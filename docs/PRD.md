@@ -42,24 +42,30 @@ Four meters run from 0 to 100. Only the fill is shown, never numbers.
 
 | Meter | Icon | Side | Start | At 0 | At 100 |
 |---|---|---|---|---|---|
-| **Joy**: how much the owner loves you | ❤️ | Owner | 35 | **Ending**: returned to the shelter (variants by flags/mods) | No failure. Joy over 90 gives a small bonus. |
-| **Home**: state of the apartment / owner's patience with damage | 🏠 | Owner | 70 | **Ending**: "the deposit is gone" / the landlord or partner draws the line | No failure. |
+| **Joy**: how much the owner loves you | ❤️ | Owner | 55 | **Ending**: returned to the shelter (variants by flags/mods) | No failure. Joy over 90 gives a small bonus. |
+| **Home**: state of the apartment / owner's patience with damage | 🏠 | Owner | 75 (Chaos Mode: 100) | **Ending**: "the deposit is gone" / the landlord or partner draws the line | No failure. |
 | **Instinct**: bottled-up cat energy | 🐾 | Cat | 40 | **Crisis**: *Sad Loaf*. You're listless, so it's a vet visit. | **Crisis**: *Feral Outburst* (bite, claw, zoomies, knock things over) |
 | **Belly**: hunger / fullness | 🐟 | Cat | 50 | **Crisis**: *4 AM Yowl*. You must demand food. | **Crisis**: *Rug Surprise* (overeating ends on the rug) |
 
 ### Rules
 
-- **Passive drift** applies every swipe after effects: Instinct +2 and Belly −3.
-  Being a good cat costs nothing up front, but the pressure keeps rising.
-- **Crises** are forced cards drawn from `crisis_<meter>_<low|high>`. They
-  usually hurt Joy and/or Home, and the choice is how *much* and *which*. After
-  a crisis resolves, that meter resets to 50. A crisis is never game over by
+- **Passive drift** applies every swipe after effects: Joy −2, Instinct +2 and
+  Belly −2. The novelty wears off, so Joy has to be earned all run long; being
+  a good cat costs nothing up front, but the Instinct pressure keeps rising.
+- **Crises** are forced cards drawn from `crisis_<meter>_<low|high>`, queued
+  whenever a cat meter touches 0 or 100 during a swipe (after effects or after
+  drift). They usually hurt Joy and/or Home, and the choice is how *much* and
+  *which*. After a crisis resolves, that meter resets to 50 (Instinct after a
+  Feral Outburst: 35, it's been vented). A crisis is never game over by
   itself, but its fallout can be.
 - **Ending checks** run after each swipe in this order: card `end` → Joy 0 →
   Home 0 → crises.
 - The tension: affection (purring, snuggling, comforting) raises Joy but also
   raises Instinct. Chaos (biting, clawing, throwing things on the floor) lowers
-  Instinct but costs Joy or Home. Food raises Belly; begging for it costs Joy.
+  Instinct but costs Joy or Home. Lazy, sleepy choices (napping, loafing) lower
+  Instinct a little, so a too-calm cat can slide into a Sad Loaf. Food raises
+  Belly; begging for it costs Joy, and overeating risks a Rug Surprise.
+- Balance targets and current simulated numbers: `docs/balance.md`.
 
 ## 4. Runs, owners, households
 

@@ -106,12 +106,18 @@ text, labels, character names and ending text.
 
 ## Turn order (engine)
 
+Start meters: Joy 55, Home 75, Instinct 40, Belly 50 (`CONFIG.start`); Chaos
+Mode starts Home at 100 (`CONFIG.chaosStart`).
+
 1. Apply chosen side: `fx` (clamped), `set`, queue `next`, add `chaos`.
-2. Passive drift: Instinct +2, Belly −3 (every swipe, including `noTime`).
-3. If the card was a crisis card, reset that meter to 50.
+2. Passive drift: Joy −2, Instinct +2, Belly −2 (every swipe, including
+   `noTime`; `CONFIG.drift` in `engine.js`).
+3. If the card was a crisis card, reset that meter (`CONFIG.crisisReset`: 35
+   after `instinct_high`, otherwise 50).
 4. Advance time one slot unless `noTime` (4 slots/day, 14 days = 56 swipes).
 5. Ending checks, first hit wins: card `end` → Joy 0 → Home 0 → trial over
-   (after Day 14 Night) → otherwise queue crises for any cat meter at 0/100.
+   (after Day 14 Night) → otherwise queue crises for any cat meter that touched
+   0/100 during steps 1–2 (so drift can't nudge it back off the edge first).
 6. Draw next card: crisis → `next` queue → `intro` (Day 1 Morning) → `main`.
 
 Complication rule built into the engine: with `allergies`, any choice that

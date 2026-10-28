@@ -40,6 +40,7 @@ node tools/validate.js          # schema + reference checks for web/data; non-ze
 node --test tests/*.test.js     # engine unit tests (use fixtures, not the real content)
 node tools/sim.js               # balance report: win rate, run length, endings, crises, card draw counts
 node tools/sim.js --runs 5000 --strategy smart --mods 2
+node tools/sim.js --runs 1000 --matrix   # every strategy x complication + Chaos Mode (see docs/balance.md)
 ```
 
 `npm run validate`, `npm test` and `npm run sim` are aliases.
