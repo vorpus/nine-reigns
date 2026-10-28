@@ -216,7 +216,7 @@ Content sets these with `"+1"` (or `true` for bools); achievements read them:
 ```
 
 Patterns and accessories are drawn by `web/js/catsvg.js`; their ids must be ones
-it knows (`none`, `tabby`, `tuxedo`, `calico`, `socks`, `spots` / `none`,
+it knows (`none`, `tabby`, `tuxedo_bib`, `calico_patches`, `socks`, `spots` / `none`,
 `bell_collar`, `bow_tie`, `tiny_hat`, `flower`, `glasses`, `bandana`, `crown`).
 
 ## First-run onboarding

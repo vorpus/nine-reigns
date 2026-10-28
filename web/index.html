@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nine Reigns</title>
+  <meta name="description" content="You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.">
+  <meta name="theme-color" content="#2b2628">
+  <meta property="og:title" content="Nine Reigns">
+  <meta property="og:description" content="You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vorpus.github.io/nine-reigns/">
+  <meta property="og:site_name" content="Nine Reigns">
+  <meta property="og:image" content="https://vorpus.github.io/nine-reigns/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Nine Reigns: a cartoon cat beside a swipe card and four meters for Joy, Home, Instinct and Belly.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nine Reigns">
+  <meta name="twitter:description" content="You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.">
+  <meta name="twitter:image" content="https://vorpus.github.io/nine-reigns/og.png">
+  <meta name="twitter:image:alt" content="Nine Reigns: a cartoon cat beside a swipe card and four meters.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Title -->
+    <section id="screen-title" class="screen screen-title" hidden>
+      <h1 class="logo">Nine<br>Reigns</h1>
+      <div class="title-cat" id="title-cat"></div>
+      <p class="tagline">Fourteen days. One human. Infinite things to knock off the table.</p>
+      <div class="menu">
+        <button class="btn btn-primary" id="btn-play">Play</button>
+        <button class="btn" id="btn-continue" hidden>Continue</button>
+        <div class="difficulty" id="difficulty" hidden role="radiogroup" aria-label="Difficulty">
+          <button class="seg" data-diff="easy" role="radio">Easy</button>
+          <button class="seg" data-diff="normal" role="radio">Normal</button>
+          <button class="seg" data-diff="hard" role="radio">Hard</button>
+        </div>
+        <button class="btn btn-chaos" id="btn-chaos" hidden>Chaos Mode</button>
+        <div class="menu-row">
+          <button class="btn btn-small" id="btn-gallery">Endings</button>
+          <button class="btn btn-small" id="btn-cosmetics">Cosmetics</button>
+          <button class="btn btn-small btn-icon" id="btn-sound" aria-pressed="false" aria-label="Sound">🔇</button>
+        </div>
+      </div>
+      <p class="title-foot" id="title-foot"></p>
+    </section>
+
+    <!-- Game -->
+    <section id="screen-game" class="screen screen-game" hidden>
+      <header class="bar bar-top">
+        <div class="meters" id="meters"></div>
+      </header>
+      <div class="prompt-wrap"><p class="prompt" id="prompt" aria-live="polite"></p></div>
+      <div class="stage" id="stage">
+        <div class="deck-back"></div>
+        <div class="card" id="card" tabindex="0" aria-describedby="prompt">
+          <div class="choice choice-left" id="choice-left"></div>
+          <div class="choice choice-right" id="choice-right"></div>
+          <div class="portrait" id="portrait"></div>
+        </div>
+      </div>
+      <div class="char-name" id="char-name"></div>
+      <div class="controls">
+        <button class="arrow" id="btn-left" aria-label="Swipe left">◀</button>
+        <div class="goals" id="goals" aria-label="Goals this run"></div>
+        <button class="arrow" id="btn-right" aria-label="Swipe right">▶</button>
+      </div>
+      <footer class="bar bar-bottom">
+        <span id="cat-name" class="cat-name"></span>
+        <span id="time" class="time"></span>
+        <button class="menu-btn" id="btn-menu" aria-label="Menu">☰</button>
+      </footer>
+      <div class="toasts" id="toasts" aria-live="polite"></div>
+    </section>
+
+    <!-- Ending summary -->
+    <section id="screen-ending" class="screen screen-ending" hidden>
+      <div class="ending-kind" id="ending-kind"></div>
+      <div class="ending-cat" id="ending-cat"></div>
+      <h2 class="ending-epithet" id="ending-epithet"></h2>
+      <p class="ending-days" id="ending-days"></p>
+      <h3 class="ending-title" id="ending-title"></h3>
+      <p class="ending-text" id="ending-text"></p>
+      <div class="ending-stats" id="ending-stats"></div>
+      <ul class="ending-ach" id="ending-ach"></ul>
+      <div class="menu">
+        <button class="btn btn-primary" id="btn-next">Next cat</button>
+        <button class="btn btn-small" id="btn-ending-title">Title</button>
+      </div>
+    </section>
+
+    <!-- New cat beat -->
+    <section id="screen-arrive" class="screen screen-arrive" hidden>
+      <p class="arrive-kicker">Meanwhile, at the shelter…</p>
+      <div class="arrive-cat" id="arrive-cat"></div>
+      <h2 class="arrive-name" id="arrive-name"></h2>
+      <p class="arrive-sub" id="arrive-sub"></p>
+      <button class="btn btn-primary" id="btn-arrive">Begin trial</button>
+    </section>
+
+    <!-- Gallery -->
+    <section id="screen-gallery" class="screen screen-list" hidden>
+      <header class="list-head"><button class="back" data-back aria-label="Back">←</button><h2>Endings &amp; Goals</h2></header>
+      <div class="list-body">
+        <p class="list-sub" id="gallery-sub"></p>
+        <div class="gallery" id="gallery"></div>
+        <h3>Cat-chievements</h3>
+        <ul class="ach-list" id="ach-list"></ul>
+      </div>
+    </section>
+
+    <!-- Cosmetics -->
+    <section id="screen-cosmetics" class="screen screen-list" hidden>
+      <header class="list-head"><button class="back" data-back aria-label="Back">←</button><h2>Your cat</h2></header>
+      <div class="list-body">
+        <div class="cos-preview" id="cos-preview"></div>
+        <div id="cos-groups"></div>
+      </div>
+    </section>
+
+    <!-- Pause menu -->
+    <div class="modal" id="modal-menu" hidden>
+      <div class="modal-box">
+        <h2>Paused</h2>
+        <button class="btn" id="btn-resume">Resume</button>
+        <button class="btn" id="btn-abandon">Give up this cat</button>
+        <button class="btn btn-small" id="btn-quit">Title screen</button>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">Loading…</div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
