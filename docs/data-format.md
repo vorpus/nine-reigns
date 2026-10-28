@@ -198,7 +198,8 @@ uses card conditions plus the run-result ones; it is checked after every swipe
 and at the end of the run, and an active goal completes the first time it
 passes. `unlocks` is `{ "cosmetic": "<cosmetic id>" }` or `{ "flag": "<meta
 flag>" }`; a meta flag makes `{ "meta": "<flag>" }` card conditions pass in
-all later runs.
+all later runs. Optional `"mode": "chaos"` (or `"normal"`) limits an
+achievement to runs in that mode. Only *active* goals can complete.
 
 ### Shared counter flags
 
@@ -214,6 +215,10 @@ Content sets these with `"+1"` (or `true` for bools); achievements read them:
   "patterns": [ { "id": "tabby", "name": "Tabby stripes", "unlocked": true } ],
   "accessories": [ { "id": "bell_collar", "name": "Bell collar", "unlocked": false } ] }
 ```
+
+Cosmetic ids are unique across all three groups (except `none`), since
+achievements unlock them by bare id. A coat may add `"eye": "#hex"` for an iris
+color (used on dark coats so the eyes stay visible).
 
 Patterns and accessories are drawn by `web/js/catsvg.js`; their ids must be ones
 it knows (`none`, `tabby`, `tuxedo_bib`, `calico_patches`, `socks`, `spots` / `none`,

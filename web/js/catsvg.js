@@ -53,13 +53,14 @@ export function catSVG(look = {}, opts = {}) {
   const mood = look.mood || 'happy';
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const eyes = mood === 'sad'
-    ? `<ellipse cx="84" cy="72" rx="6" ry="7" fill="#2b2730"/><ellipse cx="116" cy="72" rx="6" ry="7" fill="#2b2730"/>
+    ? `<ellipse cx="84" cy="72" rx="6" ry="7" fill="${c.eye || '#2b2730'}"/><ellipse cx="116" cy="72" rx="6" ry="7" fill="${c.eye || '#2b2730'}"/>
        <circle cx="86" cy="69" r="2" fill="#fff"/><circle cx="118" cy="69" r="2" fill="#fff"/>
-       <path d="M74 60 l14 -6 M126 60 l-14 -6" stroke="#2b2730" stroke-width="3" stroke-linecap="round"/>
+       <path d="M74 60 l14 -6 M126 60 l-14 -6" stroke="${c.eye ? c.belly : '#2b2730'}" stroke-width="3" stroke-linecap="round"/>
        <path d="M80 82 q-1 6 2 9" stroke="#8fc3e8" stroke-width="3" fill="none" stroke-linecap="round"/>`
     : mood === 'smug'
-      ? `<path d="M76 70 h16" stroke="#2b2730" stroke-width="5" stroke-linecap="round"/><path d="M108 70 h16" stroke="#2b2730" stroke-width="5" stroke-linecap="round"/>`
-      : `<ellipse cx="84" cy="70" rx="7" ry="9" fill="#2b2730"/><ellipse cx="116" cy="70" rx="7" ry="9" fill="#2b2730"/>
+      ? `<path d="M76 70 h16" stroke="${c.eye || '#2b2730'}" stroke-width="5" stroke-linecap="round"/><path d="M108 70 h16" stroke="${c.eye || '#2b2730'}" stroke-width="5" stroke-linecap="round"/>`
+      : `<ellipse cx="84" cy="70" rx="7" ry="9" fill="${c.eye || '#2b2730'}"/><ellipse cx="116" cy="70" rx="7" ry="9" fill="${c.eye || '#2b2730'}"/>
+         ${c.eye ? '<ellipse cx="84" cy="70" rx="2.5" ry="7" fill="#1a1720"/><ellipse cx="116" cy="70" rx="2.5" ry="7" fill="#1a1720"/>' : ''}
          <circle cx="86" cy="66" r="2.5" fill="#fff"/><circle cx="118" cy="66" r="2.5" fill="#fff"/>`;
   const label = opts.title ? `<title>${opts.title}</title>` : '';
   return `<svg${cls} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${opts.title || 'Your cat'}">${label}
