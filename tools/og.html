@@ -9,18 +9,17 @@
   body { margin: 0; background: var(--c-bg); }
   .og { width: 1200px; height: 630px; display: flex; align-items: center; gap: 40px; padding: 0 70px; box-sizing: border-box; background: var(--c-bg); }
   .og-left { flex: 1; display: flex; flex-direction: column; align-items: center; }
-  .og-left .logo { font-size: 104px; }
-  .og-cat { width: 250px; height: 250px; }
+  .og-left .logo { font-size: 92px; margin: 0; }
+  .og-cat { width: 220px; height: 220px; }
   .og-cat svg { width: 100%; height: 100%; }
-  .og-tag { font-family: var(--font-prompt); font-style: italic; color: var(--c-bar-dim); font-size: 26px; text-align: center; margin: 4px 0 0; max-width: 520px; }
+  .og-tag { font-family: var(--font-prompt); font-style: italic; color: var(--c-bar-dim); font-size: 21px; letter-spacing: .02em; text-align: center; margin: 4px 0 0; max-width: 540px; }
   .phone { width: 400px; height: 560px; border-radius: 28px; overflow: hidden; background: var(--c-stage); display: flex; flex-direction: column; box-shadow: 0 0 0 10px #1c1819; }
-  .phone .bar-top { padding: 16px; }
+  .phone .bar-top { height: 96px; padding: 0 16px; }
   .phone .meter-full { clip-path: inset(var(--clip) 0 0 0); transition: none; }
-  .phone .prompt-wrap { min-height: 0; padding: 18px 26px 10px; }
-  .phone .prompt { font-size: 21px; }
-  .phone .stage { flex: 1; --card-size: 250px; }
-  .phone .card { transform: translate(-36px, 6px) rotate(-8deg); --lp: 1; }
-  .phone .char-name { text-align: center; padding-bottom: 14px; }
+  .phone .prompt-wrap { height: auto; padding: 18px 26px 6px; }
+  .phone .prompt { font-size: 17px; }
+  .phone .stage { flex: 1; }
+  .phone .card { transform: translate(-30px, 6px) rotate(-8deg); --lp: 1; }
   .icon { width: 180px; height: 180px; background: var(--c-bg); display: grid; place-items: center; }
   .icon svg { width: 160px; height: 160px; }
   .phone .portrait svg { width: 100%; height: 100%; }
@@ -44,12 +43,11 @@
       <div class="phone">
         <header class="bar bar-top"><div class="meters">${meter('joy', 55)}${meter('home', 70)}${meter('instinct', 40)}${meter('belly', 30)}</div></header>
         <div class="prompt-wrap"><p class="prompt">A full glass of water sits at the very edge of the table. Albert is on a work call.</p></div>
-        <div class="stage"><div class="deck-back"></div><div class="card leaning" style="--card-color:#1f9e9e"><div class="choice choice-left">Knock it off</div><div class="portrait">${portrait('albert', { expression: 'drag' })}</div></div></div>
-        <div class="char-name">Albert</div>
+        <div class="stage"><div class="card-slot"><div class="deck-back b2"></div><div class="deck-back b1"></div><div class="card-hold"><div class="card leaning" style="--card-color:#1f9e9e"><div class="choice choice-left">Knock it off</div><div class="portrait">${portrait('albert', { expression: 'drag' })}</div></div></div></div><div class="char-name">Albert</div></div>
       </div>
     </div>`;
   }
-  document.body.dataset.ready = '1';
+  document.fonts.ready.then(() => { document.body.dataset.ready = '1'; });
 </script>
 </body>
 </html>
