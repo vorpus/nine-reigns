@@ -1,6 +1,6 @@
 // Player cat portrait as an inline SVG string. Flat, faceted, tintable.
 // look: { coat: {fur, shade, belly, eye?}, pattern: id, accessory: id, mood: 'happy'|'sad'|'smug' }
-// opts: { className, title, noTail }
+// opts: { className, title, noTail, expression: 'neutral' | 'drag' }
 
 const DEFAULT_COAT = { fur: '#e8964a', shade: '#c9732c', belly: '#f8dfc0' };
 const INK = '#2b2730';
@@ -71,7 +71,7 @@ export function catSVG(look = {}, opts = {}) {
   const mood = look.mood || 'happy';
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const furL = mix(c.fur, '#fff6e8', 0.16);
-  const furS = c.shade;
+  const furS = mix(c.fur, '#2a1e28', 0.16);
   const deep = mix(c.shade, '#1a1418', 0.25);
   const bellyS = mix(c.belly, c.shade, 0.18);
   const dark = !!c.eye;
@@ -87,6 +87,8 @@ export function catSVG(look = {}, opts = {}) {
   } else if (mood === 'smug') {
     eyes = `${pg('72,72 92,70 92,75 73,76', eyeFill)}${pg('108,70 128,72 127,76 108,75', eyeFill)}
       ${pg('72,66 92,63 92,66 72,69', lineInk, ' opacity=".7"')}${pg('108,63 128,66 128,69 108,66', lineInk, ' opacity=".7"')}`;
+  } else if (opts.expression === 'drag') {
+    eyes = `<path d="M75 64 L88 71 L75 78 M125 64 L112 71 L125 78" stroke="${eyeFill === INK ? INK : lineInk}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   } else {
     eyes = `${pg('82,62 90,68 89,78 82,82 75,78 74,68', eyeFill)}${pg('118,62 126,68 125,78 118,82 111,78 110,68', eyeFill)}
       ${dark ? `${pg('82,64 84,72 82,80 80,72', '#1a1720')}${pg('118,64 120,72 118,80 116,72', '#1a1720')}` : ''}
@@ -111,7 +113,7 @@ export function catSVG(look = {}, opts = {}) {
   ${pg('93,86 107,86 100,93', '#d97d7d')}${pg('100,86 107,86 100,93', '#c26a6c')}
   ${mood === 'sad'
     ? `<path d="M100 93 v3 M92 102 l8 -5 l8 5" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
-    : `<path d="M100 93 v3 l-7 4 M100 96 l7 4" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+    : `<path d="M100 93 v3 q-3.5 4 -7.5 1.5 M100 96 q3.5 4 7.5 1.5" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
   <g stroke="${lineInk}" stroke-width="1.5" stroke-linecap="round" opacity=".5">
     <path d="M74 92 l-26 -4 M74 97 l-24 4 M126 92 l26 -4 M126 97 l24 4"/>
   </g>

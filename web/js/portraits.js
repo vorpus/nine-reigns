@@ -50,7 +50,7 @@ const TOPS = ['tee', 'sweater', 'hoodie', 'collar', 'cardigan', 'turtleneck'];
 
 // Hand-picked looks for the owners in owners.json. Generic and kind.
 export const OWNER_LOOKS = {
-  albert: { skin: SKIN[1], hair: 'messy', hairColor: '#4a3328', top: 'hoodie', topColor: '#5d7f99', eyes: 'tired', mouth: 'grin', stubble: true, extras: ['headset'] },
+  albert: { skin: SKIN[1], hair: 'messy', hairColor: '#4a3328', top: 'hoodie', topColor: '#d9a441', eyes: 'tired', mouth: 'grin', stubble: true, extras: ['headset'] },
   grace: { skin: SKIN[6], hair: 'bun', hairColor: HAIR[0], top: 'sweater', topColor: '#8e4b4b', earrings: true, eyes: 'sleepy', mouth: 'smile' },
   andy: { skin: SKIN[3], hair: 'buzz', hairColor: HAIR[0], top: 'sweater', topColor: '#6f8a5b', glasses: true, beard: 'short', mouth: 'smile' },
   dyang: { skin: SKIN[2], hair: 'ponytail', hairColor: HAIR[0], top: 'hoodie', topColor: '#8e4b4b', glasses: true, eyes: 'focus', mouth: 'flat' },
@@ -77,7 +77,7 @@ export function lookFromSeed(key, avoid) {
     glasses: take([0, 0, 1]) === 1,
     earrings: take([0, 0, 1]) === 1,
     beard: take([null, null, null, 'short', 'full', 'stubble']),
-    eyes: take(['dot', 'dot', 'happy', 'sleepy']),
+    eyes: take(['dot', 'dot', 'dot', 'sleepy', 'tired']),
     mouth: take(['smile', 'smile', 'grin', 'flat']),
   };
   if (look.hair === 'bald' && !look.beard) look.beard = 'full';
@@ -94,17 +94,19 @@ export function ownerLook(id, name) {
 // Layer order: backdrop, back hair, torso, neck, head, face, beard, front hair, props.
 
 const HEAD = '100,40 122,44 133,62 134,86 126,106 110,120 90,120 74,106 66,86 67,62 78,44';
-const HEAD_SHADE = '114,42 122,44 133,62 134,86 126,106 110,120 102,120 118,104 124,84 124,62';
+const HEAD_SHADE = '100,40 122,44 133,62 134,86 126,106 110,120 100,120';
 const HEAD_LIGHT = '78,44 100,40 88,52 74,70 67,62';
 const JAW = '80,108 100,114 120,108 110,120 90,120';
-const TORSO = '18,200 26,168 46,150 80,140 120,140 154,150 174,168 182,200';
-const TORSO_SHADE = '120,140 154,150 174,168 182,200 132,200 144,166';
-const TORSO_LIGHT = '26,168 46,150 80,140 62,162 50,200 18,200';
+const TORSO = '18,208 26,168 46,150 80,140 120,140 154,150 174,168 182,208';
+const TORSO_SHADE = '100,140 120,140 154,150 174,168 182,208 100,208';
+const TORSO_LIGHT = '26,168 46,150 70,143 52,170 40,208 18,208';
 
-function backdrop(color) {
-  // a single soft facet behind the bust so the card isn't perfectly flat
-  return pg('0,0 200,0 200,200 120,200 150,90', '#000', ' opacity=".05"') + pg('0,0 60,0 0,70', '#fff', ' opacity=".07"');
-}
+// Reigns cards are one solid color; kept as a hook for future texture.
+function backdrop() { return ''; }
+
+// Expression for the portrait being drawn: false = neutral, true = drag ("> <").
+let DRAG = false;
+const SQUINT = (x1, x2, y, w = 9, h = 6, sw = 3.4) => ln(`M${x1 - w / 2} ${y - h} L${x1 + w / 2} ${y} L${x1 - w / 2} ${y + h} M${x2 + w / 2} ${y - h} L${x2 - w / 2} ${y} L${x2 + w / 2} ${y + h}`, INK, sw);
 
 function hairBack(L) {
   const c = L.hairColor, s = dk(c, 0.25);
@@ -119,12 +121,13 @@ function hairBack(L) {
       return pg('122,44 146,52 156,84 150,128 140,140 138,104 134,64', s)
         + pg('122,44 146,52 150,74 136,64', c);
     case 'bun':
-      return pg('100,10 112,14 116,26 112,38 100,42 88,38 84,26 88,14', c)
-        + pg('100,10 112,14 116,26 112,38 100,42 104,26', s);
-    case 'afro':
-      return pg('100,14 128,20 148,40 154,68 148,96 136,106 64,106 52,96 46,68 52,40 72,20', c)
-        + pg('128,20 148,40 154,68 148,96 136,106 132,60', s)
-        + pg('72,20 100,14 82,30 60,52 52,40', lt(c, 0.12));
+      return pg('100,16 111,20 115,30 111,40 100,44 89,40 85,30 89,20', c)
+        + pg('100,16 111,20 115,30 111,40 100,44 104,30', s);
+    case 'afro': {
+      const ring = [[100, 24, 18], [78, 28, 17], [122, 28, 17], [62, 42, 16], [138, 42, 16], [54, 60, 15], [146, 60, 15], [52, 80, 14], [148, 80, 14], [58, 98, 12], [142, 98, 12], [86, 22, 12], [114, 22, 12]];
+      return pg('60,50 140,50 146,100 54,100', c) + ring.map(([x, y, r]) => ci(x, y, r, x > 104 ? s : c)).join('')
+        + ci(80, 26, 6, lt(c, 0.14)) + ci(62, 46, 5, lt(c, 0.14)) + ci(98, 18, 5, lt(c, 0.14));
+    }
     case 'curly':
       return [[68, 60, 13], [132, 60, 13], [64, 80, 11], [136, 80, 11], [66, 96, 9], [134, 96, 9]]
         .map(([x, y, r]) => ci(x, y, r, x > 100 ? s : c)).join('');
@@ -168,8 +171,8 @@ function hairFront(L) {
         .map(([x, y, r], i) => ci(x, y, r, i === 3 || i === 4 || i === 6 ? s : c)).join('')
         + ci(84, 34, 5, h) + ci(100, 30, 4, h);
     case 'afro':
-      return pg('70,62 76,44 100,36 124,44 130,62 118,52 100,50 82,52', c)
-        + pg('112,40 124,44 130,62 118,52', s);
+      return pg('66,72 70,52 84,40 100,37 116,40 130,52 134,72 124,56 100,52 76,56', c)
+        + pg('116,40 130,52 134,72 124,56', s) + ci(76, 46, 8, c) + ci(94, 40, 8, c) + ci(110, 40, 8, s) + ci(126, 48, 8, s);
     case 'beanie': {
       const b = L.beanieColor || '#c79a4a';
       return pg('66,78 66,62 134,62 134,78 128,70 72,70', c)
@@ -217,9 +220,9 @@ function torso(L) {
       break;
     case 'cardigan': {
       const inner = '#e9dfcf';
-      out += pg('80,140 120,140 112,200 88,200', inner) + pg('84,140 116,140 108,150 92,150', dk(L.skin, 0.08))
-        + pg('100,154 112,152 108,200 100,200', dk(inner, 0.1))
-        + pg('80,140 72,142 82,200 94,200', dk(c, 0.1)) + pg('120,140 128,142 118,200 106,200', s)
+      out += pg('80,140 120,140 112,208 88,208', inner) + pg('84,140 116,140 108,150 92,150', dk(L.skin, 0.08))
+        + pg('100,154 112,152 108,208 100,208', dk(inner, 0.1))
+        + pg('80,140 72,142 82,208 94,208', dk(c, 0.1)) + pg('120,140 128,142 118,208 106,208', s)
         + ci(92, 176, 2.2, lt(c, 0.45)) + ci(90, 192, 2.2, lt(c, 0.45));
       break;
     }
@@ -235,43 +238,24 @@ function torso(L) {
 }
 
 function neckAndHead(L) {
-  const k = L.skin, ks = dk(k, 0.16), kd = dk(k, 0.3), kh = lt(k, 0.14);
-  let out = pg('88,108 112,108 113,146 87,146', ks) + pg('88,112 112,112 112,126 100,131 88,126', kd);
-  out += both('67,72 59,70 57,84 62,96 70,94', ks, kd) + both('61,76 64,88 67,86', kd, dk(k, 0.4));
-  out += pg(HEAD, k) + pg(HEAD_LIGHT, kh) + pg(HEAD_SHADE, ks) + pg(JAW, ks);
+  const k = L.skin, ks = dk(k, 0.16), kd = dk(k, 0.3), kh = lt(k, 0.12);
+  let out = pg('88,108 100,108 100,146 87,146', ks) + pg('100,108 112,108 113,146 100,146', kd)
+    + pg('88,112 112,112 112,124 100,129 88,124', dk(k, 0.36));
+  out += both('67,72 59,70 57,84 62,96 70,94', k, kd) + both('61,76 64,88 67,86', ks, dk(k, 0.42));
+  out += pg(HEAD, k) + pg(HEAD_LIGHT, kh) + pg(HEAD_SHADE, ks);
   return out;
 }
 
 function face(L) {
-  const k = L.skin, kd = dk(k, 0.3), brow = dk(L.hairColor === '#e6e0d6' ? '#a8a29c' : L.hairColor, 0.15);
-  const eye = INK;
+  const k = L.skin, kd = dk(k, 0.32), brow = dk(L.hairColor === '#e6e0d6' ? '#a8a29c' : L.hairColor, 0.15);
   let out = '';
-  // brows
-  if (L.eyes === 'stern') out += pg('80,70 95,74 95,78 80,75', brow) + pg('120,70 105,74 105,78 120,75', brow);
-  else if (L.eyes === 'tired') out += pg('80,72 95,70 95,74 80,76', brow) + pg('120,72 105,70 105,74 120,76', brow);
-  else out += pg('80,72 95,69 95,73 80,76', brow) + pg('105,69 120,72 120,76 105,73', brow);
-  // eyes
-  switch (L.eyes) {
-    case 'happy':
-      out += ln('M83 86 q5 -6 10 0 M107 86 q5 -6 10 0', eye, 3);
-      break;
-    case 'tired':
-      out += ln('M83 85 q5 -6 10 0 M107 85 q5 -6 10 0', eye, 3)
-        + ln('M84 91 q4 3 8 0 M108 91 q4 3 8 0', kd, 2, ' opacity=".8"');
-      break;
-    case 'sleepy':
-      out += ln('M83 83 h10 M107 83 h10', eye, 2.6) + pa('M84 83 a4.5 4 0 0 0 9 0z M108 83 a4.5 4 0 0 0 9 0z', eye);
-      break;
-    case 'focus':
-      out += ci(88, 84, 3.4, eye) + ci(112, 84, 3.4, eye);
-      break;
-    default:
-      out += ci(88, 84, 3.6, eye) + ci(112, 84, 3.6, eye) + ci(89.2, 82.8, 1.1, '#fff', ' opacity=".8"') + ci(113.2, 82.8, 1.1, '#fff', ' opacity=".8"');
-  }
-  // nose
-  out += pg('100,86 95,99 102,100', dk(k, 0.2));
-  // cheeks
-  out += `<ellipse cx="80" cy="98" rx="6" ry="3.5" fill="#e0786a" opacity=".22"/><ellipse cx="120" cy="98" rx="6" ry="3.5" fill="#e0786a" opacity=".22"/>`;
+  if (L.eyes === 'stern') out += pg('79,70 95,75 95,79 79,74', brow) + pg('121,70 105,75 105,79 121,74', brow);
+  else if (L.eyes === 'tired') out += pg('80,72 95,70 95,73.5 80,75.5', brow) + pg('120,72 105,70 105,73.5 120,75.5', brow);
+  if (DRAG) out += SQUINT(88, 112, 83);
+  else if (L.eyes === 'happy') out += ln('M83 85 q5 -6 10 0 M107 85 q5 -6 10 0', INK, 3.2);
+  else if (L.eyes === 'sleepy') out += pg('84,82 92,82 92,89 84,89', INK) + pg('108,82 116,82 116,89 108,89', INK) + ln('M82 82 h12 M106 82 h12', kd, 2.6);
+  else out += pg('86.2,76 89.8,76 89.8,90 86.2,90', INK) + pg('110.2,76 113.8,76 113.8,90 110.2,90', INK);
+  if (L.eyes === 'tired') out += ln('M84 94 q4 2.5 8 0 M108 94 q4 2.5 8 0', kd, 2);
   return out;
 }
 
@@ -310,8 +294,10 @@ function extras(L) {
   if (L.earrings) out += ci(61, 100, 2.6, '#e2b552') + ci(139, 100, 2.6, '#c99a3c');
   for (const x of L.extras || []) {
     if (x === 'headset') {
-      out += ln('M58 150 Q100 176 142 150', '#2f2c35', 5) + pg('50,138 62,134 68,150 56,156', '#3a3640') + pg('150,138 138,134 132,150 144,156', '#2f2c35')
-        + pg('52,140 58,138 62,148 56,150', '#c25b4e') + ln('M60 152 q16 18 30 14', '#2f2c35', 2.2) + ci(92, 165, 3, '#3a3640');
+      out += ln('M60 84 C56 14 144 14 140 84', '#2f2c35', 6) + ln('M66 50 C76 26 124 26 134 50', '#4a4652', 2, ' opacity=".8"')
+        + pg('52,72 64,70 68,100 56,102 50,90', '#3a3640') + pg('148,72 136,70 132,100 144,102 150,90', '#2a272f')
+        + pg('52,80 56,80 57,94 53,94', '#c25b4e') + pg('148,80 144,80 143,94 147,94', '#a8443c')
+        + ln('M60 100 Q64 116 84 112', '#2f2c35', 3) + ci(86, 112, 3.4, '#3a3640');
     } else if (x === 'earbud') {
       out += pg('56,84 62,82 63,90 57,92', '#f4efe6') + pg('59,92 62,92 62,100 59,100', '#e2dcd0');
     } else if (x === 'leaf') {
@@ -325,8 +311,9 @@ export function person(L, opts = {}) {
   L = { eyes: 'dot', mouth: 'smile', ...L };
   return [
     opts.noBackdrop ? '' : backdrop(),
+    '<g transform="translate(100 160) scale(1.16) translate(-100 -160)">',
     hairBack(L),
-    torso(L),
+    `<g transform="translate(0 -8)">${torso(L)}</g>`,
     opts.underHead || '',
     neckAndHead(L),
     beard(L),
@@ -335,7 +322,8 @@ export function person(L, opts = {}) {
     hairFront(L),
     L.glasses ? glasses() : '',
     extras(L),
-    opts.over || '',
+    opts.over ? `<g transform="translate(0 -8)">${opts.over}</g>` : '',
+    '</g>',
   ].join('');
 }
 
@@ -343,7 +331,7 @@ export function person(L, opts = {}) {
 const VET = { skin: SKIN[4], hair: 'curly', hairColor: HAIR[1], top: 'vneck', topColor: '#5f9a93', glasses: true, mouth: 'smile', eyes: 'dot' };
 const NEIGHBOR = { skin: SKIN[2], hair: 'curly', hairColor: '#d8d2c8', top: 'cardigan', topColor: '#9a6f97', glasses: true, eyes: 'happy', mouth: 'smile' };
 const LANDLORD = { skin: SKIN[1], hair: 'bald', hairColor: '#7b746c', top: 'collar', topColor: '#6b5a48', eyes: 'stern', mouth: 'stern' };
-const SHELTER = { skin: SKIN[5], hair: 'ponytail', hairColor: HAIR[2], top: 'tee', topColor: '#c86f4f', eyes: 'happy', mouth: 'grin', earrings: true };
+const SHELTER = { skin: SKIN[5], hair: 'ponytail', hairColor: HAIR[2], top: 'tee', topColor: '#3f6f73', eyes: 'dot', mouth: 'grin', earrings: true };
 
 function stethoscope() {
   return ln('M76 146 Q74 172 92 178 M124 146 Q128 172 108 178', '#3d4250', 3.4)
@@ -368,9 +356,9 @@ function lanyard() {
 
 function apron() {
   const a = '#6f8a5b', s = dk(a, 0.22);
-  return pg('66,164 134,164 140,200 60,200', a) + pg('116,164 134,164 140,200 120,200', s)
+  return pg('66,164 134,164 141,210 59,210', a) + pg('116,164 134,164 141,210 120,210', s)
     + ln('M70 166 L84 140 M130 166 L116 140', a, 4)
-    + pg('86,180 114,180 114,200 86,200', dk(a, 0.12))
+    + pg('86,180 114,180 114,210 86,210', dk(a, 0.12))
     + ci(100, 190, 3.2, lt(a, 0.5)) + ci(94, 184, 1.8, lt(a, 0.5)) + ci(100, 182, 1.8, lt(a, 0.5)) + ci(106, 184, 1.8, lt(a, 0.5));
 }
 
@@ -406,11 +394,10 @@ const DRAW = {
 };
 
 function instinct() {
-  const bg = '#1d1519', glow = '#e9e05a';
+  const glow = '#e9e05a';
   return [
-    pg('0,0 200,0 200,200 0,200', bg),
-    pg('0,0 90,0 0,110', '#2a1a20'), pg('200,40 200,200 110,200', '#24171c'),
-    pg('0,200 0,150 60,200', '#33161d'), pg('200,0 150,0 200,30', '#3a1a22'),
+    pg('0,0 90,0 0,110', '#000', ' opacity=".18"'), pg('200,40 200,200 110,200', '#000', ' opacity=".28"'),
+    pg('0,200 0,150 60,200', '#000', ' opacity=".12"'),
     // head
     pg('30,58 22,6 70,40 100,34 130,40 178,6 170,58 186,104 168,152 132,178 100,184 68,178 32,152 14,104', '#0f0b0e'),
     pg('22,6 70,40 52,42 36,60 30,58', '#2b1b22'), pg('178,6 130,40 148,42 164,60 170,58', '#241820'),
@@ -419,10 +406,11 @@ function instinct() {
     // eye glow
     `<g fill="${glow}"><ellipse cx="66" cy="92" rx="34" ry="26" opacity=".08"/><ellipse cx="136" cy="88" rx="38" ry="30" opacity=".08"/><ellipse cx="66" cy="92" rx="24" ry="17" opacity=".14"/><ellipse cx="136" cy="88" rx="27" ry="20" opacity=".14"/></g>`,
     // eyes (mismatched: unhinged)
-    pa('M46 94 L60 78 L86 84 L80 100 L58 104z', glow), pa('M60 78 L86 84 L80 100z', '#c9b53c'),
-    pa('M112 90 L128 70 L160 76 L158 98 L130 106z', glow), pa('M128 70 L160 76 L158 98z', '#c9b53c'),
-    pa('M66 82 L70 81 L72 100 L67 101z', '#0f0b0e'), pa('M137 74 L143 74 L144 103 L138 104z', '#0f0b0e'),
-    ci(76, 88, 2.2, '#fffbe0'), ci(152, 82, 2.6, '#fffbe0'),
+    DRAG ? ln('M50 78 L82 92 L52 104 M156 70 L118 88 L154 104', glow, 9)
+      : pa('M46 94 L60 78 L86 84 L80 100 L58 104z', glow) + pa('M60 78 L86 84 L80 100z', '#c9b53c')
+      + pa('M112 90 L128 70 L160 76 L158 98 L130 106z', glow) + pa('M128 70 L160 76 L158 98z', '#c9b53c')
+      + pa('M66 82 L70 81 L72 100 L67 101z', '#0f0b0e') + pa('M137 74 L143 74 L144 103 L138 104z', '#0f0b0e')
+      + ci(76, 88, 2.2, '#fffbe0') + ci(152, 82, 2.6, '#fffbe0'),
     // nose + grin
     pg('92,118 108,118 100,126', '#6b2d3a'),
     pa('M58 132 L76 140 L100 136 L124 140 L146 128 L132 152 L100 158 L68 152z', '#3a0f18'),
@@ -455,7 +443,7 @@ function dog() {
     // brows (hopeful)
     pg('72,64 88,60 90,64 74,69', gd), pg('110,60 126,64 126,69 110,64', gd),
     // eyes
-    ci(82, 76, 6, '#2b2124'), ci(118, 76, 6, '#2b2124'), ci(84, 74, 2, '#fff'), ci(120, 74, 2, '#fff'),
+    DRAG ? SQUINT(82, 118, 76, 10, 6, 3.6) : ci(82, 76, 6, '#2b2124') + ci(118, 76, 6, '#2b2124') + ci(84, 74, 2, '#fff') + ci(120, 74, 2, '#fff'),
     // nose + mouth + tongue
     pg('90,96 110,96 112,102 100,110 88,102', '#2b2124'), pg('92,97 100,97 96,101', '#5a4a4e'),
     ln('M100 110 v6 M88 116 q12 8 24 0', '#6b4a3a', 2.4),
@@ -467,10 +455,9 @@ function dog() {
 function roomba() {
   const top = '#d9dde3', mid = '#b8bec8', side = '#4a4f5c', dark = '#353943';
   return [
-    pg('0,0 200,0 200,120 0,138', '#000', ' opacity="0"'),
-    // wall / floor
-    pg('0,124 200,108 200,200 0,200', '#6f7a8a'), pg('0,124 200,108 200,114 0,130', '#d6d0c4'),
-    pg('0,200 0,170 70,200', '#626d7c'), pg('140,200 200,160 200,200', '#7b8696'),
+        // wall / floor
+    pg('0,124 200,108 200,200 0,200', '#000', ' opacity=".22"'), pg('0,124 200,108 200,114 0,130', '#fff', ' opacity=".55"'),
+    pg('0,200 0,170 70,200', '#000', ' opacity=".08"'), pg('140,200 200,160 200,200', '#fff', ' opacity=".06"'),
     // shadow
     `<ellipse cx="100" cy="172" rx="80" ry="16" fill="#000" opacity=".18"/>`,
     // side band
@@ -486,7 +473,7 @@ function roomba() {
     pg('40,152 70,160 130,160 160,152 160,158 130,168 70,168 40,158', '#2a2d35'),
     // the LED + judging brow
     `<g fill="#ff4a3d"><ellipse cx="100" cy="146" rx="22" ry="9" opacity=".12"/><ellipse cx="100" cy="146" rx="12" ry="5.5" opacity=".25"/></g>`,
-    ci(100, 146, 4.5, '#ff4a3d'), ci(99, 145, 1.5, '#ffd9d0'),
+    DRAG ? pg('90,144 110,144 110,148 90,148', '#ff4a3d') : ci(100, 146, 4.5, '#ff4a3d') + ci(99, 145, 1.5, '#ffd9d0'),
     pg('84,138 112,134 113,137 85,141', '#2a2d35'),
     // brush + crumbs
     ln('M30 156 l-14 8 M32 160 l-12 14 M36 162 l-4 14', '#3b3f49', 2),
@@ -513,7 +500,7 @@ function plant() {
     pg('58,120 142,120 132,188 68,188', pot), pg('58,120 82,120 80,188 68,188', potL), pg('118,120 142,120 132,188 116,188', potS),
     pg('58,120 142,120 141,126 59,126', potD),
     // face
-    ci(86, 146, 4, INK), ci(114, 146, 4, INK), ci(87.4, 144.6, 1.3, '#fff'), ci(115.4, 144.6, 1.3, '#fff'),
+    DRAG ? SQUINT(86, 114, 146, 8, 5) : ci(86, 146, 4, INK) + ci(114, 146, 4, INK) + ci(87.4, 144.6, 1.3, '#fff') + ci(115.4, 144.6, 1.3, '#fff'),
     pg('80,136 92,133 92,136 81,139', potD), pg('108,133 120,136 119,139 108,136', potD),
     ln('M93 162 q4 -4 7 0 q3 4 7 0', INK, 2.4),
     `<ellipse cx="76" cy="156" rx="6" ry="3.5" fill="#e0786a" opacity=".35"/><ellipse cx="124" cy="156" rx="6" ry="3.5" fill="#e0786a" opacity=".35"/>`,
@@ -526,7 +513,7 @@ function bird() {
   const frame = '#efe4cf', frameS = '#cdbfa6', g = '#8d93a1', gl = lt(g, 0.22), gs = dk(g, 0.22), gd = dk(g, 0.38);
   return [
     // sky facets
-    pg('0,0 120,0 0,90', '#a3c5df'), pg('200,0 200,120 90,140', '#7fa8cb'),
+    pg('0,0 120,0 0,90', '#fff', ' opacity=".12"'), pg('200,0 200,120 90,140', '#000', ' opacity=".08"'),
     // cloud
     pg('120,46 134,36 150,38 162,30 180,38 186,52 112,52', '#e8f1f7'), pg('150,38 162,30 180,38 186,52 160,52', '#d0e0eb'),
     // window frame
@@ -544,7 +531,7 @@ function bird() {
     pg('62,100 86,94 92,118 70,124', '#6c9f86'), pg('76,96 88,94 92,118 80,120', '#8a6fa0'),
     pg('52,64 66,48 86,50 94,66 90,90 66,98 52,86', g), pg('52,64 66,48 76,49 60,70 52,76', gl), pg('86,50 94,66 90,90 80,94 86,70', gs),
     // eye + beak
-    ci(66, 66, 6, '#e7894a'), ci(66, 66, 3, INK), ci(67, 65, 1, '#fff'),
+    DRAG ? ln('M61 61 L69 66 L61 71', INK, 3) : ci(66, 66, 6, '#e7894a') + ci(66, 66, 3, INK) + ci(67, 65, 1, '#fff'),
     pg('52,70 36,76 52,78', '#3a3640'), pg('48,68 54,66 54,72', '#efe8dc'),
     // smug brow
     pg('58,56 74,58 74,61 58,60', gd),
@@ -554,17 +541,17 @@ function bird() {
 }
 
 function reddot() {
-  const wall = '#3b3340';
   return [
-    pg('0,0 200,0 200,160 0,176', wall), pg('0,0 80,0 0,90', lt(wall, 0.06)), pg('120,0 200,0 200,160 150,164', dk(wall, 0.12)),
+    // wall facets over the card color
+    pg('0,0 80,0 0,90', '#fff', ' opacity=".05"'), pg('120,0 200,0 200,160 150,164', '#000', ' opacity=".14"'),
     // baseboard + floor
-    pg('0,176 200,160 200,170 0,186', '#5a4e58'), pg('0,186 200,170 200,200 0,200', '#2a2430'),
-    // hand shadow, top right
-    `<g fill="#000" opacity=".22" transform="translate(150 6) rotate(28)"><path d="M0 0 h26 v34 l-4 8 h-22z"/><path d="M-2 4 h-22 a4 4 0 0 1 0 -8 h22z"/><path d="M26 12 h10 a4 4 0 0 1 0 8 h-10z"/><path d="M26 22 h8 a4 4 0 0 1 0 8 h-8z"/><path d="M4 42 h20 v40 h-20z"/></g>`,
+    pg('0,176 200,160 200,170 0,186', '#fff', ' opacity=".12"'), pg('0,186 200,170 200,200 0,200', '#000', ' opacity=".4"'),
+    // the cat's shadow, watching from the bottom right
+    `<g fill="#000" opacity=".3">${pg('128,200 132,150 142,124 152,148 170,146 182,122 188,150 196,200')}</g>`,
     // beam
-    pa('M150 24 L84 112 L88 116z', '#ff3b30', ' opacity=".08"'),
+    pa('M200 20 L84 112 L88 116z', '#ff3b30', ' opacity=".08"'),
     // glow + dot
-    `<g fill="#ff3b30"><circle cx="86" cy="114" r="38" opacity=".06"/><circle cx="86" cy="114" r="24" opacity=".12"/><circle cx="86" cy="114" r="14" opacity=".28"/></g>`,
+    `<g fill="#ff3b30"><circle cx="86" cy="114" r="${DRAG ? 46 : 38}" opacity=".06"/><circle cx="86" cy="114" r="24" opacity=".12"/><circle cx="86" cy="114" r="14" opacity=".28"/></g>`,
     ci(86, 114, 7.5, '#ff3b30'), ci(86, 114, 4, '#ff8a7a'), ci(85, 113, 1.8, '#fff1ec'),
     // motion ticks
     ln('M104 100 l8 -6 M106 114 h10 M104 128 l8 6', '#ff6a5a', 2, ' opacity=".5"'),
@@ -585,7 +572,7 @@ function narrator() {
     + [80, 92, 104, 116, 128, 140].map((y, i) => pg(`50,${y} ${i % 3 === 2 ? 118 : 146},${y} ${i % 3 === 2 ? 118 : 146},${y + 4} 50,${y + 4}`, '#cfc5b2')).join('')
     + `</g>`,
     // paper clip
-    ln('M62 34 v28 a5 5 0 0 0 10 0 v-24', '#8e98a3', 2.6),
+    ln('M146 34 v28 a5 5 0 0 0 10 0 v-24', '#8e98a3', 2.6),
     // paw stamp
     `<g transform="translate(128 130) rotate(-14)" fill="#b8423a" opacity=".85">`
     + `<circle r="22" fill="none" stroke="#b8423a" stroke-width="3"/><ellipse cx="0" cy="5" rx="8" ry="6.5"/><ellipse cx="-9" cy="-5" rx="3.6" ry="4.6"/><ellipse cx="-3" cy="-10" rx="3.6" ry="4.6"/><ellipse cx="4" cy="-10" rx="3.6" ry="4.6"/><ellipse cx="10" cy="-4" rx="3.6" ry="4.6"/></g>`,
@@ -604,17 +591,20 @@ function wrap(body, title) {
 }
 
 export function portrait(charId, opts = {}) {
-  if (charId === 'cat') return catSVG(opts.look || {}, { title: opts.title, className: 'cat-portrait' });
-  const key = `${charId}|${opts.owner || ''}|${opts.ownerName || ''}|${opts.partner || ''}|${opts.seed || ''}|${opts.title || ''}`;
+  if (charId === 'cat') return catSVG(opts.look || {}, { title: opts.title, className: 'cat-portrait', expression: opts.expression });
+  const drag = opts.expression === 'drag';
+  const key = `${drag ? 'D' : 'N'}|${charId}|${opts.owner || ''}|${opts.ownerName || ''}|${opts.partner || ''}|${opts.seed || ''}|${opts.title || ''}`;
   const hit = cache.get(key);
   if (hit) return hit;
   let body = null;
+  DRAG = drag;
   if (charId === 'owner') body = person(ownerLook(opts.owner, opts.ownerName));
   else if (charId === 'albert') body = person(OWNER_LOOKS.albert);
   else if (charId === 'partner') {
     const avoid = ownerLook(opts.owner, opts.ownerName);
     body = person(lookFromSeed(`partner:${opts.partner || 'Alex'}:${opts.seed || ''}`, avoid));
   } else if (DRAW[charId]) body = DRAW[charId]();
+  DRAG = false;
   if (body == null) return null;
   const svg = wrap(body, opts.title || charId);
   cache.set(key, svg);
