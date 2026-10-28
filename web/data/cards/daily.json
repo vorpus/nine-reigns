@@ -1,0 +1,554 @@
+[
+  {
+    "id": "daily_alarm_snooze",
+    "char": "owner",
+    "text": "{owner}'s alarm goes off. They hit snooze. Breakfast is now nine minutes away. You were not consulted.",
+    "bag": "main",
+    "when": [{ "slot": ["morning"] }, { "notQuirk": "nightshift" }],
+    "left": { "label": "Purr on their chest", "fx": { "joy": 10, "instinct": 5 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Paw their eyelid", "fx": { "joy": -10, "belly": 15 } }
+  },
+  {
+    "id": "daily_pate_rejection",
+    "char": "owner",
+    "text": "\"It's the salmon pâté! The bag says GOURMET!\" {owner} paid $3 for this tiny can. They are watching you sniff it.",
+    "bag": "main",
+    "left": { "label": "Eat it all", "fx": { "joy": 10, "belly": 15 } },
+    "right": { "label": "Bury it in the floor", "fx": { "joy": -10, "belly": -5, "instinct": -5 } }
+  },
+  {
+    "id": "daily_double_dinner",
+    "char": "owner",
+    "text": "\"Did I feed you already?\" {owner} genuinely can't remember. You genuinely can. You ate eleven minutes ago.",
+    "bag": "main",
+    "when": [{ "slot": ["evening"] }],
+    "left": { "label": "Wash face, satisfied", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Act starving", "fx": { "belly": 15, "joy": -5 } }
+  },
+  {
+    "id": "daily_bowl_politics",
+    "char": "instinct",
+    "text": "THE HUMAN MOVED THE BOWL TWO INCHES TO THE LEFT. TWO INCHES. THIS IS HOW EMPIRES FALL.",
+    "bag": "main",
+    "left": { "label": "Eat anyway", "fx": { "belly": 10, "instinct": 5 } },
+    "right": { "label": "Push it back", "fx": { "instinct": -10, "home": -5, "joy": -5 }, "set": { "knocked": "+1" }, "chaos": 2 }
+  },
+  {
+    "id": "daily_can_opener",
+    "char": "instinct",
+    "text": "THE CAN. THE SACRED CYLINDER HAS BEEN OPENED. IT IS FOR US. IT IS ALWAYS FOR US. ...the human is making a tuna sandwich.",
+    "bag": "main",
+    "left": { "label": "Accept your fate", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Climb them", "fx": { "joy": -10, "belly": 10, "instinct": -10 }, "chaos": 1 }
+  },
+  {
+    "id": "daily_treat_shake",
+    "char": "owner",
+    "text": "*shake shake* \"Whooo wants a treat?\" {owner} knows exactly who. It's a rhetorical bag.",
+    "bag": "main",
+    "left": { "label": "Sit like a gentleman", "fx": { "joy": 10, "belly": 5 } },
+    "right": { "label": "Headbutt bag open", "fx": { "belly": 20, "home": -10, "joy": -5 }, "chaos": 3 }
+  },
+  {
+    "id": "daily_high_five",
+    "char": "owner",
+    "text": "{owner} watched a video of a cat doing a high five. They're holding up a treat and a palm. \"Hiiiigh five! Come on! Up top!\"",
+    "bag": "main",
+    "when": [{ "day": { "gte": 3 } }],
+    "left": { "label": "High five", "fx": { "joy": 15, "belly": 5, "instinct": 5 } },
+    "right": { "label": "Swat the treat away", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_owner_cooking",
+    "char": "owner",
+    "text": "{owner} is cooking chicken. The kitchen smells like your entire religion. \"Do NOT get underfoot.\"",
+    "bag": "main",
+    "when": [{ "slot": ["evening"] }],
+    "left": { "label": "Supervise politely", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Figure-eight ankles", "fx": { "instinct": -5 }, "next": "daily_cooking_trip" }
+  },
+  {
+    "id": "daily_cooking_trip",
+    "char": "owner",
+    "text": "{owner} has tripped over you. A piece of chicken is on the floor. So is {owner}.",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Check on them", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Take the chicken", "fx": { "belly": 15, "joy": -10, "instinct": -5 } }
+  },
+  {
+    "id": "daily_onion_tears",
+    "char": "owner",
+    "text": "{owner} is chopping onions and crying. You don't know about onions. As far as you know, the vegetable is winning.",
+    "bag": "main",
+    "left": { "label": "Comfort the crier", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Hiss at the onion", "fx": { "instinct": -10 } }
+  },
+  {
+    "id": "daily_couch_dinner",
+    "char": "owner",
+    "text": "{owner} is eating pasta on the couch. You are four inches from the plate, maintaining eye contact. \"This isn't for cats.\"",
+    "bag": "main",
+    "when": [{ "slot": ["evening", "night"] }],
+    "left": { "label": "Sit, saintly", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Paw the fork", "fx": { "belly": 10, "joy": -10 } }
+  },
+  {
+    "id": "daily_sad_day",
+    "char": "owner",
+    "text": "{owner} is on the couch crying into a hoodie. Something about a text. They haven't noticed you yet.",
+    "bag": "main",
+    "cooldown": 30,
+    "left": { "label": "Bring your mouse", "fx": { "joy": 10, "instinct": -5 }, "set": { "gifts": "+1" } },
+    "right": { "label": "Curl up on their lap", "fx": { "joy": 15, "instinct": 10 }, "set": { "snuggles": "+1" } }
+  },
+  {
+    "id": "daily_bad_work_day",
+    "char": "owner",
+    "text": "\"Today was so bad.\" {owner} says this to you, specifically, like you can fix capitalism.",
+    "bag": "main",
+    "when": [{ "slot": ["evening"] }],
+    "left": { "label": "Headbutt their chin", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Ask about dinner", "fx": { "belly": 10, "joy": -10 } }
+  },
+  {
+    "id": "daily_sick_day",
+    "char": "owner",
+    "text": "{owner} has the flu. They're on the couch in three blankets, whispering \"you're my nurse now.\" You have no training.",
+    "bag": "main",
+    "once": true,
+    "left": { "label": "Demand breakfast", "fx": { "belly": 10, "joy": -10 } },
+    "right": { "label": "Lie on their chest", "fx": { "joy": 15, "instinct": 10 }, "set": { "snuggles": "+1" }, "next": "daily_sick_soup" }
+  },
+  {
+    "id": "daily_sick_soup",
+    "char": "instinct",
+    "text": "THE HUMAN HAS MADE SOUP. THE HUMAN IS TOO WEAK TO DEFEND THE SOUP. NATURE HAS SPOKEN.",
+    "bag": "main",
+    "weight": 0,
+    "left": { "label": "Keep nursing", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Drink the soup", "fx": { "belly": 15, "joy": -10, "instinct": -10 } }
+  },
+  {
+    "id": "daily_breakup_movie",
+    "char": "owner",
+    "text": "{owner} is watching The Notebook with a pint of ice cream. It is the third time this week. They are saying \"why\" at Ryan Gosling.",
+    "bag": "main",
+    "when": [{ "slot": ["evening", "night"] }],
+    "left": { "label": "Lick the ice cream", "fx": { "belly": 10, "joy": -5, "instinct": -5 } },
+    "right": { "label": "Purr through credits", "fx": { "joy": 15, "instinct": 10 }, "set": { "snuggles": "+1" } }
+  },
+  {
+    "id": "daily_blanket_mice",
+    "char": "instinct",
+    "text": "THE BLANKET MICE HAVE RETURNED. TWO OF THEM. THEY TWITCH BENEATH THE DUVET. THE HUMAN CALLS THEM \"FEET.\" THE HUMAN IS A FOOL.",
+    "bag": "main",
+    "when": [{ "slot": ["night"] }],
+    "left": { "label": "Sleep like a pet", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Ambush the mice", "fx": { "joy": -10, "instinct": -15 }, "set": { "bites": "+1" }, "next": "daily_duvet_fortress" }
+  },
+  {
+    "id": "daily_duvet_fortress",
+    "char": "owner",
+    "text": "{owner} has tucked the duvet under both feet like a burrito. \"Not tonight.\" This is a declaration of war.",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Accept the treaty", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Sleep on their face", "fx": { "joy": -5, "instinct": -10 }, "set": { "slept_on_face": "+1" } }
+  },
+  {
+    "id": "daily_warm_pillow",
+    "char": "owner",
+    "text": "{owner} got up for water. They return to find you in their warm spot, on their pillow, in a perfect circle. \"...Seriously?\"",
+    "bag": "main",
+    "when": [{ "slot": ["night"] }],
+    "left": { "label": "Scoot over", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Become 40 pounds", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_face_available",
+    "char": "instinct",
+    "text": "THE HUMAN SLEEPS. THEIR FACE IS WARM. THEIR FACE IS EXACTLY THE SIZE OF US. COINCIDENCE? NO.",
+    "bag": "main",
+    "when": [{ "slot": ["night"] }],
+    "left": { "label": "Sleep at their feet", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Become a face hat", "fx": { "joy": -5, "instinct": -10 }, "set": { "slept_on_face": "+1" } }
+  },
+  {
+    "id": "daily_raccoon_eyes",
+    "char": "owner",
+    "text": "{owner} looks like a raccoon who lost an argument. \"I wake up with fur in my mouth. Every. Night.\"",
+    "bag": "main",
+    "once": true,
+    "when": [{ "flagGte": ["slept_on_face", 2] }, { "slot": ["morning"] }],
+    "left": { "label": "Settle for the chest", "fx": { "joy": 10, "instinct": 5 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Face is home now", "fx": { "joy": -10, "instinct": -10 }, "set": { "slept_on_face": "+1" } }
+  },
+  {
+    "id": "daily_3am_escort",
+    "char": "owner",
+    "text": "3 AM. {owner} gets up to pee. You escort them down the hall like a tiny, furry Secret Service agent.",
+    "bag": "main",
+    "when": [{ "slot": ["night"] }],
+    "left": { "label": "Escort in silence", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Scream in the dark", "fx": { "joy": -10, "instinct": -10 } }
+  },
+  {
+    "id": "daily_morning_coffee",
+    "char": "owner",
+    "text": "{owner} sits down with coffee and their phone. Their lap is open. Their attention is not.",
+    "bag": "main",
+    "when": [{ "slot": ["morning"] }],
+    "left": { "label": "Claim the lap", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Stand on the phone", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_yoga_tunnel",
+    "char": "owner",
+    "text": "{owner} is doing morning yoga. Downward dog. You have never seen a better tunnel.",
+    "bag": "main",
+    "when": [{ "slot": ["morning"] }],
+    "left": { "label": "Sit under them", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Attack the ponytail", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_owner_home",
+    "char": "owner",
+    "text": "Keys in the door. {owner} is home after nine hours. You have been asleep for eight and a half of them.",
+    "bag": "main",
+    "when": [{ "slot": ["evening"] }, { "notQuirk": ["wfh", "nightshift"] }],
+    "left": { "label": "Greet at the door", "fx": { "joy": 15, "instinct": 10 } },
+    "right": { "label": "Yell the whole story", "fx": { "belly": 10, "joy": -5, "instinct": -5 } }
+  },
+  {
+    "id": "daily_baby_voice",
+    "char": "owner",
+    "text": "\"Who's a widdle baby? Who's my scrumptious wittle bean?\" {owner} has a master's degree.",
+    "bag": "main",
+    "left": { "label": "Leave the room", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Slow blink", "fx": { "joy": 15, "instinct": 10 } }
+  },
+  {
+    "id": "daily_cat_song",
+    "char": "owner",
+    "text": "{owner} has written a song about you, to the tune of \"Baby Shark.\" There are verses. There is a bridge.",
+    "bag": "main",
+    "when": [{ "day": { "gte": 4 } }],
+    "left": { "label": "Purr along", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Yowl the harmony", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_slow_blink_war",
+    "char": "owner",
+    "text": "{owner} read that cats slow-blink to say \"I love you.\" They are now slow-blinking at you so hard it looks like a stroke.",
+    "bag": "main",
+    "once": true,
+    "left": { "label": "Blink back", "fx": { "joy": 15, "instinct": 10 } },
+    "right": { "label": "Never blink again", "fx": { "joy": -10, "instinct": -5 } }
+  },
+  {
+    "id": "daily_picked_up",
+    "char": "owner",
+    "text": "{owner} scoops you up like a newborn, belly to the sky, and starts swaying. \"Rock-a-bye kitty...\"",
+    "bag": "main",
+    "left": { "label": "Go limp and purr", "fx": { "joy": 15, "instinct": 15 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Bicycle kick", "fx": { "joy": -10, "instinct": -15 } }
+  },
+  {
+    "id": "daily_belly_trap",
+    "char": "instinct",
+    "text": "WE HAVE ROLLED OVER. THE BELLY IS EXPOSED. THE HUMAN REACHES IN. THE HUMAN HAS LEARNED NOTHING.",
+    "bag": "main",
+    "left": { "label": "Allow belly rubs", "fx": { "joy": 10, "instinct": 15 } },
+    "right": { "label": "Bear-trap the arm", "fx": { "joy": -10, "instinct": -15 }, "set": { "bites": "+1" } }
+  },
+  {
+    "id": "daily_brushing",
+    "char": "owner",
+    "text": "{owner} bought a brush. The first stroke is incredible. The second is incredible. The fourth is a war crime.",
+    "bag": "main",
+    "left": { "label": "Bite the brush hand", "fx": { "joy": -10, "instinct": -10 }, "set": { "bites": "+1" } },
+    "right": { "label": "Tolerate stroke five", "fx": { "joy": 10, "instinct": 10, "home": 5 }, "next": "daily_fur_clone" }
+  },
+  {
+    "id": "daily_fur_clone",
+    "char": "owner",
+    "text": "{owner} has brushed out enough fur to build a second, smaller cat. They're holding it up, proud. \"Look! It's you!\"",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Attack the clone", "fx": { "joy": 5, "instinct": -10 } },
+    "right": { "label": "Get brushed more", "fx": { "joy": 10, "instinct": 10, "home": 5 } }
+  },
+  {
+    "id": "daily_wand_toy",
+    "char": "owner",
+    "text": "{owner} waves the feather wand with the energy of someone who just finished a 50-minute meeting about a meeting.",
+    "bag": "main",
+    "left": { "label": "Watch it, unmoved", "fx": { "joy": -10, "instinct": 5 } },
+    "right": { "label": "Full predator mode", "fx": { "joy": 5, "instinct": -15, "belly": -5 }, "next": "daily_wand_kill" }
+  },
+  {
+    "id": "daily_wand_kill",
+    "char": "owner",
+    "text": "You caught the feather. You killed it. It is very dead. {owner} would like it back. \"That was $14, buddy.\"",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Return the body", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Drag it under couch", "fx": { "joy": -5, "instinct": -10 }, "set": { "feather_hoard": true } }
+  },
+  {
+    "id": "daily_couch_excavation",
+    "char": "owner",
+    "text": "{owner} moved the couch. Found: four feathers, three hair ties, one sock, and a pen from 2019. \"Is this... your nest?\"",
+    "bag": "main",
+    "once": true,
+    "when": [{ "flag": "feather_hoard" }],
+    "left": { "label": "Look ashamed", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Defend the hoard", "fx": { "joy": -5, "instinct": -10, "home": -5 }, "set": { "gifts": "+1" } }
+  },
+  {
+    "id": "daily_mail_slot",
+    "char": "instinct",
+    "text": "INTRUDERS. FLAT ONES. THEY COME THROUGH THE SLOT IN THE DOOR EVERY DAY AT NOON AND THE HUMAN JUST LETS THEM.",
+    "bag": "main",
+    "when": [{ "slot": ["afternoon"] }],
+    "left": { "label": "Hide under the bed", "fx": { "instinct": 10, "joy": 5 } },
+    "right": { "label": "Shred the bills", "fx": { "instinct": -15, "home": -5, "joy": -5 }, "chaos": 2 }
+  },
+  {
+    "id": "daily_bubble_wrap",
+    "char": "owner",
+    "text": "A package! {owner} unwraps a $90 heated cat bed. \"For YOU!\" The bubble wrap falls to the floor, gleaming.",
+    "bag": "main",
+    "once": true,
+    "left": { "label": "Try the fancy bed", "fx": { "joy": 15, "instinct": 5 } },
+    "right": { "label": "Murder bubble wrap", "fx": { "joy": -10, "instinct": -15 } }
+  },
+  {
+    "id": "daily_warm_laundry",
+    "char": "owner",
+    "text": "{owner} dumps a load of warm laundry on the bed to fold. It's all black clothes. They have a work thing tomorrow.",
+    "bag": "main",
+    "left": { "label": "Watch respectfully", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Dive in", "fx": { "joy": 5, "home": -10, "instinct": -10 } }
+  },
+  {
+    "id": "daily_grandma_facetime",
+    "char": "owner",
+    "text": "{owner}'s mom is on FaceTime. \"Show me the grandcat!\" You are held up to a phone like a newborn prince.",
+    "bag": "main",
+    "left": { "label": "Show them your butt", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Meow on cue", "fx": { "joy": 10, "instinct": 5 }, "next": "daily_grandma_pug" }
+  },
+  {
+    "id": "daily_grandma_pug",
+    "char": "owner",
+    "text": "\"Say hi to Meatball!\" Mom flips the camera. A pug fills the entire screen, breathing directly into the phone.",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Lick the screen", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Hiss at the pug", "fx": { "joy": 5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_ankles_moving",
+    "char": "instinct",
+    "text": "THE HUMAN WALKS. THE ANKLES MOVE. ANKLES ARE PREY. WHY HAVE WE NEVER EATEN AN ANKLE. TODAY WE EAT AN ANKLE.",
+    "bag": "main",
+    "when": [{ "meter": "instinct", "gt": 65 }],
+    "left": { "label": "Resist the ankle", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Eat the ankle", "fx": { "joy": -10, "instinct": -20 }, "set": { "bites": "+1" } }
+  },
+  {
+    "id": "daily_baking_show",
+    "char": "instinct",
+    "text": "...we used to hunt. our ancestors took down gazelles. now we watch a man named Kevin fold butter into dough with the human.",
+    "bag": "main",
+    "when": [{ "meter": "instinct", "lt": 30 }],
+    "left": { "label": "Kevin is fine", "fx": { "joy": 10, "instinct": -5 } },
+    "right": { "label": "Yell at nothing", "fx": { "joy": -5, "instinct": 15 } }
+  },
+  {
+    "id": "daily_stomach_noise",
+    "char": "owner",
+    "text": "A low gurgle. {owner} looks up. \"Was that you? Was that a cat noise or a pipe noise?\" It was a you noise.",
+    "bag": "main",
+    "when": [{ "meter": "belly", "lt": 30 }],
+    "left": { "label": "Suffer nobly", "fx": { "joy": 5, "belly": -5, "instinct": 5 } },
+    "right": { "label": "Lead them to bowl", "fx": { "belly": 20, "joy": -5 } }
+  },
+  {
+    "id": "daily_feeding_guide",
+    "char": "owner",
+    "text": "{owner} reads the food bag. \"'Feed one half-cup daily.'\" They look at you. They look at the three cups you've had today.",
+    "bag": "main",
+    "when": [{ "meter": "belly", "gt": 70 }],
+    "left": { "label": "Beg for a fourth", "fx": { "belly": 10, "joy": -10 } },
+    "right": { "label": "Do a fitness lap", "fx": { "belly": -10, "instinct": -10, "home": -5 }, "set": { "zoomies": "+1" } }
+  },
+  {
+    "id": "daily_cancelled_plans",
+    "char": "owner",
+    "text": "{owner} has started cancelling plans. \"Sorry, can't, {cat} is on me.\" Their friends have started a group chat about it.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "flagGte": ["snuggles", 3] }],
+    "left": { "label": "Stay on them", "fx": { "joy": 10, "instinct": 15 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Go be weird alone", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_photo_roll",
+    "char": "owner",
+    "text": "{owner}'s phone has 400 photos of you. Zero of anything else since you arrived. They're showing a stranger at the bus stop.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "flagGte": ["snuggles", 5] }],
+    "left": { "label": "Pose for 401", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Lick your butt", "fx": { "joy": -5, "instinct": -5 } }
+  },
+  {
+    "id": "daily_oven_mitts",
+    "char": "owner",
+    "text": "{owner} has started wearing oven mitts to pet you. Just as a precaution. They say it's \"not personal.\"",
+    "bag": "main",
+    "once": true,
+    "when": [{ "flagGte": ["bites", 3] }],
+    "left": { "label": "Be gentle. Prove it.", "fx": { "joy": 15, "instinct": 15 } },
+    "right": { "label": "Bite the mitt", "fx": { "joy": -5, "instinct": -10 }, "set": { "bites": "+1" } }
+  },
+  {
+    "id": "daily_adoption_papers",
+    "char": "owner",
+    "text": "{owner} is staring at the adoption form on the fridge, pen in hand. \"You're not going anywhere, huh?\"",
+    "bag": "main",
+    "once": true,
+    "when": [{ "day": { "gte": 10 } }, { "meter": "joy", "gte": 50 }],
+    "left": { "label": "Slow blink", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Knock the pen off", "fx": { "joy": -5, "instinct": -10 }, "set": { "knocked": "+1" } }
+  },
+  {
+    "id": "daily_named_bowl",
+    "char": "owner",
+    "text": "{owner} bought a ceramic bowl with your name painted on it. It's spelled wrong. They're too proud to notice.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "day": { "gte": 10 } }],
+    "left": { "label": "Drink from their mug", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Eat from it", "fx": { "joy": 10, "belly": 10 } }
+  },
+  {
+    "id": "daily_wfh_intern",
+    "char": "owner",
+    "text": "{owner} has introduced you on Slack as \"the new intern.\" Your first task: stay off the desk during the 10:00.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "quirk": "wfh" }, { "slot": ["morning", "afternoon"] }],
+    "left": { "label": "Do the job (nap)", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Unionize (yell)", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_wfh_synergy",
+    "char": "owner",
+    "text": "{owner} hasn't left the apartment in four days. They are explaining \"synergy\" to you. You are the only one who'll listen.",
+    "bag": "main",
+    "when": [{ "quirk": "wfh" }, { "day": { "gte": 4 } }],
+    "left": { "label": "Listen, rapt", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Leave mid-sentence", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_nightshift_7am",
+    "char": "owner",
+    "text": "{owner} gets home at 7 AM in scrubs, eyes like two burnt holes. They want to sleep. You've been up all night, for fun.",
+    "bag": "main",
+    "when": [{ "quirk": "nightshift" }, { "slot": ["morning"] }],
+    "left": { "label": "Let them sleep", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Breakfast. NOW.", "fx": { "belly": 15, "joy": -10 } }
+  },
+  {
+    "id": "daily_nightshift_blackout",
+    "char": "owner",
+    "text": "2 PM. The blackout curtains are drawn. {owner} is asleep with a sleep mask and earplugs. The apartment is yours.",
+    "bag": "main",
+    "when": [{ "quirk": "nightshift" }, { "slot": ["afternoon"] }],
+    "left": { "label": "Guard their sleep", "fx": { "joy": 5, "instinct": 10 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Silent rave", "fx": { "joy": -5, "home": -10, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 3 }
+  },
+  {
+    "id": "daily_plant_baby_voice",
+    "char": "owner",
+    "text": "{owner} is talking to the fiddle-leaf fig. In the baby voice. YOUR baby voice. \"Who's growing? You're growing!\"",
+    "bag": "main",
+    "when": [{ "quirk": "plantparent" }],
+    "left": { "label": "Accept the polycule", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Sit in its pot", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 2 }
+  },
+  {
+    "id": "daily_plant_mister",
+    "char": "owner",
+    "text": "{owner} mists the ferns every morning. Today, half-asleep, with the same bottle, they mist you. Then they keep going.",
+    "bag": "main",
+    "when": [{ "quirk": "plantparent" }, { "slot": ["morning"] }],
+    "left": { "label": "Endure the spa", "fx": { "joy": 5, "instinct": 15 } },
+    "right": { "label": "Fight the bottle", "fx": { "joy": -5, "instinct": -15 } }
+  },
+  {
+    "id": "daily_neatfreak_lint",
+    "char": "owner",
+    "text": "{owner} is lint-rolling the couch. Then their pants. Then, slowly, holding eye contact, they turn the roller toward you.",
+    "bag": "main",
+    "when": [{ "quirk": "neatfreak" }],
+    "left": { "label": "Allow the roller", "fx": { "joy": 10, "instinct": 10, "home": 5 } },
+    "right": { "label": "Shed defiantly", "fx": { "joy": -10, "home": -5, "instinct": -10 } }
+  },
+  {
+    "id": "daily_neatfreak_cushions",
+    "char": "owner",
+    "text": "{owner} vacuumed, then set every couch cushion at a precise 45° angle. Then photographed it. For themselves.",
+    "bag": "main",
+    "when": [{ "quirk": "neatfreak" }],
+    "left": { "label": "Admire from afar", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Nap on all of them", "fx": { "joy": -5, "home": -10, "instinct": -10 }, "chaos": 2 }
+  },
+  {
+    "id": "daily_gamer_clutch",
+    "char": "owner",
+    "text": "{owner} is in a ranked match, yelling \"HEAL ME\" into a headset. \"Not now, bud. I'm clutching. Do NOT.\"",
+    "bag": "main",
+    "when": [{ "quirk": "gamer" }, { "slot": ["evening", "night"] }],
+    "left": { "label": "Lie beside them", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Sit on controller", "fx": { "joy": -10, "instinct": -10 }, "next": "daily_gamer_mic" }
+  },
+  {
+    "id": "daily_gamer_mic",
+    "char": "owner",
+    "text": "They lost. Eleven strangers heard {owner} scream your name into the mic. Someone types: \"is that a CAT??\"",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Flee the scene", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Meow into the mic", "fx": { "instinct": -5 }, "next": "daily_gamer_donation" }
+  },
+  {
+    "id": "daily_gamer_donation",
+    "char": "owner",
+    "text": "Chat is spamming cat emojis. Someone tipped $5 \"for the cat.\" {owner} is quietly reconsidering their whole career.",
+    "bag": "main",
+    "weight": 0,
+    "noTime": true,
+    "left": { "label": "Retire undefeated", "fx": { "joy": 10, "instinct": 5 } },
+    "right": { "label": "Demand a cut (tuna)", "fx": { "joy": 5, "belly": 15 } }
+  },
+  {
+    "id": "daily_gamer_one_more",
+    "char": "owner",
+    "text": "It's 2 AM. {owner} is still gaming. \"One more match.\" That was the seventh one-more-match.",
+    "bag": "main",
+    "when": [{ "quirk": "gamer" }, { "slot": ["night"] }],
+    "left": { "label": "Fall asleep on lap", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" } },
+    "right": { "label": "Yowl them to bed", "fx": { "joy": -5, "instinct": -10 } }
+  }
+]
