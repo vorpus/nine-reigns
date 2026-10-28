@@ -53,8 +53,10 @@ export function catSVG(look = {}, opts = {}) {
   const mood = look.mood || 'happy';
   const cls = opts.className ? ` class="${opts.className}"` : '';
   const eyes = mood === 'sad'
-    ? `<path d="M76 72 q8 -6 16 0" stroke="#2b2730" stroke-width="4" fill="none" stroke-linecap="round"/>
-       <path d="M108 72 q8 -6 16 0" stroke="#2b2730" stroke-width="4" fill="none" stroke-linecap="round"/>`
+    ? `<ellipse cx="84" cy="72" rx="6" ry="7" fill="#2b2730"/><ellipse cx="116" cy="72" rx="6" ry="7" fill="#2b2730"/>
+       <circle cx="86" cy="69" r="2" fill="#fff"/><circle cx="118" cy="69" r="2" fill="#fff"/>
+       <path d="M74 60 l14 -6 M126 60 l-14 -6" stroke="#2b2730" stroke-width="3" stroke-linecap="round"/>
+       <path d="M80 82 q-1 6 2 9" stroke="#8fc3e8" stroke-width="3" fill="none" stroke-linecap="round"/>`
     : mood === 'smug'
       ? `<path d="M76 70 h16" stroke="#2b2730" stroke-width="5" stroke-linecap="round"/><path d="M108 70 h16" stroke="#2b2730" stroke-width="5" stroke-linecap="round"/>`
       : `<ellipse cx="84" cy="70" rx="7" ry="9" fill="#2b2730"/><ellipse cx="116" cy="70" rx="7" ry="9" fill="#2b2730"/>
@@ -72,7 +74,9 @@ export function catSVG(look = {}, opts = {}) {
   ${patternLayer(look.pattern, c)}
   ${eyes}
   <path d="M95 80 h10 l-5 6z" fill="#e07a7a"/>
-  <path d="M100 86 q-5 7 -10 3 M100 86 q5 7 10 3" stroke="#2b2730" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  ${mood === 'sad'
+    ? '<path d="M100 86 v3 M92 95 q8 -7 16 0" stroke="#2b2730" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
+    : '<path d="M100 86 q-5 7 -10 3 M100 86 q5 7 10 3" stroke="#2b2730" stroke-width="2.5" fill="none" stroke-linecap="round"/>'}
   <g stroke="#2b2730" stroke-width="1.6" stroke-linecap="round" opacity=".55">
     <path d="M70 82 h-20 M70 88 l-18 4 M130 82 h20 M130 88 l18 4"/>
   </g>

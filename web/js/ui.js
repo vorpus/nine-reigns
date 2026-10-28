@@ -44,8 +44,9 @@ export function renderMeters(meters, deltas, opts = {}) {
   for (const el of document.querySelectorAll('.meter')) {
     const m = el.dataset.meter;
     const v = meters[m];
-    // Keep a sliver visible at 0 and a gap at 100 so both extremes read.
-    el.style.setProperty('--v', `${6 + v * 0.88}%`);
+    // The glyph spans roughly 10%..90% of its box; clip from the top so the
+    // colored part rises with the value. A sliver stays visible at 0.
+    el.style.setProperty('--clip', `${(10 + (100 - v) * 0.78).toFixed(1)}%`);
     el.setAttribute('aria-valuenow', String(Math.round(v)));
     el.classList.toggle('off', !!(opts.off && opts.off.includes(m)));
     const lowDanger = v <= UI_CONFIG.dangerLow;

@@ -102,7 +102,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .meter-icon { position: relative; width: var(--meter-size); height: var(--meter-size); font-size: calc(var(--meter-size) * .82); line-height: var(--meter-size); text-align: center; }
 .meter-icon span { position: absolute; inset: 0; }
 .meter-empty { filter: grayscale(1) brightness(.55); opacity: .55; }
-.meter-full { clip-path: inset(calc(100% - var(--v, 50%)) 0 0 0); transition: clip-path var(--t-meter) cubic-bezier(.3,.7,.3,1); }
+.meter-full { clip-path: inset(var(--clip, 50%) 0 0 0); transition: clip-path var(--t-meter) cubic-bezier(.3,.7,.3,1); }
 .meter.up .meter-icon { animation: meter-up var(--t-meter) ease-out; }
 .meter.down .meter-icon { animation: meter-down var(--t-meter) ease-out; }
 @keyframes meter-up { 0% { transform: scale(1); } 40% { transform: scale(1.25); filter: drop-shadow(0 0 8px var(--c-good)); } 100% { transform: scale(1); } }
