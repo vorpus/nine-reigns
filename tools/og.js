@@ -14,9 +14,9 @@ const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/cs
 
 // favicon: the cat's head on a rounded tile
 const head = catSVG({ coat: { fur: '#e8964a', shade: '#c9732c', belly: '#f8dfc0' }, pattern: 'tabby' }, { noTail: true })
-  .replace('viewBox="0 0 200 200"', 'viewBox="36 -2 128 128"')
+  .replace('viewBox="0 0 200 200"', 'viewBox="30 2 140 140"')
   .replace(/<title>.*?<\/title>/, '')
-  .replace(/(<svg[^>]*>)/, '$1<rect x="36" y="-2" width="128" height="128" rx="28" fill="#c8643b"/>');
+  .replace(/(<svg[^>]*>)/, '$1<rect x="30" y="2" width="140" height="140" rx="30" fill="#221302"/>');
 await writeFile(join(root, 'web/favicon.svg'), head.replace(/\n\s*/g, ' ') + '\n');
 
 const server = createServer(async (req, res) => {
