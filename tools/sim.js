@@ -7,11 +7,12 @@
 //   random  coin flip every card.
 //   greedy  "greedy-joy": reads the true fx of both sides and takes whichever leaves Joy highest
 //           (ties: coin flip). Ignores every other meter. Chaos Mode: most chaos points.
-//   smart   a sensible human. Knows only what the screen shows: meter fills, the preview dots
-//           (which meters move, small < 10 or big >= 10, read as 5 and 12) and the card text.
-//           Direction is guessed from the text: right 85% of the time (a wrong guess sticks for
-//           that card side for the whole run). Doesn't know which choices end the run. Keeps
-//           Joy and Home healthy and steers Instinct/Belly away from 0/100.
+//   smart   a sensible human. Knows only what the screen shows: meter fills (read +-5), the
+//           preview dots (which meters move, small < 10 or big >= 10, read as 5 and 12) and the
+//           card text. Direction is guessed from the text: right 80% of the time (a wrong guess
+//           sticks for that card side and meter for the whole run). Picks 10% of cards on a whim.
+//           Doesn't know which choices end the run. Keeps Joy and Home healthy and steers
+//           Instinct/Belly away from 0/100. Env overrides: SIM_GUESS, SIM_WHIM, SIM_NOISE.
 //   oracle  the same heuristic with perfect knowledge of the true fx and card endings (an upper
 //           bound, reported for reference only).
 //
@@ -56,8 +57,9 @@ export function loadDataFromDisk() {
 
 // ---------- strategies ----------
 const clampM = (v) => Math.max(0, Math.min(100, v));
-const GUESS_RIGHT = Number(process.env.SIM_GUESS || 0.85);
-const WHIM = Number(process.env.SIM_WHIM || 0);
+const GUESS_RIGHT = Number(process.env.SIM_GUESS || 0.8); // direction guessed right from the text
+const WHIM = Number(process.env.SIM_WHIM || 0.1); // share of cards picked for the joke, not the meters
+const FILL_NOISE = Number(process.env.SIM_NOISE || 5); // reading a fill bar: +-5 points
 
 // fx as a strategy sees it. perfect: true numbers. Otherwise: dots + a direction guess.
 function seenFx(eng, side, rng, perfect) {
@@ -76,9 +78,9 @@ function seenFx(eng, side, rng, perfect) {
   return { fx: out, ch, end: perfect ? !!ch.end : false };
 }
 
-function project(eng, side, rng, perfect = true) {
+function project(eng, side, rng, perfect = true, base = eng.state.meters) {
   const { fx, ch, end } = seenFx(eng, side, rng, perfect);
-  const m = { ...eng.state.meters };
+  const m = { ...base };
   for (const k of METERS) m[k] = clampM(m[k] + (fx[k] || 0));
   for (const [k, d] of Object.entries(CONFIG.drift)) m[k] = clampM(m[k] + d);
   if (eng.state.cardIsCrisis) m[eng.state.cardIsCrisis.meter] = crisisResetValue(eng.state.cardIsCrisis);
@@ -92,8 +94,10 @@ const argmax = (l, r, rng) => (l === r ? coin(rng) : l > r ? 'left' : 'right');
 function sensible(perfect) {
   return (eng, rng) => {
     if (!perfect && WHIM && rng() < WHIM) return coin(rng);
+    const base = { ...eng.state.meters };
+    if (!perfect) for (const k of METERS) base[k] = clampM(base[k] + Math.round((rng() * 2 - 1) * FILL_NOISE));
     const score = (side) => {
-      const { m, ch, fx, end } = project(eng, side, rng, perfect);
+      const { m, ch, fx, end } = project(eng, side, rng, perfect, base);
       if (eng.state.mode === 'chaos') return (perfect ? chaosPts(ch) : Math.max(0, -(fx.home || 0))) + rng() * 0.01;
       if (end || m.joy <= 0 || m.home <= 0) return -1000 + rng();
       // Concave in Joy and Home, so the lower one gets the attention; mind the win line late on.

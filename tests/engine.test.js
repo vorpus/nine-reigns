@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Engine, buildData, evalCond, fillText, mulberry32, CONFIG } from '../web/js/engine.js';
+import { Engine, buildData, evalCond, fillText, mulberry32, CONFIG, crisisResetValue } from '../web/js/engine.js';
 import { rawData } from './fixtures/fixture.js';
 
 function mk(extra = [], runOpts = {}, dataOpts = {}) {
@@ -123,7 +123,7 @@ test('fx clamp, drift, set increments and literals', () => {
   assert.equal(eng.state.card, 'big');
   eng.state.flags.knocked = 2;
   const r = eng.choose('left');
-  assert.equal(eng.state.meters.joy, 100);
+  assert.equal(eng.state.meters.joy, 100 + (CONFIG.drift.joy || 0)); // clamped, then drift
   assert.equal(r.ending.id, 'home_generic'); // home hit 0
   assert.equal(eng.state.flags.knocked, 3);
   assert.equal(eng.state.flags.butter, true);
@@ -132,10 +132,11 @@ test('fx clamp, drift, set increments and literals', () => {
 
 test('passive drift each swipe', () => {
   const eng = start(mk()); eng.choose('left');
-  const { instinct, belly } = eng.state.meters;
+  const { joy, instinct, belly } = eng.state.meters;
   eng.choose('left');
-  assert.equal(eng.state.meters.instinct, instinct + 2);
-  assert.equal(eng.state.meters.belly, belly - 3);
+  assert.equal(eng.state.meters.joy, joy + (CONFIG.drift.joy || 0));
+  assert.equal(eng.state.meters.instinct, instinct + (CONFIG.drift.instinct || 0));
+  assert.equal(eng.state.meters.belly, belly + (CONFIG.drift.belly || 0));
 });
 
 test('placeholders substituted', () => {
@@ -145,21 +146,36 @@ test('placeholders substituted', () => {
   assert.equal(eng.current().character.name, 'Maya');
 });
 
-test('crisis trigger and reset to 50', () => {
+test('crisis trigger and reset', () => {
   const eng = start(mk()); eng.choose('left');
   eng.state.meters.instinct = 99;
   const r = eng.choose('left');
   assert.deepEqual(r.crisis, { meter: 'instinct', dir: 'high' });
   assert.equal(eng.state.card, 'ci_high');
   eng.choose('left');
-  assert.equal(eng.state.meters.instinct, 50);
+  assert.equal(eng.state.meters.instinct, crisisResetValue({ meter: 'instinct', dir: 'high' }));
   assert.equal(eng.state.cardIsCrisis, null);
   // belly low
   eng.state.meters.belly = 2;
   eng.choose('left');
   assert.equal(eng.state.card, 'cb_low');
   eng.choose('right');
-  assert.equal(eng.state.meters.belly, 50);
+  assert.equal(eng.state.meters.belly, crisisResetValue({ meter: 'belly', dir: 'low' }));
+});
+
+test('crisis fires when fx hits the edge even if drift moves the meter back', () => {
+  const extra = [card('calm', { weight: 100000, left: { label: 'l', fx: { instinct: -100, belly: 100 } } })];
+  const eng = start(mk(extra)); eng.choose('left');
+  assert.equal(eng.state.card, 'calm');
+  const r = eng.choose('left');
+  assert.ok(eng.state.meters.instinct > 0 || CONFIG.drift.instinct <= 0);
+  assert.deepEqual(r.crisis, { meter: 'instinct', dir: 'low' });
+  assert.deepEqual(eng.state.crisisQueue, [{ meter: 'belly', dir: 'high' }]);
+});
+
+test('chaos mode start meters', () => {
+  const eng = mk([], { mode: 'chaos' });
+  assert.equal(eng.state.meters.home, { ...CONFIG.start, ...CONFIG.chaosStart }.home);
 });
 
 test('crisis takes priority over next', () => {
@@ -211,7 +227,7 @@ test('trial fail and win tier fallthrough', () => {
 });
 
 test('chaos mode: joy irrelevant, chaos scored, home 0 ends', () => {
-  const extra = [card('smash', { weight: 100000, left: { label: 's', fx: { joy: -100, home: -30 }, chaos: 7 }, right: { label: 't', fx: { home: -10 } } })];
+  const extra = [card('smash', { weight: 100000, left: { label: 's', fx: { joy: -100, home: -60 }, chaos: 7 }, right: { label: 't', fx: { home: -10 } } })];
   const eng = start(mk(extra, { mode: 'chaos' }));
   assert.equal(eng.state.card, 'smash'); // no intro in chaos
   let r = eng.choose('left');

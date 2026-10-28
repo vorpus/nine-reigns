@@ -12,11 +12,12 @@ export const BAGS = ['main', 'intro', 'chain', 'chaos',
   'crisis_instinct_high', 'crisis_instinct_low', 'crisis_belly_high', 'crisis_belly_low'];
 
 export const CONFIG = {
-  start: { joy: 35, home: 70, instinct: 40, belly: 50 },
-  drift: { instinct: 1, belly: -2 },
+  start: { joy: 55, home: 75, instinct: 40, belly: 50 },
+  drift: { joy: -2, instinct: 2, belly: -2 },
+  chaosStart: { home: 100 }, // Chaos Mode overrides on top of start
   winJoy: 60,
   // Value a cat meter resets to after its crisis card resolves (number or per crisis bag).
-  crisisReset: { instinct_high: 25, instinct_low: 50, belly_high: 50, belly_low: 50 },
+  crisisReset: { instinct_high: 35, instinct_low: 50, belly_high: 50, belly_low: 50 },
   defaultWeight: 10,
   defaultCooldown: 20,
   sneezeChance: 0.35,
@@ -301,7 +302,7 @@ export class Engine {
       version: 1,
       mode,
       profile,
-      meters: { ...CONFIG.start },
+      meters: mode === 'chaos' ? { ...CONFIG.start, ...CONFIG.chaosStart } : { ...CONFIG.start },
       flags: {},
       day: 1,
       slot: 0,
