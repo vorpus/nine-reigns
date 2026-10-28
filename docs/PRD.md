@@ -157,11 +157,15 @@ Short multi-card arcs use flags and `next`. Examples:
 
 ## 7. UX
 
-- **Layout (portrait)**:
-  - Top: 4 meter icons with fill and preview dots.
-  - Then: the prompt text.
-  - Center: the card with the portrait and the character name below it.
-  - Bottom: "Day 3 · Evening" and the cat's name.
+- **Layout (portrait)**, proportions from `docs/research-onboarding.md` §4b:
+  - Top band (~15%): 4 meter icons with fill and preview dots above them.
+  - Then: the prompt text (up to 5 lines).
+  - Center: a square card ~83% of the column wide, the character name right under it.
+  - Bottom: "{cat} the Epithet" and "N days on trial" on the left; big segment-style
+    day digits, a time-of-day icon and the goal slots on the right (tap = goals/menu).
+- **Flow**: title (one tap) → trial file (cat, Day 1, tag #603, goals, NEXT) → deal
+  → cards → ending card (tap) → "The / Trial / is over" → succession trial file
+  ("Long live the Cat!", Nth Cat, 3 goals) → deal. Type is self-hosted Space Mono.
 - **Desktop**: centered column (max ~440 px wide). Mouse drag, ←/→ keys, and
   click buttons.
 - **Card physics**:

@@ -38,6 +38,7 @@ files**, `snake_case`.
 | `once` | bool | `false` | at most once per run |
 | `noTime` | bool | `false` | swipe does not advance the clock |
 | `when` | condition[] | `[]` | ALL must pass |
+| `ui` | object | — | presentation hints, see [Onboarding](#first-run-onboarding): `entry`, `dim`, `hint` (booleans) |
 | `left`, `right` | choice | required | if one side is omitted it mirrors the other (info card) |
 
 ### Choice fields
@@ -90,6 +91,7 @@ All listed conditions must pass. Every type:
 { "meta": "unlock_flag" }                // permanent unlock from an achievement
 { "meta": "firstRun" }                   // built-in: true on the player's very first run ever
 { "meta": "firstWin" }                   // built-in: true until the player has been adopted once
+{ "meta": "secondCat" }                  // built-in: true on the second run ever (normal mode)
 { "chance": 0.3 }                        // passes with probability p (rolled per check)
 { "any": [ {...}, {...} ] }              // OR
 { "not": {...} }                         // negation
@@ -202,6 +204,7 @@ the partner's look is derived from their name. Portraits support
   { "id": "gravity_tester", "title": "Gravity Tester", "icon": "🥛",
     "desc": "Knock 5 things off surfaces in one run.",
     "goal": [ { "flagGte": ["knocked", 5] } ],
+    "epithet": "the Gremlin",
     "unlocks": { "cosmetic": "bell_collar" } }
 ] }
 ```
@@ -239,7 +242,21 @@ it knows (`none`, `tabby`, `tuxedo_bib`, `calico_patches`, `socks`, `spots` / `n
 
 ## First-run onboarding
 
-The title screen is just "Play". On the very first run `{ "meta": "firstRun" }`
-passes, so a scripted tutorial can live in the `intro` bag: one `once` intro
-card gated on `firstRun` (high weight) whose choices `next` into `chain` cards.
-Later runs skip it and just get regular intro cards (or none).
+The script lives in `cards/tutorial.json` (see `docs/research-onboarding.md` §8)
+and is driven by `web/js/onboarding.js`:
+
+- After `newRun()`, `prepareRun()` queues the first card flagged `"ui": { "entry": true }`
+  whose `when` passes (`{ "meta": "firstRun" }` for cat 1, `{ "meta": "secondCat" }`
+  for cat 2's "that's our curse" beat). The rest of the script is `chain` cards
+  linked by `next`. From cat 3 on there is no entry card, so the deck opens on a
+  normal card. Entry cards are `bag: "chain"`, `weight: 0`; the validator counts
+  them as reachable.
+- `"ui": { "dim": true }` shows the meters switched off (dim brown) on that card;
+  the first card without it lights them one by one. `"ui": { "hint": true }`
+  runs the automatic hand drag until the player touches the card.
+- `*word*` in card text renders the word in red (the key noun of the first prompt).
+- `char: "narrator"` cards are narration cards: cream, italic text on the card,
+  previous prompt kept (dimmed) above.
+- The first run has one goal, the `kitten` achievement ("Make it to Day 2").
+  Achievements may carry an `epithet` ("the Kitten"); the latest one earned is
+  the cat's title in the footer and on the "Trial is over" screen.

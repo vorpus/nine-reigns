@@ -67,6 +67,9 @@ web/                 the deployed site
   js/swipe.js        pointer/touch gesture
   js/ui.js           DOM rendering
   js/catsvg.js       the player's cat portrait
+  js/icons.js        HUD icons, segment digits, hand hint
+  js/onboarding.js   first-run tutorial wiring, cat numbers, epithets
+  fonts/             Space Mono woff2 (SIL OFL, see fonts/OFL.txt)
   js/storage.js      localStorage save/meta
   js/main.js         boot + screen flow
   data/              cards, endings, owners, characters, achievements, cosmetics
