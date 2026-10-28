@@ -179,8 +179,15 @@ Quirks: `wfh`, `nightshift`, `plantparent`, `neatfreak`, `gamer`. The owner id
 
 Ids: `owner`, `instinct`, `partner`, `dog`, `vet`, `neighbor`, `landlord`,
 `roomba`, `plant`, `bird`, `reddot`, `shelter`, `albert`, `narrator`, `cat`.
-`name` may use placeholders (`owner` is `"{owner}"`). `cat` is drawn as the
-player's SVG cat instead of the emoji.
+`name` may use placeholders (`owner` is `"{owner}"`). Every id is drawn as a
+faceted SVG portrait by `web/js/portraits.js` (`portrait(id, opts)`; `cat` uses
+`catsvg.js`); `emoji` is only a fallback for an id with no drawing. `color` is
+the card background: one saturated solid color per character.
+
+`owner` and `partner` are parametric: owners in `owners.json` get a hand-picked
+look from `OWNER_LOOKS` (unknown ids get a look derived from their name), and
+the partner's look is derived from their name. Portraits support
+`expression: 'drag'` ("> <" eyes), shown while a choice is leaned.
 
 ## Achievements (`achievements.json`)
 

@@ -108,7 +108,7 @@ hair ties).
 
 `owner`, `instinct` (inner voice), `partner`, `dog`, `vet`, `neighbor`,
 `landlord`, `roomba`, `plant`, `bird` (window bird), `reddot`, `shelter`
-(volunteer), `albert`, `narrator` (system/intro). Each has an emoji portrait
+(volunteer), `albert`, `narrator` (system/intro). Each has an SVG portrait (`web/js/portraits.js`, emoji as fallback)
 and a background color in `characters.json`.
 
 ### Volume

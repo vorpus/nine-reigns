@@ -5,6 +5,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { METERS, SLOTS, HOMES, MODS, QUIRKS, BAGS, CONDITION_KEYS } from '../web/js/engine.js';
+import { PORTRAIT_IDS } from '../web/js/portraits.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -257,6 +258,7 @@ if (owners) {
 for (const id of CHAR_IDS) if (!charMap[id]) err('characters.json', `missing character "${id}"`);
 for (const [id, c] of Object.entries(charMap)) {
   if (!c.name || !c.emoji || !c.color) err(`characters.json:${id}`, 'needs name, emoji, color');
+  if (!PORTRAIT_IDS.includes(id)) warn(`characters.json:${id}`, 'no SVG portrait in portraits.js (emoji fallback)');
 }
 
 // ---------- achievements ----------
