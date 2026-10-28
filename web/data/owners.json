@@ -1,23 +1,133 @@
 {
   "owners": [
-    { "id": "maya", "name": "Maya", "quirk": "wfh", "quirkLabel": "works from home", "weight": 10 },
-    { "id": "jordan", "name": "Jordan", "quirk": "nightshift", "quirkLabel": "night-shift nurse", "weight": 10 },
-    { "id": "priya", "name": "Priya", "quirk": "plantparent", "quirkLabel": "plant parent (43 plants)", "weight": 10 },
-    { "id": "theo", "name": "Theo", "quirk": "neatfreak", "quirkLabel": "neat freak", "weight": 10 },
-    { "id": "dana", "name": "Dana", "quirk": "gamer", "quirkLabel": "competitive gamer", "weight": 10 },
-    { "id": "marcus", "name": "Marcus", "quirk": "wfh", "quirkLabel": "works from home, many calls", "weight": 8 },
-    { "id": "rosa", "name": "Rosa", "quirk": "plantparent", "quirkLabel": "has a fiddle-leaf fig", "weight": 8 },
-    { "id": "kenji", "name": "Kenji", "quirk": "neatfreak", "quirkLabel": "owns a label maker", "weight": 8 },
-    { "id": "albert", "name": "Albert", "quirk": "gamer", "quirkLabel": "first-time cat dad, very online", "weight": 3 }
+    {
+      "id": "albert",
+      "name": "Albert",
+      "quirk": "gamer",
+      "quirkLabel": "first-time cat dad, very online",
+      "weight": 30
+    },
+    {
+      "id": "grace",
+      "name": "Grace",
+      "quirk": "nightshift",
+      "quirkLabel": "works the night shift",
+      "weight": 10
+    },
+    {
+      "id": "andy",
+      "name": "Andy",
+      "quirk": "wfh",
+      "quirkLabel": "works from home",
+      "weight": 10
+    },
+    {
+      "id": "dyang",
+      "name": "dyang",
+      "quirk": "gamer",
+      "quirkLabel": "competitive gamer",
+      "weight": 10
+    },
+    {
+      "id": "dcai",
+      "name": "dcai",
+      "quirk": "neatfreak",
+      "quirkLabel": "owns a label maker",
+      "weight": 10
+    },
+    {
+      "id": "navo",
+      "name": "Navo",
+      "quirk": "plantparent",
+      "quirkLabel": "plant parent (43 plants)",
+      "weight": 10
+    },
+    {
+      "id": "li",
+      "name": "Li",
+      "quirk": "wfh",
+      "quirkLabel": "works from home, many calls",
+      "weight": 10
+    },
+    {
+      "id": "tri",
+      "name": "Tri",
+      "quirk": "neatfreak",
+      "quirkLabel": "neat freak",
+      "weight": 10
+    },
+    {
+      "id": "nate",
+      "name": "Nate",
+      "quirk": "plantparent",
+      "quirkLabel": "has a fiddle-leaf fig",
+      "weight": 10
+    },
+    {
+      "id": "grant",
+      "name": "Grant",
+      "quirk": "gamer",
+      "quirkLabel": "stays up way too late",
+      "weight": 10
+    }
   ],
   "catNames": [
-    "Sir Pounce", "Biscuit", "Meatloaf", "Captain Whiskers", "Toast", "Mochi",
-    "Lady Fluffington", "Pickles", "Beans", "Noodle", "Gremlin", "Professor Mittens",
-    "Tater Tot", "Duchess", "Mr. Business", "Pudding", "Sergeant Floof", "Nacho",
-    "Crouton", "Princess Bean", "Gary", "Dumpling", "Muffin", "Admiral Purrington",
-    "Pancake", "Linda", "Chairman Meow", "Waffle Iron", "Tofu", "Baron von Snoot",
-    "Clementine", "Kevin"
+    "Sir Pounce",
+    "Biscuit",
+    "Meatloaf",
+    "Captain Whiskers",
+    "Toast",
+    "Mochi",
+    "Lady Fluffington",
+    "Pickles",
+    "Beans",
+    "Noodle",
+    "Gremlin",
+    "Professor Mittens",
+    "Tater Tot",
+    "Duchess",
+    "Mr. Business",
+    "Pudding",
+    "Sergeant Floof",
+    "Nacho",
+    "Crouton",
+    "Princess Bean",
+    "Gary",
+    "Dumpling",
+    "Muffin",
+    "Admiral Purrington",
+    "Pancake",
+    "Linda",
+    "Chairman Meow",
+    "Waffle Iron",
+    "Tofu",
+    "Baron von Snoot",
+    "Clementine",
+    "Kevin"
   ],
-  "partnerNames": ["Sam", "Alex", "Jamie", "Chris", "Morgan", "Riley", "Taylor", "Jess", "Devon", "Robin"],
-  "dogNames": ["Moose", "Waffles", "Tank", "Bean Dip", "Duke", "Pretzel", "Rufus", "Gravy", "Chewbacca", "Meatball", "Bubba"]
+  "partnerNames": [
+    "Sam",
+    "Alex",
+    "Jamie",
+    "Chris",
+    "Morgan",
+    "Riley",
+    "Taylor",
+    "Jess",
+    "Devon",
+    "Robin"
+  ],
+  "dogNames": [
+    "Moose",
+    "Waffles",
+    "Tank",
+    "Bean Dip",
+    "Duke",
+    "Pretzel",
+    "Rufus",
+    "Gravy",
+    "Chewbacca",
+    "Meatball",
+    "Bubba"
+  ]
 }
