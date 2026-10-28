@@ -1,0 +1,173 @@
+{
+  "cards": [
+    {
+      "id": "tut_new_cat",
+      "note": "First-ever run. Spirit of the Fallen: 'Are you the young King?'",
+      "char": "instinct",
+      "text": "ARE YOU THE NEW *CAT*?",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "when": [{ "meta": "firstRun" }],
+      "ui": { "entry": true, "dim": true, "hint": true },
+      "left": { "label": "Yes", "next": "tut_cage_nine" },
+      "right": { "label": "No", "next": "tut_cage_nine" }
+    },
+    {
+      "id": "tut_cage_nine",
+      "char": "instinct",
+      "text": "SO YOU'RE THE ONE WHO LEFT CAGE 9 AND WALKED INTO THE CARRIER. ON PURPOSE.",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "ui": { "dim": true },
+      "left": { "label": "Yes...", "next": "tut_all_mad" },
+      "right": { "label": "It was a trick", "next": "tut_all_mad" }
+    },
+    {
+      "id": "tut_all_mad",
+      "char": "instinct",
+      "text": "ANYWAY. FROM NOW ON YOU RUN THIS HOUSE. GOOD LUCK. THE HUMANS HERE ARE ALL MAD.",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "ui": { "dim": true },
+      "left": { "label": "What humans?", "next": "tut_balance" },
+      "right": { "label": "Mad how?", "next": "tut_balance" }
+    },
+    {
+      "id": "tut_balance",
+      "char": "instinct",
+      "text": "IF YOU WANT TO STAY, KEEP ALL FOUR IN BALANCE. TOO LITTLE IS BAD. TOO MUCH IS ALSO BAD. NOT FAIR.",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "ui": { "dim": true },
+      "left": { "label": "Four what?", "next": "tut_voice_quiet" },
+      "right": { "label": "Understood", "next": "tut_voice_quiet" }
+    },
+    {
+      "id": "tut_voice_quiet",
+      "char": "narrator",
+      "text": "The voice goes quiet. The carrier door clicks open. Somewhere, a vacuum cleaner is sleeping.",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "ui": { "dim": true },
+      "left": { "label": "Step out", "next": "tut_volunteer" },
+      "right": { "label": "Step out", "next": "tut_volunteer" }
+    },
+    {
+      "id": "tut_volunteer",
+      "note": "Meters light up as this card flips, one per clause.",
+      "char": "shelter",
+      "text": "Two-week trial! Be loved, don't wreck the place, don't go feral, eat your dinner. That's the whole job.",
+      "bag": "chain",
+      "weight": 0,
+      "left": { "label": "Sounds easy", "fx": { "joy": 5 }, "next": "tut_memory_foam" },
+      "right": { "label": "Two weeks?!", "fx": { "instinct": 5 }, "next": "tut_memory_foam" }
+    },
+    {
+      "id": "tut_memory_foam",
+      "char": "owner",
+      "text": "Welcome home, {cat}! This is your bed. It was eighty dollars. It has memory foam.",
+      "bag": "chain",
+      "weight": 0,
+      "left": { "label": "Sniff the bed", "fx": { "joy": 10, "instinct": 5 }, "next": "tut_gerald" },
+      "right": { "label": "Sit in the box", "fx": { "instinct": -10, "joy": -5 }, "next": "tut_gerald" }
+    },
+    {
+      "id": "tut_gerald",
+      "note": "Reigns' first king is Gerald.",
+      "char": "plant",
+      "text": "This is Gerald. Gerald is a fern. Nobody has ever chewed Gerald. Gerald looks crunchy.",
+      "bag": "chain",
+      "weight": 0,
+      "left": { "label": "Respect Gerald", "fx": { "instinct": 5 }, "next": "tut_one_scoop" },
+      "right": { "label": "Chew Gerald", "fx": { "instinct": -10, "home": -5, "belly": 5 }, "set": { "plants_eaten": "+1" }, "next": "tut_one_scoop" }
+    },
+    {
+      "id": "tut_one_scoop",
+      "char": "owner",
+      "text": "Dinner time! One scoop, exactly like the shelter said.",
+      "bag": "chain",
+      "weight": 0,
+      "left": { "label": "Eat politely", "fx": { "belly": 10 }, "next": "tut_glass" },
+      "right": { "label": "Yell for scoop 2", "fx": { "belly": 15, "joy": -10 }, "next": "tut_glass" }
+    },
+    {
+      "id": "tut_glass",
+      "char": "instinct",
+      "text": "THE GLASS OF WATER ON THE TABLE. IT IS LOOKING AT US.",
+      "bag": "chain",
+      "weight": 0,
+      "left": { "label": "Let it live", "fx": { "instinct": 10 } },
+      "right": { "label": "Knock it off", "fx": { "instinct": -15, "home": -10, "joy": -5 }, "set": { "knocked": "+1" } }
+    },
+
+    {
+      "id": "tut_curse_new_cat",
+      "note": "Second cat only. 'Ha ha, just kidding... That's our curse, see?'",
+      "char": "instinct",
+      "text": "ARE YOU THE NEW *CAT*?",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "when": [{ "meta": "secondCat" }],
+      "ui": { "entry": true },
+      "left": { "label": "Yes", "next": "tut_curse_kidding" },
+      "right": { "label": "I'm not sure...", "next": "tut_curse_kidding" }
+    },
+    {
+      "id": "tut_curse_kidding",
+      "char": "instinct",
+      "text": "HA. JUST KIDDING. I KNOW WE'VE DONE THIS BEFORE. THAT'S OUR *CURSE*, SEE?",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "left": { "label": "I don't understand", "next": "tut_curse_remember" },
+      "right": { "label": "Curse?", "next": "tut_curse_remember" }
+    },
+    {
+      "id": "tut_curse_remember",
+      "char": "instinct",
+      "text": "WE REMEMBER EVERY CAT WHO CAME BEFORE. EVERY RETURN. EVERY RUG. FOR NINE LIVES...",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "left": { "label": "How...", "next": "tut_curse_red_dot" },
+      "right": { "label": "But...", "next": "tut_curse_red_dot" }
+    },
+    {
+      "id": "tut_curse_red_dot",
+      "note": "The Red Dot is our Devil.",
+      "char": "instinct",
+      "text": "THEY SAY ONLY THE *RED DOT* CAN MAKE US FORGET. BUT DOES THE RED DOT EVEN EXIST?",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "left": { "label": "Yes it does", "next": "tut_curse_maybe" },
+      "right": { "label": "It's a laser", "next": "tut_curse_maybe" }
+    },
+    {
+      "id": "tut_curse_maybe",
+      "char": "instinct",
+      "text": "INTERESTING. MAYBE IT DOES. MAYBE ONE DAY WE WILL CATCH IT.",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "left": { "label": "Maybe...", "next": "tut_curse_curls_up" },
+      "right": { "label": "One day", "next": "tut_curse_curls_up" }
+    },
+    {
+      "id": "tut_curse_curls_up",
+      "char": "narrator",
+      "text": "The Instinct slowly curls up somewhere behind your eyes...",
+      "bag": "chain",
+      "weight": 0,
+      "noTime": true,
+      "left": { "label": "Blink" },
+      "right": { "label": "Blink" }
+    }
+  ]
+}

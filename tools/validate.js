@@ -14,7 +14,8 @@ const quiet = args.includes('--quiet');
 
 const LIMITS = { label: 24, labelWarn: 20, text: 200, textWarn: 140, endingText: 400 };
 const CHAR_IDS = ['owner', 'instinct', 'partner', 'dog', 'vet', 'neighbor', 'landlord', 'roomba', 'plant', 'bird', 'reddot', 'shelter', 'albert', 'narrator', 'cat'];
-const CARD_KEYS = ['id', 'char', 'text', 'bag', 'weight', 'cooldown', 'once', 'noTime', 'when', 'left', 'right', 'note', 'tags'];
+const CARD_KEYS = ['id', 'char', 'text', 'bag', 'weight', 'cooldown', 'once', 'noTime', 'when', 'left', 'right', 'note', 'tags', 'ui'];
+const UI_KEYS = ['entry', 'dim', 'hint'];
 const CHOICE_KEYS = ['label', 'fx', 'set', 'next', 'end', 'chaos'];
 const PATTERNS = ['none', 'tabby', 'tuxedo_bib', 'calico_patches', 'socks', 'spots'];
 const ACCESSORIES = ['none', 'bell_collar', 'bow_tie', 'tiny_hat', 'flower', 'glasses', 'bandana', 'crown'];
@@ -78,6 +79,16 @@ for (const e of endings) {
   endingIds.add(e.id);
 }
 const ownerIds = new Set(((owners && owners.owners) || []).map((o) => o.id));
+// Longest name each placeholder can expand to, for label length checks.
+const longest = (xs) => (xs || []).reduce((a, b) => (String(b).length > a.length ? String(b) : a), '');
+const LONGEST = {
+  '{owner}': longest(((owners && owners.owners) || []).map((o) => o.name)) || 'your human',
+  '{partner}': longest(owners && owners.partnerNames) || 'the partner',
+  '{dog}': longest(owners && owners.dogNames) || 'the dog',
+  '{cat}': longest(owners && owners.catNames) || 'the cat',
+  '{home}': 'apartment',
+};
+const expandLongest = (t) => Object.entries(LONGEST).reduce((s, [k, v]) => s.split(k).join(v), t);
 const cosmeticIds = new Set();
 if (cosmetics) {
   for (const group of ['coats', 'patterns', 'accessories']) {
@@ -154,6 +165,14 @@ for (const { card, file } of cards) {
   for (const k of ['weight', 'cooldown']) if (k in card && (typeof card[k] !== 'number' || card[k] < 0)) err(where, `${k} must be a number >= 0`);
   for (const k of ['once', 'noTime']) if (k in card && typeof card[k] !== 'boolean') err(where, `${k} must be boolean`);
   checkConds(where, card.when);
+  if (card.ui != null) {
+    if (typeof card.ui !== 'object' || Array.isArray(card.ui)) err(where, 'ui must be an object');
+    else for (const [k, v] of Object.entries(card.ui)) {
+      if (!UI_KEYS.includes(k)) warn(where, `unknown ui key "${k}"`);
+      else if (typeof v !== 'boolean') err(where, `ui.${k} must be boolean`);
+    }
+    if (card.ui.entry && !(card.when && card.when.length)) warn(where, 'ui.entry card has no `when`, so it opens every run');
+  }
   if (!card.left && !card.right) err(where, 'needs left and/or right');
   for (const side of ['left', 'right']) {
     const ch = card[side];
@@ -163,6 +182,9 @@ for (const { card, file } of cards) {
     for (const k of Object.keys(ch)) if (!CHOICE_KEYS.includes(k)) warn(w, `unknown choice key "${k}"`);
     if (typeof ch.label !== 'string' || !ch.label.trim()) err(w, 'missing label');
     else if (ch.label.length > LIMITS.label) err(w, `label "${ch.label}" is ${ch.label.length} chars (max ${LIMITS.label})`);
+    else if (ch.label.includes('{') && expandLongest(ch.label).length > LIMITS.label) {
+      err(w, `label "${ch.label}" can expand to "${expandLongest(ch.label)}" (${expandLongest(ch.label).length} chars, max ${LIMITS.label})`);
+    }
     if (ch.fx != null) {
       if (typeof ch.fx !== 'object') err(w, 'fx must be an object');
       else for (const [k, v] of Object.entries(ch.fx)) {
@@ -192,7 +214,7 @@ for (const { card, file } of cards) {
   }
 }
 for (const [id, { card, file }] of cardIds) {
-  if ((card.bag === 'chain' || card.weight === 0) && !referencedNext.has(id)) warn(`cards/${file}:${id}`, 'chain/weight-0 card is never reached by any `next`');
+  if ((card.bag === 'chain' || card.weight === 0) && !referencedNext.has(id) && !(card.ui && card.ui.entry)) warn(`cards/${file}:${id}`, 'chain/weight-0 card is never reached by any `next`');
 }
 for (const b of BAGS.filter((x) => x.startsWith('crisis_'))) if (!bagCounts[b]) warn('cards', `crisis bag "${b}" is empty (built-in fallback will be used)`);
 if (!bagCounts.main) warn('cards', 'main bag is empty');
