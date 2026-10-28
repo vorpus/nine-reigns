@@ -1,79 +1,218 @@
-[
-  {
-    "id": "albert_haul",
-    "char": "albert",
-    "text": "Albert has bought 14 toys, a heated bed and a $190 app-connected litter box. You are sitting in the box it all came in.",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Stay in the box", "fx": { "joy": -5, "instinct": -5 } },
-    "right": { "label": "Try the heated bed", "fx": { "joy": 15, "instinct": 5 }, "set": { "albert_bff": "+1" } }
-  },
-  {
-    "id": "albert_nicknames",
-    "char": "albert",
-    "text": "In 48 hours Albert has called you {cat}, Little Guy, Mr. Business, Chicken Nugget, and \"Sir, please.\" He's waiting to see which one sticks.",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Answer to none", "fx": { "joy": -5, "instinct": -5 } },
-    "right": { "label": "Answer to Nugget", "fx": { "joy": 15, "instinct": 5 }, "set": { "albert_bff": "+1", "nugget": true } }
-  },
-  {
-    "id": "albert_photos",
-    "char": "albert",
-    "text": "Albert is taking photo #312 of you sleeping. He's sending it to a group chat that has politely asked him to slow down.",
-    "bag": "main",
-    "weight": 12,
-    "cooldown": 25,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Blur on purpose", "fx": { "joy": -5, "instinct": -5 } },
-    "right": { "label": "Model pose", "fx": { "joy": 10, "instinct": 5 }, "set": { "albert_bff": "+1" } }
-  },
-  {
-    "id": "albert_forum",
-    "char": "albert",
-    "text": "2 AM. Albert is reading a forum thread titled \"is it normal if my cat stares at the wall\". You are staring at the wall.",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Stare harder", "fx": { "joy": -5, "instinct": -10 } },
-    "right": { "label": "Stare at Albert", "fx": { "joy": 5, "instinct": 5 } }
-  },
-  {
-    "id": "albert_cat_tree",
-    "char": "albert",
-    "text": "Albert finished building the cat tree. Four screws are left over. \"That's normal,\" he says. The tree leans like it has a secret.",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Sit in its box", "fx": { "joy": -10, "instinct": -5 } },
-    "right": { "label": "Summit the tree", "fx": { "joy": 10, "home": -10, "instinct": -10 }, "chaos": 10, "set": { "albert_bff": "+1" } }
-  },
-  {
-    "id": "albert_dinner",
-    "char": "albert",
-    "text": "Albert is attempting dinner. The smoke alarm is singing. \"It's fine,\" he tells you, the cat, as if you'd asked.",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }],
-    "left": { "label": "Sing with alarm", "fx": { "joy": -5, "instinct": -10 } },
-    "right": { "label": "Inspect the pan", "fx": { "home": -5, "belly": 10, "joy": 5 } }
-  },
-  {
-    "id": "albert_voice",
-    "char": "albert",
-    "text": "Albert has invented a voice for you. It's a Victorian gentleman. \"I say, Albert, the bowl is dreadfully empty.\" Is this accurate?",
-    "bag": "main",
-    "weight": 12,
-    "once": true,
-    "when": [{ "owner": "albert" }, { "day": { "gte": 3 } }],
-    "left": { "label": "Ignore him", "fx": { "joy": -5, "belly": -5 } },
-    "right": { "label": "Meow on cue", "fx": { "joy": 15, "belly": 5, "instinct": 5 }, "set": { "albert_bff": "+1" } }
-  }
-]
+{
+  "cards": [
+    {
+      "id": "albert_haul",
+      "char": "albert",
+      "text": "Albert has bought 14 toys, a heated bed and a $190 app-connected litter box. You are sitting in the box it all came in.",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Stay in the box",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        }
+      },
+      "right": {
+        "label": "Try the heated bed",
+        "fx": {
+          "joy": 15,
+          "instinct": 5
+        },
+        "set": {
+          "albert_bff": "+1"
+        }
+      }
+    },
+    {
+      "id": "albert_nicknames",
+      "char": "albert",
+      "text": "In 48 hours Albert has called you {cat}, Little Guy, Mr. Business, Chicken Nugget, and \"Sir, please.\" He's waiting to see which one sticks.",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Answer to none",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        }
+      },
+      "right": {
+        "label": "Answer to Nugget",
+        "fx": {
+          "joy": 15,
+          "instinct": 5
+        },
+        "set": {
+          "albert_bff": "+1",
+          "nugget": true
+        }
+      }
+    },
+    {
+      "id": "albert_photos",
+      "char": "albert",
+      "text": "Albert is taking photo #312 of you sleeping. He's sending it to a group chat that has politely asked him to slow down.",
+      "bag": "main",
+      "weight": 12,
+      "cooldown": 25,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Blur on purpose",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        }
+      },
+      "right": {
+        "label": "Model pose",
+        "fx": {
+          "joy": 10,
+          "instinct": 5
+        },
+        "set": {
+          "albert_bff": "+1"
+        }
+      }
+    },
+    {
+      "id": "albert_forum",
+      "char": "albert",
+      "text": "2 AM. Albert is reading a forum thread titled \"is it normal if my cat stares at the wall\". You are staring at the wall.",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Stare harder",
+        "fx": {
+          "joy": -5,
+          "instinct": -10
+        }
+      },
+      "right": {
+        "label": "Stare at Albert",
+        "fx": {
+          "joy": 5,
+          "instinct": 5
+        }
+      }
+    },
+    {
+      "id": "albert_cat_tree",
+      "char": "albert",
+      "text": "Albert finished building the cat tree. Four screws are left over. \"That's normal,\" he says. The tree leans like it has a secret.",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Sit in its box",
+        "fx": {
+          "joy": -10,
+          "instinct": -5
+        }
+      },
+      "right": {
+        "label": "Summit the tree",
+        "fx": {
+          "joy": 10,
+          "home": -10,
+          "instinct": -10
+        },
+        "chaos": 10,
+        "set": {
+          "albert_bff": "+1"
+        }
+      }
+    },
+    {
+      "id": "albert_dinner",
+      "char": "albert",
+      "text": "Albert is attempting dinner. The smoke alarm is singing. \"It's fine,\" he tells you, the cat, as if you'd asked.",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ],
+      "left": {
+        "label": "Sing with alarm",
+        "fx": {
+          "joy": -5,
+          "instinct": -10
+        }
+      },
+      "right": {
+        "label": "Inspect the pan",
+        "fx": {
+          "home": -5,
+          "belly": 10,
+          "joy": 5
+        }
+      }
+    },
+    {
+      "id": "albert_voice",
+      "char": "albert",
+      "text": "Albert has invented a voice for you. It's a Victorian gentleman. \"I say, Albert, the bowl is dreadfully empty.\" Is this accurate?",
+      "bag": "main",
+      "weight": 12,
+      "once": true,
+      "when": [
+        {
+          "owner": "albert"
+        },
+        {
+          "day": {
+            "gte": 3
+          }
+        }
+      ],
+      "left": {
+        "label": "Ignore him",
+        "fx": {
+          "joy": -5,
+          "belly": -5
+        }
+      },
+      "right": {
+        "label": "Meow on cue",
+        "fx": {
+          "joy": 15,
+          "belly": 5,
+          "instinct": 5
+        },
+        "set": {
+          "albert_bff": "+1"
+        }
+      }
+    }
+  ]
+}

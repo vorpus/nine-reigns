@@ -1,463 +1,466 @@
-[
-  {
-    "id": "chain_vet_carrier",
-    "char": "owner",
-    "text": "The carrier has come out of the closet. {owner} is pretending it hasn't. \"Hey buddy! No reason! Just a fun little box!\"",
-    "bag": "main",
-    "weight": 6,
-    "once": true,
-    "when": [
-      {
-        "day": {
-          "gte": 4,
-          "lte": 12
+{
+  "cards": [
+    {
+      "id": "chain_vet_carrier",
+      "char": "owner",
+      "text": "The carrier has come out of the closet. {owner} is pretending it hasn't. \"Hey buddy! No reason! Just a fun little box!\"",
+      "bag": "main",
+      "weight": 6,
+      "once": true,
+      "when": [
+        {
+          "day": {
+            "gte": 4,
+            "lte": 12
+          }
+        },
+        {
+          "notFlag": "vet_started"
+        }
+      ],
+      "left": {
+        "label": "Vanish under bed",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        },
+        "set": {
+          "vet_started": true
+        },
+        "next": "chain_vet_hunt"
+      },
+      "right": {
+        "label": "Walk in, trusting",
+        "fx": {
+          "joy": 10,
+          "instinct": 5
+        },
+        "set": {
+          "vet_started": true
+        },
+        "next": "chain_vet_car"
+      }
+    },
+    {
+      "id": "chain_vet_carrier_called",
+      "char": "owner",
+      "text": "After the Loaf Incident, {owner} booked the vet. The carrier is out. {owner} is holding a towel like a matador's cape.",
+      "bag": "main",
+      "weight": 40,
+      "once": true,
+      "when": [
+        {
+          "flag": "vet_called"
+        },
+        {
+          "notFlag": "vet_started"
+        }
+      ],
+      "left": {
+        "label": "Vanish under bed",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        },
+        "set": {
+          "vet_started": true
+        },
+        "next": "chain_vet_hunt"
+      },
+      "right": {
+        "label": "Walk in, trusting",
+        "fx": {
+          "joy": 10,
+          "instinct": 5
+        },
+        "set": {
+          "vet_started": true
+        },
+        "next": "chain_vet_car"
+      }
+    },
+    {
+      "id": "chain_vet_hunt",
+      "char": "owner",
+      "text": "{owner} is flat on the floor with a flashlight and a towel. \"I can see your eyes. I'm not mad. The appointment is in 9 minutes.\"",
+      "bag": "main",
+      "weight": 0,
+      "noTime": true,
+      "left": {
+        "label": "Surrender",
+        "fx": {
+          "joy": 5
+        },
+        "next": "chain_vet_car"
+      },
+      "right": {
+        "label": "Wedge behind fridge",
+        "fx": {
+          "joy": -10,
+          "home": -10,
+          "instinct": -10
+        },
+        "chaos": 5,
+        "next": "chain_vet_car"
+      }
+    },
+    {
+      "id": "chain_vet_car",
+      "char": "instinct",
+      "text": "THE BOX IS MOVING. THE WORLD IS MOVING. WE ARE BEING TAKEN TO THE MOON. SING, SO THEY REMEMBER US.",
+      "bag": "main",
+      "weight": 0,
+      "left": {
+        "label": "Low, haunted yowl",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
+        },
+        "next": "chain_vet_exam"
+      },
+      "right": {
+        "label": "Full four-act opera",
+        "fx": {
+          "joy": -10,
+          "instinct": -15
+        },
+        "next": "chain_vet_exam"
+      }
+    },
+    {
+      "id": "chain_vet_exam",
+      "char": "vet",
+      "text": "\"Hello, {cat}! Just a quick temperature check.\" The thermometer is not going where you assumed. Betrayal has a smell. It's latex.",
+      "bag": "main",
+      "weight": 0,
+      "left": {
+        "label": "Endure, silently",
+        "fx": {
+          "joy": 10,
+          "instinct": 15
+        },
+        "set": {
+          "vet_survived": true
+        },
+        "next": "chain_vet_home"
+      },
+      "right": {
+        "label": "Hiss at the vet",
+        "fx": {
+          "joy": -5,
+          "instinct": -10
+        },
+        "set": {
+          "vet_survived": true,
+          "vet_spicy": true
+        },
+        "next": "chain_vet_home"
+      }
+    },
+    {
+      "id": "chain_vet_home",
+      "char": "owner",
+      "text": "Home again, with a sticker on your file that says \"CAUTION\". {owner} offers a treat. \"You were so brave. I'm so sorry.\"",
+      "bag": "main",
+      "weight": 0,
+      "noTime": true,
+      "left": {
+        "label": "Shun for 3 hours",
+        "fx": {
+          "joy": -5,
+          "instinct": -5
         }
       },
-      {
-        "notFlag": "vet_started"
-      }
-    ],
-    "left": {
-      "label": "Vanish under bed",
-      "fx": {
-        "joy": -5,
-        "instinct": -5
-      },
-      "set": {
-        "vet_started": true
-      },
-      "next": "chain_vet_hunt"
-    },
-    "right": {
-      "label": "Walk in, trusting",
-      "fx": {
-        "joy": 10,
-        "instinct": 5
-      },
-      "set": {
-        "vet_started": true
-      },
-      "next": "chain_vet_car"
-    }
-  },
-  {
-    "id": "chain_vet_carrier_called",
-    "char": "owner",
-    "text": "After the Loaf Incident, {owner} booked the vet. The carrier is out. {owner} is holding a towel like a matador's cape.",
-    "bag": "main",
-    "weight": 40,
-    "once": true,
-    "when": [
-      {
-        "flag": "vet_called"
-      },
-      {
-        "notFlag": "vet_started"
-      }
-    ],
-    "left": {
-      "label": "Vanish under bed",
-      "fx": {
-        "joy": -5,
-        "instinct": -5
-      },
-      "set": {
-        "vet_started": true
-      },
-      "next": "chain_vet_hunt"
-    },
-    "right": {
-      "label": "Walk in, trusting",
-      "fx": {
-        "joy": 10,
-        "instinct": 5
-      },
-      "set": {
-        "vet_started": true
-      },
-      "next": "chain_vet_car"
-    }
-  },
-  {
-    "id": "chain_vet_hunt",
-    "char": "owner",
-    "text": "{owner} is flat on the floor with a flashlight and a towel. \"I can see your eyes. I'm not mad. The appointment is in 9 minutes.\"",
-    "bag": "main",
-    "weight": 0,
-    "noTime": true,
-    "left": {
-      "label": "Surrender",
-      "fx": {
-        "joy": 5
-      },
-      "next": "chain_vet_car"
-    },
-    "right": {
-      "label": "Wedge behind fridge",
-      "fx": {
-        "joy": -10,
-        "home": -10,
-        "instinct": -10
-      },
-      "chaos": 5,
-      "next": "chain_vet_car"
-    }
-  },
-  {
-    "id": "chain_vet_car",
-    "char": "instinct",
-    "text": "THE BOX IS MOVING. THE WORLD IS MOVING. WE ARE BEING TAKEN TO THE MOON. SING, SO THEY REMEMBER US.",
-    "bag": "main",
-    "weight": 0,
-    "left": {
-      "label": "Low, haunted yowl",
-      "fx": {
-        "joy": -5,
-        "instinct": -5
-      },
-      "next": "chain_vet_exam"
-    },
-    "right": {
-      "label": "Full four-act opera",
-      "fx": {
-        "joy": -10,
-        "instinct": -15
-      },
-      "next": "chain_vet_exam"
-    }
-  },
-  {
-    "id": "chain_vet_exam",
-    "char": "vet",
-    "text": "\"Hello, {cat}! Just a quick temperature check.\" The thermometer is not going where you assumed. Betrayal has a smell. It's latex.",
-    "bag": "main",
-    "weight": 0,
-    "left": {
-      "label": "Endure, silently",
-      "fx": {
-        "joy": 10,
-        "instinct": 15
-      },
-      "set": {
-        "vet_survived": true
-      },
-      "next": "chain_vet_home"
-    },
-    "right": {
-      "label": "Hiss at the vet",
-      "fx": {
-        "joy": -5,
-        "instinct": -10
-      },
-      "set": {
-        "vet_survived": true,
-        "vet_spicy": true
-      },
-      "next": "chain_vet_home"
-    }
-  },
-  {
-    "id": "chain_vet_home",
-    "char": "owner",
-    "text": "Home again, with a sticker on your file that says \"CAUTION\". {owner} offers a treat. \"You were so brave. I'm so sorry.\"",
-    "bag": "main",
-    "weight": 0,
-    "noTime": true,
-    "left": {
-      "label": "Shun for 3 hours",
-      "fx": {
-        "joy": -5,
-        "instinct": -5
-      }
-    },
-    "right": {
-      "label": "Accept the bribe",
-      "fx": {
-        "joy": 10,
-        "belly": 10
-      }
-    }
-  },
-  {
-    "id": "chain_bird_stare",
-    "char": "bird",
-    "text": "A fat pigeon lands on the windowsill. It looks at you the way a landlord looks at a late tenant.",
-    "bag": "main",
-    "weight": 8,
-    "cooldown": 12,
-    "when": [
-      {
-        "notFlag": "bird_chain_done"
-      }
-    ],
-    "left": {
-      "label": "Ignore the bird",
-      "fx": {
-        "instinct": 5
-      }
-    },
-    "right": {
-      "label": "Stare it down",
-      "fx": {
-        "instinct": -5,
-        "joy": 5
-      },
-      "set": {
-        "bird_watch": "+1"
-      }
-    }
-  },
-  {
-    "id": "chain_bird_chatter",
-    "char": "bird",
-    "text": "The pigeon is back. Your jaw starts making a sound on its own: \"ek-ek-ek-ek\". {owner} is filming. This is going in the group chat.",
-    "bag": "main",
-    "weight": 10,
-    "once": true,
-    "when": [
-      {
-        "flagGte": [
-          "bird_watch",
-          2
-        ]
-      },
-      {
-        "notFlag": "bird_chain_done"
-      }
-    ],
-    "left": {
-      "label": "Chatter for camera",
-      "fx": {
-        "joy": 10,
-        "instinct": 5
-      },
-      "set": {
-        "bird_watch": "+1"
-      }
-    },
-    "right": {
-      "label": "Headbutt the glass",
-      "fx": {
-        "joy": -5,
-        "home": -5,
-        "instinct": -10
-      },
-      "set": {
-        "bird_watch": "+1"
-      }
-    }
-  },
-  {
-    "id": "chain_bird_window",
-    "char": "narrator",
-    "text": "{owner} opened the window to air out the litter smell. The screen has one loose corner. The pigeon is RIGHT THERE.",
-    "bag": "main",
-    "weight": 15,
-    "once": true,
-    "when": [
-      {
-        "flagGte": [
-          "bird_watch",
-          3
-        ]
-      },
-      {
-        "notFlag": "bird_chain_done"
-      }
-    ],
-    "left": {
-      "label": "Just watch",
-      "fx": {
-        "instinct": 10,
-        "joy": 5
-      },
-      "set": {
-        "bird_chain_done": true
-      }
-    },
-    "right": {
-      "label": "Nose the screen",
-      "fx": {
-        "instinct": -5,
-        "home": -5
-      },
-      "next": "chain_bird_ledge"
-    }
-  },
-  {
-    "id": "chain_bird_ledge",
-    "char": "instinct",
-    "text": "WE ARE OUTSIDE THE SCREEN. ON THE LEDGE. THE BIRD IS ONE LEAP AWAY. THE HUMAN IS SAYING OUR NAME VERY CALMLY. TOO CALMLY.",
-    "bag": "main",
-    "weight": 0,
-    "noTime": true,
-    "left": {
-      "label": "Climb back inside",
-      "fx": {
-        "joy": -10,
-        "instinct": 5
-      },
-      "set": {
-        "bird_chain_done": true
-      }
-    },
-    "right": {
-      "label": "LEAP",
-      "fx": {
-        "instinct": -25
-      },
-      "set": {
-        "bird_chain_done": true
-      },
-      "end": "escaped_window"
-    }
-  },
-  {
-    "id": "chain_tuna_smell",
-    "char": "neighbor",
-    "text": "Something next door smells like tuna. Not just tuna: the expensive tuna, in oil. You hear the neighbor humming to it.",
-    "bag": "main",
-    "weight": 7,
-    "once": true,
-    "when": [
-      {
-        "day": {
-          "gte": 3
-        }
-      },
-      {
-        "home": [
-          "studio",
-          "apartment"
-        ]
-      }
-    ],
-    "left": {
-      "label": "Camp by the door",
-      "fx": {
-        "instinct": -5,
-        "belly": -5
-      },
-      "set": {
-        "tuna_curious": true
-      }
-    },
-    "right": {
-      "label": "Sit on {owner}",
-      "fx": {
-        "joy": 5,
-        "instinct": 5
-      }
-    }
-  },
-  {
-    "id": "chain_tuna_ajar",
-    "char": "narrator",
-    "text": "{owner} is hauling groceries in and propped the front door open. Across the hall, the neighbor's door is ALSO open. The tuna calls.",
-    "bag": "main",
-    "weight": 20,
-    "once": true,
-    "when": [
-      {
-        "flag": "tuna_curious"
-      },
-      {
-        "day": {
-          "gte": 4
+      "right": {
+        "label": "Accept the bribe",
+        "fx": {
+          "joy": 10,
+          "belly": 10
         }
       }
-    ],
-    "left": {
-      "label": "Stay home",
-      "fx": {
-        "joy": 5,
-        "instinct": 5
+    },
+    {
+      "id": "chain_bird_stare",
+      "char": "bird",
+      "text": "A fat pigeon lands on the windowsill. It looks at you the way a landlord looks at a late tenant.",
+      "bag": "main",
+      "weight": 8,
+      "cooldown": 12,
+      "when": [
+        {
+          "notFlag": "bird_chain_done"
+        }
+      ],
+      "left": {
+        "label": "Ignore the bird",
+        "fx": {
+          "instinct": 5
+        }
+      },
+      "right": {
+        "label": "Stare it down",
+        "fx": {
+          "instinct": -5,
+          "joy": 5
+        },
+        "set": {
+          "bird_watch": "+1"
+        }
       }
     },
-    "right": {
-      "label": "Dart across",
-      "fx": {
-        "instinct": -10
+    {
+      "id": "chain_bird_chatter",
+      "char": "bird",
+      "text": "The pigeon is back. Your jaw starts making a sound on its own: \"ek-ek-ek-ek\". {owner} is filming. This is going in the group chat.",
+      "bag": "main",
+      "weight": 10,
+      "once": true,
+      "when": [
+        {
+          "flagGte": [
+            "bird_watch",
+            2
+          ]
+        },
+        {
+          "notFlag": "bird_chain_done"
+        }
+      ],
+      "left": {
+        "label": "Chatter for camera",
+        "fx": {
+          "joy": 10,
+          "instinct": 5
+        },
+        "set": {
+          "bird_watch": "+1"
+        }
       },
-      "next": "chain_tuna_inside"
-    }
-  },
-  {
-    "id": "chain_tuna_inside",
-    "char": "neighbor",
-    "text": "\"Well, hello, little visitor.\" The neighbor opens a can, just for you. A second can is on the counter. {owner} is calling your name.",
-    "bag": "main",
-    "weight": 0,
-    "noTime": true,
-    "left": {
-      "label": "Run back home",
-      "fx": {
-        "joy": 10,
-        "belly": 5
-      },
-      "set": {
-        "neighbor_friend": true
+      "right": {
+        "label": "Headbutt the glass",
+        "fx": {
+          "joy": -5,
+          "home": -5,
+          "instinct": -10
+        },
+        "set": {
+          "bird_watch": "+1",
+          "bites": "+1"
+        }
       }
     },
-    "right": {
-      "label": "Eat the tuna",
-      "fx": {
-        "joy": -10,
-        "belly": 15
+    {
+      "id": "chain_bird_window",
+      "char": "narrator",
+      "text": "{owner} opened the window to air out the litter smell. The screen has one loose corner. The pigeon is RIGHT THERE.",
+      "bag": "main",
+      "weight": 15,
+      "once": true,
+      "when": [
+        {
+          "flagGte": [
+            "bird_watch",
+            3
+          ]
+        },
+        {
+          "notFlag": "bird_chain_done"
+        }
+      ],
+      "left": {
+        "label": "Just watch",
+        "fx": {
+          "instinct": 10,
+          "joy": 5
+        },
+        "set": {
+          "bird_chain_done": true
+        }
       },
-      "set": {
-        "neighbor_friend": true
-      },
-      "next": "chain_tuna_armchair"
-    }
-  },
-  {
-    "id": "chain_tuna_armchair",
-    "char": "neighbor",
-    "text": "Full of tuna, you're shown a sunny armchair. \"Stay as long as you like.\" She means forever. {owner} is knocking. Last chance.",
-    "bag": "main",
-    "weight": 0,
-    "noTime": true,
-    "left": {
-      "label": "Go home, sheepish",
-      "fx": {
-        "joy": -5,
-        "belly": 10
+      "right": {
+        "label": "Nose the screen",
+        "fx": {
+          "instinct": -5,
+          "home": -5
+        },
+        "next": "chain_bird_ledge"
       }
     },
-    "right": {
-      "label": "Never leave",
-      "fx": {
-        "belly": 20
+    {
+      "id": "chain_bird_ledge",
+      "char": "instinct",
+      "text": "WE ARE OUTSIDE THE SCREEN. ON THE LEDGE. THE BIRD IS ONE LEAP AWAY. THE HUMAN IS SAYING OUR NAME VERY CALMLY. TOO CALMLY.",
+      "bag": "main",
+      "weight": 0,
+      "noTime": true,
+      "left": {
+        "label": "Climb back inside",
+        "fx": {
+          "joy": -10,
+          "instinct": 5
+        },
+        "set": {
+          "bird_chain_done": true
+        }
       },
-      "end": "escaped_neighbor_tuna"
-    }
-  },
-  {
-    "id": "chain_tuna_visit",
-    "char": "neighbor",
-    "text": "The tuna neighbor has stopped by \"to say hi to {owner}\". She has brought nothing for {owner}. She has brought treats for you.",
-    "bag": "main",
-    "weight": 6,
-    "cooldown": 30,
-    "when": [
-      {
-        "flag": "neighbor_friend"
-      }
-    ],
-    "left": {
-      "label": "Stay loyal",
-      "fx": {
-        "joy": 10,
-        "belly": -5
+      "right": {
+        "label": "LEAP",
+        "fx": {
+          "instinct": -25
+        },
+        "set": {
+          "bird_chain_done": true
+        },
+        "end": "escaped_window"
       }
     },
-    "right": {
-      "label": "Take the treats",
-      "fx": {
-        "joy": -5,
-        "belly": 15
+    {
+      "id": "chain_tuna_smell",
+      "char": "neighbor",
+      "text": "Something next door smells like tuna. Not just tuna: the expensive tuna, in oil. You hear the neighbor humming to it.",
+      "bag": "main",
+      "weight": 7,
+      "once": true,
+      "when": [
+        {
+          "day": {
+            "gte": 3
+          }
+        },
+        {
+          "home": [
+            "studio",
+            "apartment"
+          ]
+        }
+      ],
+      "left": {
+        "label": "Camp by the door",
+        "fx": {
+          "instinct": -5,
+          "belly": -5
+        },
+        "set": {
+          "tuna_curious": true
+        }
+      },
+      "right": {
+        "label": "Sit on {owner}",
+        "fx": {
+          "joy": 5,
+          "instinct": 5
+        }
+      }
+    },
+    {
+      "id": "chain_tuna_ajar",
+      "char": "narrator",
+      "text": "{owner} is hauling groceries in and propped the front door open. Across the hall, the neighbor's door is ALSO open. The tuna calls.",
+      "bag": "main",
+      "weight": 20,
+      "once": true,
+      "when": [
+        {
+          "flag": "tuna_curious"
+        },
+        {
+          "day": {
+            "gte": 4
+          }
+        }
+      ],
+      "left": {
+        "label": "Stay home",
+        "fx": {
+          "joy": 5,
+          "instinct": 5
+        }
+      },
+      "right": {
+        "label": "Dart across",
+        "fx": {
+          "instinct": -10
+        },
+        "next": "chain_tuna_inside"
+      }
+    },
+    {
+      "id": "chain_tuna_inside",
+      "char": "neighbor",
+      "text": "\"Well, hello, little visitor.\" The neighbor opens a can, just for you. A second can is on the counter. {owner} is calling your name.",
+      "bag": "main",
+      "weight": 0,
+      "noTime": true,
+      "left": {
+        "label": "Run back home",
+        "fx": {
+          "joy": 10,
+          "belly": 5
+        },
+        "set": {
+          "neighbor_friend": true
+        }
+      },
+      "right": {
+        "label": "Eat the tuna",
+        "fx": {
+          "joy": -10,
+          "belly": 15
+        },
+        "set": {
+          "neighbor_friend": true
+        },
+        "next": "chain_tuna_armchair"
+      }
+    },
+    {
+      "id": "chain_tuna_armchair",
+      "char": "neighbor",
+      "text": "Full of tuna, you're shown a sunny armchair. \"Stay as long as you like.\" She means forever. {owner} is knocking. Last chance.",
+      "bag": "main",
+      "weight": 0,
+      "noTime": true,
+      "left": {
+        "label": "Go home, sheepish",
+        "fx": {
+          "joy": -5,
+          "belly": 10
+        }
+      },
+      "right": {
+        "label": "Never leave",
+        "fx": {
+          "belly": 20
+        },
+        "end": "escaped_neighbor_tuna"
+      }
+    },
+    {
+      "id": "chain_tuna_visit",
+      "char": "neighbor",
+      "text": "The tuna neighbor has stopped by \"to say hi to {owner}\". She has brought nothing for {owner}. She has brought treats for you.",
+      "bag": "main",
+      "weight": 6,
+      "cooldown": 30,
+      "when": [
+        {
+          "flag": "neighbor_friend"
+        }
+      ],
+      "left": {
+        "label": "Stay loyal",
+        "fx": {
+          "joy": 10,
+          "belly": -5
+        }
+      },
+      "right": {
+        "label": "Take the treats",
+        "fx": {
+          "joy": -5,
+          "belly": 15
+        }
       }
     }
-  }
-]
+  ]
+}
