@@ -1,0 +1,19 @@
+{
+  "characters": {
+    "owner":    { "name": "{owner}",       "emoji": "🧑", "color": "#e3b98f" },
+    "instinct": { "name": "THE INSTINCT",  "emoji": "😼", "color": "#c25b4e" },
+    "partner":  { "name": "{partner}",     "emoji": "🧔", "color": "#9fb7a0" },
+    "dog":      { "name": "{dog}",         "emoji": "🐶", "color": "#d6a86c" },
+    "vet":      { "name": "The Vet",       "emoji": "🩺", "color": "#a9c4cf" },
+    "neighbor": { "name": "The Neighbor",  "emoji": "👵", "color": "#c7a6c4" },
+    "landlord": { "name": "The Landlord",  "emoji": "🧾", "color": "#a39e8f" },
+    "roomba":   { "name": "The Roomba",    "emoji": "🤖", "color": "#8e9aab" },
+    "plant":    { "name": "The Plant",     "emoji": "🪴", "color": "#93b47e" },
+    "bird":     { "name": "Window Bird",   "emoji": "🐦", "color": "#8fb6d6" },
+    "reddot":   { "name": "The Red Dot",   "emoji": "🔴", "color": "#3b3340" },
+    "shelter":  { "name": "Shelter Volunteer", "emoji": "📋", "color": "#e6cf8a" },
+    "albert":   { "name": "Albert",        "emoji": "👨‍🦳", "color": "#b8a1d9" },
+    "narrator": { "name": "Meanwhile",     "emoji": "📜", "color": "#d8ccb4" },
+    "cat":      { "name": "{cat}",         "emoji": "🐱", "color": "#f2d2a9" }
+  }
+}

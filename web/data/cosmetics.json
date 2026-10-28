@@ -1,0 +1,30 @@
+{
+  "coats": [
+    { "id": "orange", "name": "Orange", "fur": "#e8964a", "shade": "#c9732c", "belly": "#f8dfc0", "unlocked": true },
+    { "id": "grey", "name": "Grey", "fur": "#9a9ca3", "shade": "#74767e", "belly": "#d9dade", "unlocked": true },
+    { "id": "black", "name": "Black", "fur": "#3a3640", "shade": "#24212a", "belly": "#5a5560", "unlocked": true },
+    { "id": "cream", "name": "Cream", "fur": "#ecd9b8", "shade": "#d2b98f", "belly": "#fbf2e2", "unlocked": false },
+    { "id": "tuxedo", "name": "Tuxedo", "fur": "#2f2c35", "shade": "#1d1b22", "belly": "#f4f1ea", "unlocked": false },
+    { "id": "calico", "name": "Calico", "fur": "#f1e6d6", "shade": "#d78a45", "belly": "#fffaf2", "unlocked": false },
+    { "id": "lilac", "name": "Lilac", "fur": "#b9a8b8", "shade": "#968496", "belly": "#e6dbe4", "unlocked": false },
+    { "id": "siamese", "name": "Siamese", "fur": "#efe0c9", "shade": "#6b5444", "belly": "#fbf4ea", "unlocked": false }
+  ],
+  "patterns": [
+    { "id": "none", "name": "Plain", "unlocked": true },
+    { "id": "tabby", "name": "Tabby stripes", "unlocked": true },
+    { "id": "socks", "name": "White socks", "unlocked": false },
+    { "id": "tuxedo_bib", "name": "Tuxedo bib", "unlocked": false },
+    { "id": "spots", "name": "Spots", "unlocked": false },
+    { "id": "calico_patches", "name": "Calico patches", "unlocked": false }
+  ],
+  "accessories": [
+    { "id": "none", "name": "Nothing", "unlocked": true },
+    { "id": "bell_collar", "name": "Bell collar", "unlocked": false },
+    { "id": "bow_tie", "name": "Bow tie", "unlocked": false },
+    { "id": "tiny_hat", "name": "Tiny hat", "unlocked": false },
+    { "id": "flower", "name": "Flower", "unlocked": false },
+    { "id": "glasses", "name": "Reading glasses", "unlocked": false },
+    { "id": "bandana", "name": "Bandana", "unlocked": false },
+    { "id": "crown", "name": "Crown", "unlocked": false }
+  ]
+}
