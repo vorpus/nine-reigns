@@ -63,7 +63,7 @@ export function catSVG(look = {}, opts = {}) {
          <circle cx="86" cy="66" r="2.5" fill="#fff"/><circle cx="118" cy="66" r="2.5" fill="#fff"/>`;
   const label = opts.title ? `<title>${opts.title}</title>` : '';
   return `<svg${cls} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${opts.title || 'Your cat'}">${label}
-  <path d="M136 176 Q178 170 172 128 Q168 108 152 112" stroke="${c.fur}" stroke-width="14" fill="none" stroke-linecap="round"/>
+  ${opts.noTail ? '' : `<path d="M136 176 Q178 170 172 128 Q168 108 152 112" stroke="${c.fur}" stroke-width="14" fill="none" stroke-linecap="round"/>`}
   <path d="M60 182 Q52 120 80 100 L120 100 Q148 120 140 182z" fill="${c.fur}"/>
   <path d="M82 182 Q78 130 100 116 Q122 130 118 182z" fill="${c.belly}"/>
   <rect x="70" y="168" width="22" height="16" rx="8" fill="${c.fur}"/><rect x="108" y="168" width="22" height="16" rx="8" fill="${c.fur}"/>

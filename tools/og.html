@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../web/css/tokens.css">
+<link rel="stylesheet" href="../web/css/style.css">
+<style>
+  html, body { overflow: hidden; }
+  body { margin: 0; background: var(--c-bg); }
+  .og { width: 1200px; height: 630px; display: flex; align-items: center; gap: 40px; padding: 0 70px; box-sizing: border-box; background: var(--c-bg); }
+  .og-left { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .og-left .logo { font-size: 104px; }
+  .og-cat { width: 250px; height: 250px; }
+  .og-cat svg { width: 100%; height: 100%; }
+  .og-tag { font-family: var(--font-prompt); font-style: italic; color: var(--c-bar-dim); font-size: 26px; text-align: center; margin: 4px 0 0; max-width: 520px; }
+  .phone { width: 400px; height: 560px; border-radius: 28px; overflow: hidden; background: var(--c-stage); display: flex; flex-direction: column; box-shadow: 0 0 0 10px #1c1819; }
+  .phone .bar-top { padding: 16px; }
+  .phone .meter-full { clip-path: inset(var(--clip) 0 0 0); }
+  .phone .prompt-wrap { min-height: 0; padding: 18px 26px 10px; }
+  .phone .prompt { font-size: 21px; }
+  .phone .stage { flex: 1; --card-size: 250px; }
+  .phone .card { transform: translate(-36px, 6px) rotate(-8deg); --lp: 1; }
+  .phone .char-name { text-align: center; padding-bottom: 14px; }
+  .icon { width: 180px; height: 180px; background: var(--c-btn-primary); display: grid; place-items: center; }
+  .icon svg { width: 150px; height: 150px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+  import { catSVG } from '../web/js/catsvg.js';
+  const look = { coat: { fur: '#e8964a', shade: '#c9732c', belly: '#f8dfc0' }, pattern: 'tabby', accessory: 'bell_collar' };
+  const root = document.getElementById('root');
+  if (location.hash === '#icon') {
+    root.innerHTML = `<div class="icon">${catSVG({ ...look, accessory: 'none' }, { noTail: true }).replace('viewBox="0 0 200 200"', 'viewBox="36 -2 128 128"')}</div>`;
+  } else {
+    const meter = (icon, v) => `<div class="meter"><div class="meter-icon"><span class="meter-empty">${icon}</span><span class="meter-full" style="--clip:${10 + (100 - v) * 0.78}%">${icon}</span></div><div class="meter-dot ${v === 70 ? 'big' : v === 40 ? 'small' : ''}"></div></div>`;
+    root.innerHTML = `<div class="og">
+      <div class="og-left"><h1 class="logo">Nine<br>Reigns</h1><div class="og-cat">${catSVG(look)}</div>
+        <p class="og-tag">You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.</p></div>
+      <div class="phone">
+        <header class="bar bar-top"><div class="meters">${meter('❤️', 55)}${meter('🏠', 70)}${meter('🐾', 40)}${meter('🐟', 30)}</div></header>
+        <div class="prompt-wrap"><p class="prompt">A full glass of water sits at the very edge of the table. Your human is on a work call.</p></div>
+        <div class="stage"><div class="deck-back"></div><div class="card" style="--card-color:#e3b98f"><div class="choice choice-left">Knock it off</div><div class="portrait"><span>🥛</span></div></div></div>
+        <div class="char-name">Maya</div>
+      </div>
+    </div>`;
+  }
+  document.body.dataset.ready = '1';
+</script>
+</body>
+</html>
