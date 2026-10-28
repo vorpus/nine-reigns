@@ -1,0 +1,152 @@
+[
+  {
+    "id": "crisis_instinct_high_curtains",
+    "char": "instinct",
+    "text": "THE CURTAINS HAVE BEEN MOCKING US FOR DAYS. THEY SWAY. THEY KNOW. CLIMB THEM OR DESTROY SOMETHING SMALLER. NO THIRD OPTION.",
+    "bag": "crisis_instinct_high",
+    "left": { "label": "Scale the curtains", "fx": { "home": -20, "joy": -5 }, "chaos": 20 },
+    "right": { "label": "Shred the toilet roll", "fx": { "home": -10, "joy": -10 }, "chaos": 10 }
+  },
+  {
+    "id": "crisis_instinct_high_ankle",
+    "char": "instinct",
+    "text": "{owner}'S ANKLES. WALKING. UNGUARDED. LIKE TWO LITTLE SAUSAGES OF PREY. WE ARE SO SORRY. WE ARE NOT SORRY.",
+    "bag": "crisis_instinct_high",
+    "left": { "label": "Ambush the ankles", "fx": { "joy": -20 } },
+    "right": { "label": "Bite the couch", "fx": { "home": -15, "joy": -5 }, "chaos": 10 },
+    "when": [{ "notMod": "dog" }]
+  },
+  {
+    "id": "crisis_instinct_high_ankle_dog",
+    "char": "instinct",
+    "text": "{owner}'S ANKLES. OR THE DOG'S TAIL. ONE OF THEM IS GETTING HUNTED IN THE NEXT FOUR SECONDS. PICK.",
+    "bag": "crisis_instinct_high",
+    "when": [{ "mod": "dog" }],
+    "left": { "label": "Ambush the ankles", "fx": { "joy": -20 } },
+    "right": { "label": "Ambush the dog", "fx": { "joy": -10, "home": -10 }, "chaos": 10, "set": { "dog_feud": "+1" } }
+  },
+  {
+    "id": "crisis_instinct_high_zoomies",
+    "char": "narrator",
+    "text": "It is 3:12 AM. {cat} has achieved a speed previously thought impossible for something that sleeps 18 hours a day.",
+    "bag": "crisis_instinct_high",
+    "left": { "label": "Laps over the bed", "fx": { "joy": -15, "home": -5 } },
+    "right": { "label": "Hallway drift", "fx": { "home": -15, "joy": -5 }, "chaos": 10 }
+  },
+  {
+    "id": "crisis_instinct_high_shelf",
+    "char": "instinct",
+    "text": "THE SHELF HAS SEVEN OBJECTS. THE FLOOR HAS ZERO. THIS IS AN INJUSTICE AND WE ARE THE CORRECTION.",
+    "bag": "crisis_instinct_high",
+    "left": { "label": "One. At. A. Time.", "fx": { "home": -15, "joy": -10 }, "chaos": 15, "set": { "knocked": "+1" } },
+    "right": { "label": "Full sweep", "fx": { "home": -25 }, "chaos": 25, "set": { "knocked": "+1" } }
+  },
+  {
+    "id": "crisis_instinct_low_loaf",
+    "char": "owner",
+    "text": "{cat} has been a loaf on the same cushion for nine hours. {owner} has Googled \"is my cat a croissant now\".",
+    "bag": "crisis_instinct_low",
+    "left": { "label": "Stay loafed", "fx": { "joy": -15 } },
+    "right": { "label": "Sigh dramatically", "fx": { "joy": -10, "belly": -5 } }
+  },
+  {
+    "id": "crisis_instinct_low_toy",
+    "char": "owner",
+    "text": "{owner} waves the $24 feather wand with growing desperation. \"Remember fun? You loved fun. Yesterday. Please.\"",
+    "bag": "crisis_instinct_low",
+    "left": { "label": "Watch it pass", "fx": { "joy": -15 } },
+    "right": { "label": "One limp swat", "fx": { "joy": -5, "home": -5 } }
+  },
+  {
+    "id": "crisis_instinct_low_vetcall",
+    "char": "vet",
+    "text": "\"Lethargic, hm. Is she eating? Grooming? Judging you?\" {owner} is on speaker with the vet. You hear the word \"appointment\".",
+    "bag": "crisis_instinct_low",
+    "left": { "label": "Judge harder", "fx": { "joy": -10, "home": -5 } },
+    "right": { "label": "Remain a puddle", "fx": { "joy": -15 } }
+  },
+  {
+    "id": "crisis_instinct_low_box",
+    "char": "instinct",
+    "text": "we have no thoughts. only box. the box is the world. we are the box. hello.",
+    "bag": "crisis_instinct_low",
+    "left": { "label": "Become box", "fx": { "joy": -15 } },
+    "right": { "label": "Leave box, sadly", "fx": { "joy": -10, "home": -5 } }
+  },
+  {
+    "id": "crisis_belly_low_yowl",
+    "char": "instinct",
+    "text": "IT IS 4 AM. THE BOWL. THE BOWL HAS A BOTTOM. WE CAN SEE THE BOTTOM. THIS IS FAMINE. ALERT THE HUMAN BY ANY MEANS.",
+    "bag": "crisis_belly_low",
+    "left": { "label": "Opera solo", "fx": { "joy": -15, "belly": 10 } },
+    "right": { "label": "Sit on face", "fx": { "joy": -10, "home": -5, "belly": 10 } }
+  },
+  {
+    "id": "crisis_belly_low_pantry",
+    "char": "narrator",
+    "text": "{cat} has located the treat bag. It is in a closed cupboard. The cupboard is about to learn about persistence.",
+    "bag": "crisis_belly_low",
+    "left": { "label": "Bash the door", "fx": { "joy": -10, "home": -10, "belly": 10 }, "chaos": 5 },
+    "right": { "label": "Bite through bag", "fx": { "home": -15, "belly": 20 }, "chaos": 10 }
+  },
+  {
+    "id": "crisis_belly_low_paw",
+    "char": "owner",
+    "text": "5:40 AM. A paw taps {owner}'s cheek. Then again. Then with one claw, as a treat. \"The alarm is set for SEVEN.\"",
+    "bag": "crisis_belly_low",
+    "left": { "label": "Tap. Tap. Tap.", "fx": { "joy": -10, "belly": 10 } },
+    "right": { "label": "Knock off the lamp", "fx": { "joy": -5, "home": -15, "belly": 10 }, "chaos": 10, "set": { "knocked": "+1" } }
+  },
+  {
+    "id": "crisis_belly_low_dogbowl",
+    "char": "dog",
+    "text": "The dog's bowl is full. The dog is right there. The dog is very large and looking at you with a little worried face.",
+    "bag": "crisis_belly_low",
+    "when": [{ "mod": "dog" }],
+    "left": { "label": "Steal the kibble", "fx": { "joy": -10, "belly": 15 }, "set": { "dog_feud": "+1" } },
+    "right": { "label": "Scream at {owner}", "fx": { "joy": -15, "belly": 10 } }
+  },
+  {
+    "id": "crisis_belly_low_counter",
+    "char": "instinct",
+    "text": "THE CHICKEN IS THAWING ON THE COUNTER. THE CHICKEN IS UNSUPERVISED. THE CHICKEN WAS ALWAYS OURS, SPIRITUALLY.",
+    "bag": "crisis_belly_low",
+    "when": [{ "notMod": "dog" }],
+    "left": { "label": "Take the chicken", "fx": { "joy": -20, "belly": 20 }, "chaos": 10 },
+    "right": { "label": "Yell at chicken", "fx": { "joy": -10, "home": -5, "belly": 5 } }
+  },
+  {
+    "id": "crisis_belly_high_rug",
+    "char": "narrator",
+    "text": "{cat} ate too fast. {cat} walks past the tile floor, past the bathroom, and selects the one good rug. Hork.",
+    "bag": "crisis_belly_high",
+    "when": [{ "notMod": "dog" }],
+    "left": { "label": "The rug", "fx": { "home": -20 } },
+    "right": { "label": "{owner}'s pillow", "fx": { "joy": -15, "home": -5 } }
+  },
+  {
+    "id": "crisis_belly_high_rug_dog",
+    "char": "dog",
+    "text": "{cat} hurls on the rug. Before anyone can react, the dog has \"handled it\". {owner} saw everything. {owner} is not okay.",
+    "bag": "crisis_belly_high",
+    "when": [{ "mod": "dog" }],
+    "left": { "label": "Act natural", "fx": { "joy": -10, "home": -5 } },
+    "right": { "label": "Blame the dog", "fx": { "joy": -5, "home": -10 }, "set": { "dog_feud": "+1" } }
+  },
+  {
+    "id": "crisis_belly_high_shoe",
+    "char": "instinct",
+    "text": "TOO MUCH FOOD. IT MUST LEAVE. WHERE DO HUMANS LEAST EXPECT IT? THINK. THINK LIKE A VILLAIN.",
+    "bag": "crisis_belly_high",
+    "left": { "label": "Inside a shoe", "fx": { "joy": -15 } },
+    "right": { "label": "On the laptop", "fx": { "joy": -10, "home": -15 }, "chaos": 10 }
+  },
+  {
+    "id": "crisis_belly_high_bed",
+    "char": "owner",
+    "text": "{owner} has just put on fresh sheets and is smiling at them. {cat} has been eating grass. {cat} hops on the bed.",
+    "bag": "crisis_belly_high",
+    "left": { "label": "Dead center", "fx": { "joy": -15, "home": -10 } },
+    "right": { "label": "Sprint to the floor", "fx": { "home": -10 } }
+  }
+]
