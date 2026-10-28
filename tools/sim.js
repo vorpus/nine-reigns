@@ -6,17 +6,21 @@
 // Strategies (what each one is allowed to know):
 //   random  coin flip every card.
 //   greedy  "greedy-joy": reads the true fx of both sides and takes whichever leaves Joy highest
-//           (ties: coin flip). Ignores every other meter. In Chaos Mode it maximises chaos points.
-//   smart   a sensible player with perfect knowledge of the true fx (a stand-in for a player who
-//           has learned the deck): keeps Joy and Home healthy, steers Instinct/Belly away from
-//           0/100, never takes a card `end`. In Chaos Mode it maximises chaos points.
+//           (ties: coin flip). Ignores every other meter. Chaos Mode: most chaos points.
+//   smart   a sensible human. Knows only what the screen shows: meter fills, the preview dots
+//           (which meters move, small < 10 or big >= 10, read as 5 and 12) and the card text.
+//           Direction is guessed from the text: right 85% of the time (a wrong guess sticks for
+//           that card side for the whole run). Doesn't know which choices end the run. Keeps
+//           Joy and Home healthy and steers Instinct/Belly away from 0/100.
+//   oracle  the same heuristic with perfect knowledge of the true fx and card endings (an upper
+//           bound, reported for reference only).
 //
 // --matrix prints one compact table: every strategy x mods (random, 0, allergies, partner, dog, 2)
 // plus Chaos Mode.
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { Engine, buildData, mulberry32, METERS, MODS as ALL_MODS, CONFIG } from '../web/js/engine.js';
+import { Engine, buildData, mulberry32, METERS, MODS as ALL_MODS, CONFIG, crisisResetValue } from '../web/js/engine.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(here, '..', 'web', 'data');
@@ -51,34 +55,46 @@ export function loadDataFromDisk() {
 }
 
 // ---------- strategies ----------
-function project(eng, side) {
+const clampM = (v) => Math.max(0, Math.min(100, v));
+const GUESS_RIGHT = 0.85;
+
+// fx as a strategy sees it. perfect: true numbers. Otherwise: dots + a direction guess.
+function seenFx(eng, side, rng, perfect) {
   const card = eng.getCard(eng.state.card);
   const ch = card[side] || {};
+  const out = {};
+  for (const k of METERS) {
+    const d = (ch.fx && ch.fx[k]) || 0;
+    if (!d) continue;
+    if (perfect) { out[k] = d; continue; }
+    const key = `${card.id}:${side}:${k}`;
+    const g = eng._guess || (eng._guess = {});
+    if (g[key] == null) g[key] = rng() < GUESS_RIGHT ? 1 : -1;
+    out[k] = Math.sign(d) * g[key] * (Math.abs(d) >= CONFIG.bigDot ? 12 : 5);
+  }
+  return { fx: out, ch, end: perfect ? !!ch.end : false };
+}
+
+function project(eng, side, rng, perfect = true) {
+  const { fx, ch, end } = seenFx(eng, side, rng, perfect);
   const m = { ...eng.state.meters };
-  for (const k of METERS) m[k] = Math.max(0, Math.min(100, m[k] + ((ch.fx && ch.fx[k]) || 0)));
-  for (const [k, d] of Object.entries(CONFIG.drift)) m[k] = Math.max(0, Math.min(100, m[k] + d));
-  return { m, ch };
+  for (const k of METERS) m[k] = clampM(m[k] + (fx[k] || 0));
+  for (const [k, d] of Object.entries(CONFIG.drift)) m[k] = clampM(m[k] + d);
+  if (eng.state.cardIsCrisis) m[eng.state.cardIsCrisis.meter] = crisisResetValue(eng.state.cardIsCrisis);
+  return { m, ch, fx, end };
 }
 
 const chaosPts = (ch) => (ch.chaos != null ? ch.chaos : Math.max(0, -((ch.fx && ch.fx.home) || 0)));
+const coin = (rng) => (rng() < 0.5 ? 'left' : 'right');
+const argmax = (l, r, rng) => (l === r ? coin(rng) : l > r ? 'left' : 'right');
 
-export const strategies = {
-  random: (eng, rng) => (rng() < 0.5 ? 'left' : 'right'),
-  greedy: (eng, rng) => {
-    if (eng.state.mode === 'chaos') {
-      const l = chaosPts(project(eng, 'left').ch), r = chaosPts(project(eng, 'right').ch);
-      return l === r ? (rng() < 0.5 ? 'left' : 'right') : l > r ? 'left' : 'right';
-    }
-    const l = project(eng, 'left').m.joy;
-    const r = project(eng, 'right').m.joy;
-    return l === r ? (rng() < 0.5 ? 'left' : 'right') : l > r ? 'left' : 'right';
-  },
-  smart: (eng, rng) => {
+function sensible(perfect) {
+  return (eng, rng) => {
     const score = (side) => {
-      const { m, ch } = project(eng, side);
-      if (eng.state.mode === 'chaos') return chaosPts(ch) + rng() * 0.01;
+      const { m, ch, fx, end } = project(eng, side, rng, perfect);
+      if (eng.state.mode === 'chaos') return (perfect ? chaosPts(ch) : Math.max(0, -(fx.home || 0))) + rng() * 0.01;
       let s = 0;
-      if (ch.end) s -= 1000;
+      if (end) s -= 1000;
       if (m.joy <= 0 || m.home <= 0) s -= 1000;
       s += m.joy * 1.2 + Math.min(m.home, 60) * 0.6;
       for (const k of ['instinct', 'belly']) {
@@ -89,7 +105,17 @@ export const strategies = {
       return s + rng() * 0.01;
     };
     return score('left') >= score('right') ? 'left' : 'right';
+  };
+}
+
+export const strategies = {
+  random: (eng, rng) => coin(rng),
+  greedy: (eng, rng) => {
+    if (eng.state.mode === 'chaos') return argmax(chaosPts(project(eng, 'left', rng).ch), chaosPts(project(eng, 'right', rng).ch), rng);
+    return argmax(project(eng, 'left', rng).m.joy, project(eng, 'right', rng).m.joy, rng);
   },
+  smart: sensible(false),
+  oracle: sensible(true),
 };
 
 // mods: 'random' (0-2 random), a number 0-3, or a list of mod names

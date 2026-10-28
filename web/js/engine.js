@@ -15,6 +15,7 @@ export const CONFIG = {
   start: { joy: 35, home: 70, instinct: 40, belly: 50 },
   drift: { instinct: 2, belly: -3 },
   winJoy: 60,
+  // Value a cat meter resets to after its crisis card resolves (number or per crisis bag).
   crisisReset: 50,
   defaultWeight: 10,
   defaultCooldown: 20,
@@ -24,6 +25,13 @@ export const CONFIG = {
   chaosDemolitionBonusPerSlot: 2,
   activeAchievements: 3,
 };
+
+export function crisisResetValue(crisis) {
+  const r = CONFIG.crisisReset;
+  if (typeof r === 'number') return r;
+  const v = r && r[`${crisis.meter}_${crisis.dir}`];
+  return typeof v === 'number' ? v : 50;
+}
 
 // ---------- RNG ----------
 export function mulberry32(seed) {
@@ -476,6 +484,16 @@ export class Engine {
       const d = (ch.fx && ch.fx[m]) || 0;
       if (d) s.meters[m] = clamp(s.meters[m] + d);
     }
+    // A cat meter that touches 0 or 100 at any point this swipe (after fx or after
+    // drift) triggers its crisis, so drift can't nudge it back off the edge first.
+    const hit = {};
+    const markHits = () => {
+      for (const m of ['instinct', 'belly']) {
+        if (s.meters[m] >= 100) hit[m] = 'high';
+        else if (s.meters[m] <= 0) hit[m] = 'low';
+      }
+    };
+    markHits();
     // set
     let snuggled = false;
     if (ch.set) {
@@ -500,8 +518,12 @@ export class Engine {
     }
     // 2. drift
     for (const [m, d] of Object.entries(CONFIG.drift)) s.meters[m] = clamp(s.meters[m] + d);
+    markHits();
     // 3. crisis reset
-    if (s.cardIsCrisis) s.meters[s.cardIsCrisis.meter] = CONFIG.crisisReset;
+    if (s.cardIsCrisis) {
+      s.meters[s.cardIsCrisis.meter] = crisisResetValue(s.cardIsCrisis);
+      delete hit[s.cardIsCrisis.meter];
+    }
 
     // bookkeeping
     s.seen[card.id] = (s.seen[card.id] || 0) + 1;
@@ -552,8 +574,7 @@ export class Engine {
       for (const m of ['instinct', 'belly']) {
         const queued = s.crisisQueue.some((c) => c.meter === m);
         if (queued) continue;
-        if (s.meters[m] >= 100) s.crisisQueue.push({ meter: m, dir: 'high' });
-        else if (s.meters[m] <= 0) s.crisisQueue.push({ meter: m, dir: 'low' });
+        if (hit[m]) s.crisisQueue.push({ meter: m, dir: hit[m] });
       }
       const nxt = this.draw();
       s.card = nxt.id;

@@ -1,25 +1,44 @@
-// Player cat portrait as an inline SVG string. Flat, geometric, tintable.
-// look: { coat: {fur, shade, belly}, pattern: id, accessory: id, mood: 'happy'|'sad'|'smug' }
+// Player cat portrait as an inline SVG string. Flat, faceted, tintable.
+// look: { coat: {fur, shade, belly, eye?}, pattern: id, accessory: id, mood: 'happy'|'sad'|'smug' }
+// opts: { className, title, noTail }
 
 const DEFAULT_COAT = { fur: '#e8964a', shade: '#c9732c', belly: '#f8dfc0' };
+const INK = '#2b2730';
+
+function mix(a, b, t) {
+  const p = (h) => { let s = String(h).replace('#', ''); if (s.length === 3) s = s.replace(/./g, '$&$&'); const n = parseInt(s, 16) || 0; return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const A = p(a), B = p(b);
+  return `#${A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join('')}`;
+}
+const pg = (pts, fill, extra = '') => `<polygon points="${pts}" fill="${fill}"${extra}/>`;
+const mir = (pts) => pts.trim().split(/\s+/).map((q) => { const [x, y] = q.split(','); return `${200 - x},${y}`; }).join(' ');
+
+// Shared shapes (also used by patterns so markings sit on the facets).
+const HEAD = '58,52 80,36 100,32 120,36 142,52 154,76 144,98 122,110 100,113 78,110 56,98 46,76';
+const HEAD_SHADE = '126,40 142,52 154,76 144,98 122,110 110,112 130,96 138,74';
+const HEAD_LIGHT = '58,52 80,36 100,32 84,44 62,64 50,70';
+const BODY = '58,190 62,148 76,116 100,108 124,116 138,148 142,190';
+const BODY_SHADE = '114,111 124,116 138,148 142,190 118,190 126,148';
+const BODY_LIGHT = '76,116 90,111 74,150 72,190 58,190 62,148';
+const EAR = '54,62 60,10 96,38';
+const EAR_IN = '63,50 66,23 84,40';
 
 function patternLayer(id, c) {
   switch (id) {
     case 'tabby':
-      return `<g fill="${c.shade}">
-        <path d="M88 52 l4 14 l4 -14z M100 48 l4 16 l4 -16z M112 52 l4 14 l4 -14z" transform="translate(-4 0)"/>
-        <path d="M58 130 h20 l-4 6 h-16z M122 130 h20 l-2 6 h-16z M60 150 h18 l-4 6 h-14z M122 150 h18 l-2 6 h-14z"/>
-      </g>`;
+      return `<g fill="${c.shade}">${pg('86,40 92,58 98,38')}${pg('100,36 104,56 108,36')}${pg('110,38 112,56 118,40')}
+        ${pg('48,78 64,80 62,84 47,84')}${pg('152,78 136,80 138,84 153,84')}
+        ${pg('62,144 80,140 79,146 62,151')}${pg('60,162 78,158 77,164 59,168')}${pg('138,144 120,140 121,146 138,151')}${pg('140,162 122,158 123,164 141,168')}</g>`;
     case 'tuxedo_bib':
-      return `<path d="M84 104 L100 150 L116 104 Q100 112 84 104z" fill="#f6f2ea"/>
-        <path d="M86 92 Q100 104 114 92 L110 84 Q100 92 90 84z" fill="#f6f2ea"/>`;
+      return `${pg('82,112 100,108 118,112 115,150 100,172 85,150', '#f6f2ea')}${pg('100,108 118,112 115,150 100,172', '#e4dfd6')}
+        ${pg('84,84 100,76 116,84 120,98 108,106 92,106 80,98', '#f6f2ea')}`;
     case 'socks':
-      return `<g fill="#f6f2ea"><rect x="70" y="170" width="22" height="12" rx="6"/><rect x="108" y="170" width="22" height="12" rx="6"/></g>`;
+      return `<g fill="#f6f2ea">${pg('66,178 94,178 95,192 65,192')}${pg('106,178 134,178 135,192 105,192')}</g>`;
     case 'spots':
-      return `<g fill="${c.shade}"><circle cx="66" cy="140" r="7"/><circle cx="136" cy="128" r="6"/><circle cx="128" cy="156" r="5"/><circle cx="118" cy="56" r="6"/></g>`;
+      return `<g fill="${c.shade}">${pg('64,140 74,136 78,146 68,150')}${pg('130,126 138,130 134,138 126,134')}${pg('124,156 132,154 134,162 126,164')}${pg('114,44 124,44 126,54 116,56')}${pg('62,72 70,66 72,76')}</g>`;
     case 'calico_patches':
-      return `<g><path d="M60 120 q12 -10 22 4 q-4 18 -22 14z" fill="#d78a45"/><path d="M120 140 q14 -8 20 8 q-6 14 -20 6z" fill="#3a3640"/>
-        <path d="M70 46 q14 -6 20 10 q-12 8 -22 2z" fill="#d78a45"/><path d="M114 50 q10 -2 14 8 q-8 6 -14 0z" fill="#3a3640"/></g>`;
+      return `<g>${pg('62,124 80,118 86,138 70,150 60,144', '#d78a45')}${pg('118,140 138,142 140,164 120,162', '#3a3640')}
+        ${pg('66,48 84,38 94,48 80,62 62,64', '#d78a45')}${pg('112,40 124,40 136,50 124,58', '#3a3640')}</g>`;
     default:
       return '';
   }
@@ -28,21 +47,20 @@ function patternLayer(id, c) {
 function accessoryLayer(id) {
   switch (id) {
     case 'bell_collar':
-      return `<path d="M72 100 Q100 116 128 100" stroke="#c0392b" stroke-width="7" fill="none" stroke-linecap="round"/>
-        <circle cx="100" cy="113" r="7" fill="#f2c14e" stroke="#b8860b" stroke-width="1.5"/><rect x="97" y="114" width="6" height="2" fill="#7a5a10"/>`;
+      return `${pg('72,108 100,118 128,108 128,116 100,126 72,116', '#b8433a')}${pg('100,118 128,108 128,116 100,126', '#963630')}
+        ${pg('100,118 108,122 109,130 100,134 91,130 92,122', '#f2c14e')}${pg('100,118 108,122 109,130 100,134', '#d6a43a')}${pg('97,129 103,129 103,131 97,131', '#7a5a10')}`;
     case 'bow_tie':
-      return `<g fill="#3b6ea5"><path d="M100 108 L82 98 L82 118z"/><path d="M100 108 L118 98 L118 118z"/><circle cx="100" cy="108" r="5" fill="#2a5080"/></g>`;
+      return `${pg('100,118 80,106 80,130', '#3b6ea5')}${pg('100,118 120,106 120,130', '#2f5a88')}${pg('94,112 106,112 106,124 94,124', '#24497a')}`;
     case 'tiny_hat':
-      return `<g><rect x="84" y="4" width="32" height="22" rx="3" fill="#2b2730"/><rect x="74" y="24" width="52" height="6" rx="3" fill="#2b2730"/><rect x="84" y="18" width="32" height="5" fill="#c0392b"/></g>`;
+      return `${pg('84,6 116,6 116,30 84,30', '#2b2730')}${pg('104,6 116,6 116,30 104,30', '#1d1b22')}${pg('84,20 116,20 116,26 84,26', '#b8433a')}${pg('72,28 128,28 124,36 76,36', '#2b2730')}`;
     case 'flower':
-      return `<g transform="translate(132 30)"><circle r="6" cx="0" cy="-7" fill="#f28fb1"/><circle r="6" cx="7" cy="0" fill="#f28fb1"/><circle r="6" cx="0" cy="7" fill="#f28fb1"/><circle r="6" cx="-7" cy="0" fill="#f28fb1"/><circle r="4" fill="#f7d154"/></g>`;
+      return `<g transform="translate(134 34)">${pg('0,-14 5,-5 -5,-5', '#f28fb1')}${pg('14,0 5,5 5,-5', '#e57aa0')}${pg('0,14 -5,5 5,5', '#e57aa0')}${pg('-14,0 -5,-5 -5,5', '#f28fb1')}${pg('-5,-5 5,-5 5,5 -5,5', '#f7d154')}</g>`;
     case 'glasses':
-      return `<g fill="none" stroke="#2b2730" stroke-width="3"><circle cx="84" cy="70" r="11"/><circle cx="116" cy="70" r="11"/><path d="M95 70 h10"/></g>`;
+      return `<g fill="#fff" fill-opacity=".14" stroke="${INK}" stroke-width="3" stroke-linejoin="round"><path d="M68 64 h26 l-3 16 h-20z M106 64 h26 l-3 16 h-20z"/></g><path d="M94 68 h12" stroke="${INK}" stroke-width="3"/>`;
     case 'bandana':
-      return `<path d="M70 98 Q100 112 130 98 L100 132z" fill="#c0392b"/><g fill="#f6f2ea"><circle cx="92" cy="108" r="2"/><circle cx="108" cy="108" r="2"/><circle cx="100" cy="118" r="2"/></g>`;
+      return `${pg('70,106 100,118 130,106 100,146', '#b8433a')}${pg('100,118 130,106 100,146', '#963630')}<g fill="#f6f2ea">${pg('90,120 93,122 90,124 87,122')}${pg('108,120 111,122 108,124 105,122')}${pg('100,130 103,132 100,134 97,132')}</g>`;
     case 'crown':
-      return `<path d="M76 30 L80 8 L90 22 L100 4 L110 22 L120 8 L124 30z" fill="#f2c14e" stroke="#b8860b" stroke-width="2" stroke-linejoin="round"/>
-        <circle cx="100" cy="18" r="3" fill="#c0392b"/>`;
+      return `${pg('76,38 80,10 92,26 100,6 108,26 120,10 124,38', '#f2c14e')}${pg('100,6 108,26 120,10 124,38 100,38', '#d6a43a')}${pg('96,24 104,24 104,32 96,32', '#b8433a')}`;
     default:
       return '';
   }
@@ -52,36 +70,52 @@ export function catSVG(look = {}, opts = {}) {
   const c = { ...DEFAULT_COAT, ...(look.coat || {}) };
   const mood = look.mood || 'happy';
   const cls = opts.className ? ` class="${opts.className}"` : '';
-  const eyes = mood === 'sad'
-    ? `<ellipse cx="84" cy="72" rx="6" ry="7" fill="${c.eye || '#2b2730'}"/><ellipse cx="116" cy="72" rx="6" ry="7" fill="${c.eye || '#2b2730'}"/>
-       <circle cx="86" cy="69" r="2" fill="#fff"/><circle cx="118" cy="69" r="2" fill="#fff"/>
-       <path d="M74 60 l14 -6 M126 60 l-14 -6" stroke="${c.eye ? c.belly : '#2b2730'}" stroke-width="3" stroke-linecap="round"/>
-       <path d="M80 82 q-1 6 2 9" stroke="#8fc3e8" stroke-width="3" fill="none" stroke-linecap="round"/>`
-    : mood === 'smug'
-      ? `<path d="M76 70 h16" stroke="${c.eye || '#2b2730'}" stroke-width="5" stroke-linecap="round"/><path d="M108 70 h16" stroke="${c.eye || '#2b2730'}" stroke-width="5" stroke-linecap="round"/>`
-      : `<ellipse cx="84" cy="70" rx="7" ry="9" fill="${c.eye || '#2b2730'}"/><ellipse cx="116" cy="70" rx="7" ry="9" fill="${c.eye || '#2b2730'}"/>
-         ${c.eye ? '<ellipse cx="84" cy="70" rx="2.5" ry="7" fill="#1a1720"/><ellipse cx="116" cy="70" rx="2.5" ry="7" fill="#1a1720"/>' : ''}
-         <circle cx="86" cy="66" r="2.5" fill="#fff"/><circle cx="118" cy="66" r="2.5" fill="#fff"/>`;
+  const furL = mix(c.fur, '#fff6e8', 0.16);
+  const furS = c.shade;
+  const deep = mix(c.shade, '#1a1418', 0.25);
+  const bellyS = mix(c.belly, c.shade, 0.18);
+  const dark = !!c.eye;
+  const eyeFill = c.eye || INK;
+  const lineInk = dark ? mix(c.belly, '#ffffff', 0.2) : INK;
+  let eyes;
+  if (mood === 'sad') {
+    eyes = `${pg('74,70 90,70 88,80 76,80', eyeFill)}${pg('110,70 126,70 124,80 112,80', eyeFill)}
+      ${dark ? `${pg('80,71 84,71 84,79 80,79', '#1a1720')}${pg('116,71 120,71 120,79 116,79', '#1a1720')}` : ''}
+      ${pg('86,71 89,71 88,74', '#fff')}${pg('122,71 125,71 124,74', '#fff')}
+      ${pg('70,64 88,58 89,61 72,67', lineInk)}${pg('130,64 112,58 111,61 128,67', lineInk)}
+      ${pg('76,84 80,84 81,94 77,96 75,92', '#8fc3e8')}`;
+  } else if (mood === 'smug') {
+    eyes = `${pg('72,72 92,70 92,75 73,76', eyeFill)}${pg('108,70 128,72 127,76 108,75', eyeFill)}
+      ${pg('72,66 92,63 92,66 72,69', lineInk, ' opacity=".7"')}${pg('108,63 128,66 128,69 108,66', lineInk, ' opacity=".7"')}`;
+  } else {
+    eyes = `${pg('82,62 90,68 89,78 82,82 75,78 74,68', eyeFill)}${pg('118,62 126,68 125,78 118,82 111,78 110,68', eyeFill)}
+      ${dark ? `${pg('82,64 84,72 82,80 80,72', '#1a1720')}${pg('118,64 120,72 118,80 116,72', '#1a1720')}` : ''}
+      ${pg('84,65 87,67 85,70', '#fff')}${pg('120,65 123,67 121,70', '#fff')}`;
+  }
   const label = opts.title ? `<title>${opts.title}</title>` : '';
+  const tail = opts.noTail ? '' : `<path d="M134 184 L164 176 L176 148 L168 122 L160 118" stroke="${c.fur}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M150 180 L164 176 L176 148" stroke="${furS}" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>`;
   return `<svg${cls} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${opts.title || 'Your cat'}">${label}
-  ${opts.noTail ? '' : `<path d="M136 176 Q178 170 172 128 Q168 108 152 112" stroke="${c.fur}" stroke-width="14" fill="none" stroke-linecap="round"/>`}
-  <path d="M60 182 Q52 120 80 100 L120 100 Q148 120 140 182z" fill="${c.fur}"/>
-  <path d="M82 182 Q78 130 100 116 Q122 130 118 182z" fill="${c.belly}"/>
-  <rect x="70" y="168" width="22" height="16" rx="8" fill="${c.fur}"/><rect x="108" y="168" width="22" height="16" rx="8" fill="${c.fur}"/>
-  <path d="M58 40 L66 6 L92 32z" fill="${c.fur}"/><path d="M142 40 L134 6 L108 32z" fill="${c.fur}"/>
-  <path d="M66 34 L69 16 L82 30z" fill="#f2a7a0"/><path d="M134 34 L131 16 L118 30z" fill="#f2a7a0"/>
-  <ellipse cx="100" cy="66" rx="48" ry="40" fill="${c.fur}"/>
-  <ellipse cx="100" cy="84" rx="22" ry="15" fill="${c.belly}"/>
+  ${tail}
+  ${pg(BODY, c.fur)}${pg(BODY_LIGHT, furL)}${pg(BODY_SHADE, furS)}
+  ${pg('86,114 100,110 114,114 112,142 100,158 88,142', c.belly)}${pg('100,110 114,114 112,142 100,158', bellyS)}
+  ${pg('66,176 94,176 96,192 64,192', c.fur)}${pg('106,176 134,176 136,192 104,192', c.fur)}${pg('124,176 134,176 136,192 124,192', furS)}
+  <path d="M74 186 v6 M84 186 v6 M114 186 v6 M124 186 v6" stroke="${deep}" stroke-width="1.6" opacity=".6"/>
+  ${pg(EAR, c.fur)}${pg(mir(EAR), furS)}${pg('60,10 96,38 80,40', furL)}${pg(mir('60,10 96,38 80,40'), deep, ' opacity=".35"')}
+  ${pg(EAR_IN, '#eaa59b')}${pg(mir(EAR_IN), '#d98f86')}
+  ${pg(HEAD, c.fur)}${pg(HEAD_LIGHT, furL)}${pg(HEAD_SHADE, furS)}
+  ${pg('50,78 40,92 60,100', c.fur)}${pg('150,78 160,92 140,100', furS)}
+  ${pg('84,84 100,78 116,84 120,96 108,106 92,106 80,96', c.belly)}${pg('100,78 116,84 120,96 108,106 100,106', bellyS)}
   ${patternLayer(look.pattern, c)}
   ${eyes}
-  <path d="M95 80 h10 l-5 6z" fill="#e07a7a"/>
+  ${pg('93,86 107,86 100,93', '#d97d7d')}${pg('100,86 107,86 100,93', '#c26a6c')}
   ${mood === 'sad'
-    ? '<path d="M100 86 v3 M92 95 q8 -7 16 0" stroke="#2b2730" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
-    : '<path d="M100 86 q-5 7 -10 3 M100 86 q5 7 10 3" stroke="#2b2730" stroke-width="2.5" fill="none" stroke-linecap="round"/>'}
-  <g stroke="#2b2730" stroke-width="1.6" stroke-linecap="round" opacity=".55">
-    <path d="M70 82 h-20 M70 88 l-18 4 M130 82 h20 M130 88 l18 4"/>
+    ? `<path d="M100 93 v3 M92 102 l8 -5 l8 5" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+    : `<path d="M100 93 v3 l-7 4 M100 96 l7 4" stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+  <g stroke="${lineInk}" stroke-width="1.5" stroke-linecap="round" opacity=".5">
+    <path d="M74 92 l-26 -4 M74 97 l-24 4 M126 92 l26 -4 M126 97 l24 4"/>
   </g>
-  <ellipse cx="72" cy="84" rx="6" ry="3.5" fill="#f2a7a0" opacity=".55"/><ellipse cx="128" cy="84" rx="6" ry="3.5" fill="#f2a7a0" opacity=".55"/>
+  ${pg('66,88 76,86 76,92 66,93', '#ef8f86', ' opacity=".45"')}${pg('134,88 124,86 124,92 134,93', '#ef8f86', ' opacity=".45"')}
   ${accessoryLayer(look.accessory)}
 </svg>`;
 }
