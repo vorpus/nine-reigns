@@ -138,7 +138,7 @@ button { font: inherit; letter-spacing: inherit; color: inherit; cursor: pointer
 .file-tag svg { width: 14px; height: 19px; display: block; }
 .file-tag b { font-weight: 400; color: var(--c-stage); letter-spacing: .14em; }
 .file-owner { color: #8a7a52; font-size: 12px; line-height: 1.5; }
-.file-flash { position: absolute; left: 0; right: 0; top: 14%; text-align: center; color: var(--c-cream); font-size: clamp(18px, 5.6vw, 24px); opacity: 0; pointer-events: none; }
+.file-flash { order: -1; min-height: 1.5em; margin-bottom: clamp(6px, 3dvh, 28px); text-align: center; color: var(--c-cream); font-size: clamp(18px, 5.6vw, 24px); opacity: 0; pointer-events: none; }
 .file-flash.show { animation: flash 2.2s ease-out both; }
 @keyframes flash { 0% { opacity: 0; transform: scale(.9); } 12% { opacity: 1; transform: none; } 75% { opacity: 1; } 100% { opacity: 0; } }
 .file-band {
