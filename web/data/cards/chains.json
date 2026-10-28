@@ -96,7 +96,7 @@
       "right": {
         "label": "Wedge behind fridge",
         "fx": {
-          "joy": -10,
+          "joy": -5,
           "home": -10,
           "instinct": -10
         },
@@ -121,7 +121,7 @@
       "right": {
         "label": "Full four-act opera",
         "fx": {
-          "joy": -10,
+          "joy": -5,
           "instinct": -15
         },
         "next": "chain_vet_exam"
@@ -175,7 +175,7 @@
         "label": "Accept the bribe",
         "fx": {
           "joy": 10,
-          "belly": 10
+          "belly": 15
         }
       }
     },
@@ -296,7 +296,7 @@
       "left": {
         "label": "Climb back inside",
         "fx": {
-          "joy": -10,
+          "joy": -5,
           "instinct": 5
         },
         "set": {
@@ -404,8 +404,8 @@
       "right": {
         "label": "Eat the tuna",
         "fx": {
-          "joy": -10,
-          "belly": 20
+          "joy": -5,
+          "belly": 25
         },
         "set": {
           "neighbor_friend": true
@@ -424,13 +424,13 @@
         "label": "Go home, sheepish",
         "fx": {
           "joy": -5,
-          "belly": 10
+          "belly": 15
         }
       },
       "right": {
         "label": "Never leave",
         "fx": {
-          "belly": 20
+          "belly": 25
         },
         "end": "escaped_neighbor_tuna"
       }
@@ -458,7 +458,7 @@
         "label": "Take the treats",
         "fx": {
           "joy": -5,
-          "belly": 20
+          "belly": 25
         }
       }
     }

@@ -8,8 +8,8 @@
       "left": {
         "label": "Scale the curtains",
         "fx": {
-          "home": -15,
-          "joy": -10
+          "home": -20,
+          "joy": -15
         },
         "chaos": 20
       },
@@ -17,7 +17,7 @@
         "label": "Shred the TP",
         "fx": {
           "home": -5,
-          "joy": -15
+          "joy": -20
         },
         "chaos": 10
       }
@@ -30,7 +30,7 @@
       "left": {
         "label": "Ambush the ankles",
         "fx": {
-          "joy": -20
+          "joy": -25
         },
         "set": {
           "bites": "+1"
@@ -39,8 +39,8 @@
       "right": {
         "label": "Bite the couch",
         "fx": {
-          "home": -10,
-          "joy": -10
+          "home": -15,
+          "joy": -15
         },
         "chaos": 10,
         "set": {
@@ -67,7 +67,7 @@
       "left": {
         "label": "Ambush the ankles",
         "fx": {
-          "joy": -20
+          "joy": -25
         },
         "set": {
           "bites": "+1"
@@ -76,8 +76,8 @@
       "right": {
         "label": "Ambush the dog",
         "fx": {
-          "joy": -15,
-          "home": -5
+          "joy": -20,
+          "home": -10
         },
         "chaos": 10,
         "set": {
@@ -93,7 +93,7 @@
       "left": {
         "label": "Laps over the bed",
         "fx": {
-          "joy": -15,
+          "joy": -20,
           "home": -5
         },
         "set": {
@@ -103,8 +103,8 @@
       "right": {
         "label": "Hallway drift",
         "fx": {
-          "home": -10,
-          "joy": -10
+          "home": -15,
+          "joy": -15
         },
         "chaos": 10,
         "set": {
@@ -120,8 +120,8 @@
       "left": {
         "label": "One. At. A. Time.",
         "fx": {
-          "home": -10,
-          "joy": -15
+          "home": -15,
+          "joy": -20
         },
         "chaos": 15,
         "set": {
@@ -131,7 +131,7 @@
       "right": {
         "label": "Full sweep",
         "fx": {
-          "home": -20,
+          "home": -25,
           "joy": -5
         },
         "chaos": 25,
@@ -148,13 +148,13 @@
       "left": {
         "label": "Stay loafed",
         "fx": {
-          "joy": -15
+          "joy": -20
         }
       },
       "right": {
         "label": "Sigh dramatically",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "belly": -5
         }
       }
@@ -167,7 +167,7 @@
       "left": {
         "label": "Watch it pass",
         "fx": {
-          "joy": -15
+          "joy": -20
         }
       },
       "right": {
@@ -186,7 +186,7 @@
       "left": {
         "label": "Judge harder",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "home": -5
         },
         "set": {
@@ -196,7 +196,7 @@
       "right": {
         "label": "Remain a puddle",
         "fx": {
-          "joy": -15
+          "joy": -20
         },
         "set": {
           "vet_called": true
@@ -211,13 +211,13 @@
       "left": {
         "label": "Become box",
         "fx": {
-          "joy": -15
+          "joy": -20
         }
       },
       "right": {
         "label": "Leave box, sadly",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "home": -5
         }
       }
@@ -230,14 +230,14 @@
       "left": {
         "label": "Opera solo",
         "fx": {
-          "joy": -15,
+          "joy": -20,
           "belly": 10
         }
       },
       "right": {
         "label": "Sit on face",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "home": -5,
           "belly": 10
         },
@@ -254,7 +254,7 @@
       "left": {
         "label": "Bash the door",
         "fx": {
-          "joy": -15,
+          "joy": -20,
           "home": -5,
           "belly": 10
         },
@@ -263,7 +263,7 @@
       "right": {
         "label": "Bite through bag",
         "fx": {
-          "home": -10,
+          "home": -15,
           "belly": 20,
           "joy": -5
         },
@@ -278,15 +278,15 @@
       "left": {
         "label": "Tap. Tap. Tap.",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "belly": 10
         }
       },
       "right": {
         "label": "Knock off the lamp",
         "fx": {
-          "joy": -10,
-          "home": -10,
+          "joy": -15,
+          "home": -15,
           "belly": 10
         },
         "chaos": 10,
@@ -308,7 +308,7 @@
       "left": {
         "label": "Steal the kibble",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "belly": 15
         },
         "set": {
@@ -318,7 +318,7 @@
       "right": {
         "label": "Scream at {owner}",
         "fx": {
-          "joy": -15,
+          "joy": -20,
           "belly": 10
         }
       }
@@ -336,7 +336,7 @@
       "left": {
         "label": "Take the chicken",
         "fx": {
-          "joy": -20,
+          "joy": -25,
           "belly": 20
         },
         "chaos": 10,
@@ -347,7 +347,7 @@
       "right": {
         "label": "Yell at chicken",
         "fx": {
-          "joy": -10,
+          "joy": -15,
           "home": -5,
           "belly": 5
         }
@@ -366,14 +366,14 @@
       "left": {
         "label": "The rug",
         "fx": {
-          "home": -15,
+          "home": -20,
           "joy": -5
         }
       },
       "right": {
         "label": "{owner}'s pillow",
         "fx": {
-          "joy": -15,
+          "joy": -20,
           "home": -5
         }
       }
@@ -391,15 +391,15 @@
       "left": {
         "label": "Act natural",
         "fx": {
-          "joy": -10,
-          "home": -5
+          "joy": -15,
+          "home": -10
         }
       },
       "right": {
         "label": "Blame the dog",
         "fx": {
           "joy": -10,
-          "home": -5
+          "home": -10
         },
         "set": {
           "dog_feud": "+1"
@@ -414,14 +414,14 @@
       "left": {
         "label": "Inside a shoe",
         "fx": {
-          "joy": -15
+          "joy": -20
         }
       },
       "right": {
         "label": "On the laptop",
         "fx": {
-          "joy": -15,
-          "home": -10
+          "joy": -20,
+          "home": -15
         },
         "chaos": 10
       }
@@ -434,7 +434,7 @@
       "left": {
         "label": "Dead center",
         "fx": {
-          "joy": -20,
+          "joy": -25,
           "home": -5
         }
       },

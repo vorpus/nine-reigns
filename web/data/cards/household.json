@@ -15,7 +15,7 @@
     "bag": "main",
     "weight": 0,
     "when": [{ "mod": "allergies" }],
-    "left":  { "label": "Flee, disgusted", "fx": { "joy": -10, "instinct": -5 } },
+    "left":  { "label": "Flee, disgusted", "fx": { "joy": -5, "instinct": -5 } },
     "right": { "label": "Purr through it", "fx": { "joy": 5, "instinct": 10 } }
   },
   {
@@ -25,7 +25,7 @@
     "bag": "main",
     "when": [{ "mod": "allergies" }],
     "left":  { "label": "Look innocent", "fx": { "joy": 5, "instinct": 5 } },
-    "right": { "label": "Roll on the couch", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 2 }
+    "right": { "label": "Roll on the couch", "fx": { "joy": -5, "home": -5, "instinct": -10 }, "chaos": 2 }
   },
   {
     "id": "house_allergy_fine_im_fine",
@@ -44,7 +44,7 @@
     "once": true,
     "when": [{ "mod": "allergies" }, { "slot": ["night"] }],
     "left":  { "label": "Purr reassuringly", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Shed on the laptop", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 3 }
+    "right": { "label": "Shed on the laptop", "fx": { "joy": -5, "home": -5, "instinct": -10 }, "chaos": 3 }
   },
   {
     "id": "house_allergy_bedroom_ban",
@@ -53,7 +53,7 @@
     "bag": "main",
     "when": [{ "mod": "allergies" }, { "slot": ["night"] }],
     "left":  { "label": "Accept exile", "fx": { "joy": 5, "instinct": 15 } },
-    "right": { "label": "Scream at the door", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 2 }
+    "right": { "label": "Scream at the door", "fx": { "joy": -5, "home": -5, "instinct": -10 }, "chaos": 2 }
   },
   {
     "id": "house_allergy_air_purifier",
@@ -131,8 +131,8 @@
     "text": "{owner} is out. {partner} looks around, then whispers \"who's a good little gremlin\" and holds out a slice of ham.",
     "bag": "main",
     "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "day": { "gte": 4 } }],
-    "left":  { "label": "Take ham gently", "fx": { "belly": 10, "home": 5, "instinct": 5 }, "set": { "partner_warming": "+1" } },
-    "right": { "label": "Take ham AND hand", "fx": { "belly": 20, "home": -10, "instinct": -10 }, "set": { "bites": "+1" } }
+    "left":  { "label": "Take ham gently", "fx": { "belly": 15, "home": 5, "instinct": 5 }, "set": { "partner_warming": "+1" } },
+    "right": { "label": "Take ham AND hand", "fx": { "belly": 25, "home": -10, "instinct": -10 }, "set": { "bites": "+1" } }
   },
   {
     "id": "house_partner_phone_denial",
@@ -190,8 +190,8 @@
     "text": "{dog} inhaled your entire breakfast in one breath and is now looking at you like you might have seconds on you.",
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }, { "slot": ["morning"] }],
-    "left":  { "label": "Let it go", "fx": { "belly": -10, "joy": 5, "instinct": 10 } },
-    "right": { "label": "Raid the dog bowl", "fx": { "belly": 20, "joy": -10, "instinct": -10 }, "chaos": 2 }
+    "left":  { "label": "Let it go", "fx": { "belly": -15, "joy": 5, "instinct": 10 } },
+    "right": { "label": "Raid the dog bowl", "fx": { "belly": 25, "joy": -5, "instinct": -10 }, "chaos": 2 }
   },
   {
     "id": "house_dog_bed_takeover",
@@ -199,7 +199,7 @@
     "text": "{dog}'s bed is huge, plush, memory foam. {dog} stands beside it, confused, because you are in it. Again.",
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
-    "left":  { "label": "Fine. Get out.", "fx": { "joy": 5, "instinct": 10 } },
+    "left":  { "label": "Fine. Get out.", "fx": { "joy": 5, "instinct": 15 } },
     "right": { "label": "This is mine now", "fx": { "joy": -5, "instinct": -15 }, "set": { "dog_respect": "+1" } }
   },
   {
@@ -208,7 +208,7 @@
     "text": "{dog} has put their entire nose in your face. Again. The nose is wet. The nose is enormous. The nose is everywhere.",
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
-    "left":  { "label": "Endure the nose", "fx": { "joy": 10, "instinct": 15 } },
+    "left":  { "label": "Endure the nose", "fx": { "joy": 10, "instinct": 20 } },
     "right": { "label": "One swat. Soft.", "fx": { "joy": -5, "instinct": -15 }, "set": { "dog_respect": "+1" }, "chaos": 1 }
   },
   {
@@ -217,7 +217,7 @@
     "text": "THE DOG HAS THE ZOOMIES. YOU HAVE THE ZOOMIES. THE HALLWAY IS ONE CREATURE WIDE. ONLY ONE OF YOU WILL MAKE THE TURN.",
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
-    "left":  { "label": "Watch from above", "fx": { "joy": 5, "instinct": 10 } },
+    "left":  { "label": "Watch from above", "fx": { "joy": 5, "instinct": 15 } },
     "right": { "label": "RACE", "fx": { "joy": -5, "home": -10, "instinct": -20 }, "set": { "zoomies": "+1" }, "chaos": 6 }
   },
   {
@@ -226,7 +226,7 @@
     "text": "{owner} grabs the leash and {dog} loses their entire mind. Nobody is taking you for a walk. Not that you asked.",
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
-    "left":  { "label": "Sit in the leash", "fx": { "joy": 10, "instinct": 10 } },
+    "left":  { "label": "Sit in the leash", "fx": { "joy": 10, "instinct": 15 } },
     "right": { "label": "Nap in the silence", "fx": { "joy": -5, "instinct": -10 } }
   },
   {
@@ -236,7 +236,7 @@
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
     "left":  { "label": "Accept tribute", "fx": { "joy": 10, "instinct": 10 }, "set": { "dog_respect": "+1" } },
-    "right": { "label": "Bat it off couch", "fx": { "joy": -5, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 1 }
+    "right": { "label": "Bat it off couch", "fx": { "joy": -5, "instinct": -10, "home": -5 }, "set": { "knocked": "+1" }, "chaos": 1 }
   },
   {
     "id": "house_dog_thunderstorm",
@@ -256,8 +256,8 @@
     "bag": "main",
     "weight": 0,
     "when": [{ "mod": "dog" }],
-    "left":  { "label": "It's nothing", "fx": { "joy": 15, "instinct": -10 }, "set": { "dog_friend": true } },
-    "right": { "label": "Groom {dog}'s ear", "fx": { "joy": 20, "instinct": 5 }, "set": { "dog_friend": true, "snuggles": "+1" } }
+    "left":  { "label": "It's nothing", "fx": { "joy": 10, "instinct": -10 }, "set": { "dog_friend": true } },
+    "right": { "label": "Groom {dog}'s ear", "fx": { "joy": 15, "instinct": 5 }, "set": { "dog_friend": true, "snuggles": "+1" } }
   },
   {
     "id": "house_dog_heist_partners",
@@ -266,7 +266,7 @@
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_friend" }],
     "left":  { "label": "Go straight", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Run the heist", "fx": { "belly": 20, "home": -10, "joy": -10, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 5 }
+    "right": { "label": "Run the heist", "fx": { "belly": 25, "home": -10, "joy": -5, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 5 }
   },
 
   {
@@ -285,7 +285,7 @@
     "bag": "main",
     "when": [{ "home": ["studio"] }, { "slot": ["night"] }],
     "left":  { "label": "Hold it in", "fx": { "joy": 5, "instinct": 15 } },
-    "right": { "label": "Forty laps", "fx": { "joy": -10, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 4 }
+    "right": { "label": "Forty laps", "fx": { "joy": -5, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 4 }
   },
   {
     "id": "house_studio_litter_breakfast",
@@ -294,7 +294,7 @@
     "bag": "main",
     "when": [{ "home": ["studio"] }, { "slot": ["morning"] }],
     "left":  { "label": "Bury it politely", "fx": { "joy": 5, "instinct": 5 } },
-    "right": { "label": "Dig to bedrock", "fx": { "joy": -10, "home": -10, "instinct": -10 }, "chaos": 3 }
+    "right": { "label": "Dig to bedrock", "fx": { "joy": -5, "home": -10, "instinct": -10 }, "chaos": 3 }
   },
   {
     "id": "house_apt_pigeon",
@@ -312,7 +312,7 @@
     "bag": "main",
     "when": [{ "home": ["apartment"] }, { "flagGte": ["zoomies", 1] }, { "slot": ["morning", "afternoon"] }],
     "left":  { "label": "Charm the neighbor", "fx": { "joy": 5, "home": 5, "instinct": 10 } },
-    "right": { "label": "Thump once, live", "fx": { "joy": -10, "home": -10, "instinct": -10 }, "chaos": 4 }
+    "right": { "label": "Thump once, live", "fx": { "joy": -5, "home": -10, "instinct": -10 }, "chaos": 4 }
   },
   {
     "id": "house_apt_wall_cat",
@@ -332,7 +332,7 @@
     "weight": 20,
     "when": [{ "home": ["apartment"] }, { "day": { "gte": 5 } }, { "flagGte": ["scratched_couch", 1] }],
     "left":  { "label": "Sit on the damage", "fx": { "joy": 5, "home": 10, "instinct": 5 } },
-    "right": { "label": "Show your process", "fx": { "joy": -10, "home": -20, "instinct": -15 }, "set": { "scratched_couch": "+1" }, "chaos": 7 }
+    "right": { "label": "Show your process", "fx": { "joy": -5, "home": -20, "instinct": -15 }, "set": { "scratched_couch": "+1" }, "chaos": 7 }
   },
   {
     "id": "house_house_stairs_night",
@@ -341,7 +341,7 @@
     "bag": "main",
     "when": [{ "home": ["house"] }, { "slot": ["night"] }],
     "left":  { "label": "Scoot aside", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Race them down", "fx": { "joy": -10, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 2 }
+    "right": { "label": "Race them down", "fx": { "joy": -5, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 2 }
   },
   {
     "id": "house_house_yard_squirrel",
@@ -370,6 +370,6 @@
     "weight": 0,
     "when": [{ "home": ["house"] }],
     "left":  { "label": "Present the mouse", "fx": { "joy": 10, "instinct": -5 }, "set": { "gifts": "+1" } },
-    "right": { "label": "Go back down", "fx": { "joy": -15, "instinct": -10 } }
+    "right": { "label": "Go back down", "fx": { "joy": -10, "instinct": -10 } }
   }
 ]

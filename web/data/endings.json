@@ -295,7 +295,7 @@
       "when": [
         {
           "not": {
-            "chaosGte": 150
+            "chaosGte": 65
           }
         }
       ]

@@ -140,7 +140,7 @@
       "left": {
         "label": "Sniff and walk off",
         "fx": {
-          "joy": -10,
+          "joy": -5,
           "belly": -5
         }
       },
@@ -148,7 +148,7 @@
         "label": "Inhale it",
         "fx": {
           "joy": 5,
-          "belly": 20
+          "belly": 25
         }
       },
       "noTime": true

@@ -5,7 +5,7 @@
     "text": "You're on the kitchen counter. {owner} has seen you. You have seen {owner}. Nobody blinks. \"{cat}. Down.\"",
     "bag": "main",
     "left": { "label": "Get down slowly", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Lick the butter", "fx": { "joy": -10, "belly": 15, "instinct": -10 },
+    "right": { "label": "Lick the butter", "fx": { "joy": -5, "belly": 20, "instinct": -10 },
                "set": { "counter_trips": "+1" }, "chaos": 3 }
   },
   {
@@ -14,7 +14,7 @@
     "text": "\"The stove is OFF, but you didn't KNOW that.\" {owner} is shaking. You were simply warming your paws on the concept of fire.",
     "bag": "main",
     "left": { "label": "Look ashamed", "fx": { "joy": 5, "instinct": 5 } },
-    "right": { "label": "Sit on the burner", "fx": { "joy": -10, "instinct": -10 },
+    "right": { "label": "Sit on the burner", "fx": { "joy": -5, "instinct": -10 },
                "set": { "counter_trips": "+1" }, "chaos": 2 }
   },
   {
@@ -44,7 +44,7 @@
     "bag": "main",
     "when": [{ "slot": ["evening"] }],
     "left": { "label": "Stare, don't touch", "fx": { "joy": 5, "instinct": 10, "belly": -5 } },
-    "right": { "label": "Liberate chicken", "fx": { "joy": -15, "belly": 20, "instinct": -10 },
+    "right": { "label": "Liberate chicken", "fx": { "joy": -10, "belly": 25, "instinct": -10 },
                "set": { "counter_trips": "+1" }, "chaos": 4 }
   },
   {
@@ -71,7 +71,7 @@
     "bag": "main",
     "when": [{ "slot": ["morning", "night"] }],
     "left": { "label": "Walk away", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Gravity check", "fx": { "joy": -10, "home": -5, "instinct": -10 },
+    "right": { "label": "Gravity check", "fx": { "joy": -5, "home": -5, "instinct": -10 },
                "set": { "knocked": "+1" }, "chaos": 4 }
   },
   {
@@ -91,7 +91,7 @@
     "once": true,
     "when": [{ "flagGte": ["knocked", 3] }],
     "left": { "label": "Feel nothing", "fx": { "instinct": 5, "joy": 5 } },
-    "right": { "label": "Open the cupboard", "fx": { "home": -15, "joy": -10, "instinct": -15 },
+    "right": { "label": "Open the cupboard", "fx": { "home": -15, "joy": -5, "instinct": -15 },
                "set": { "knocked": "+1" }, "chaos": 8 }
   },
   {
@@ -109,7 +109,7 @@
     "text": "\"Has anyone seen my left earbud?\" You know exactly where it is. It's under the couch. It has tooth marks now.",
     "bag": "main",
     "left": { "label": "Bring it back", "fx": { "joy": 10, "instinct": 5, "home": 5 } },
-    "right": { "label": "Chew the right one", "fx": { "joy": -10, "home": -5, "instinct": -10 },
+    "right": { "label": "Chew the right one", "fx": { "joy": -5, "home": -5, "instinct": -10 },
                "set": { "wires_chewed": "+1" }, "chaos": 3 }
   },
   {
@@ -168,7 +168,7 @@
     "bag": "main",
     "when": [{ "slot": ["night"] }],
     "left": { "label": "Lie still, vibrate", "fx": { "instinct": 15 } },
-    "right": { "label": "GO GO GO", "fx": { "joy": -10, "instinct": -20 },
+    "right": { "label": "GO GO GO", "fx": { "joy": -5, "instinct": -20 },
                "set": { "zoomies": "+1" }, "chaos": 5 }
   },
   {
@@ -188,7 +188,7 @@
     "once": true,
     "when": [{ "flagGte": ["zoomies", 3] }, { "slot": ["night"] }],
     "left": { "label": "Let them sleep", "fx": { "joy": 15, "instinct": 15 } },
-    "right": { "label": "Lap ten", "fx": { "joy": -15, "instinct": -20 },
+    "right": { "label": "Lap ten", "fx": { "joy": -10, "instinct": -20 },
                "set": { "zoomies": "+1" }, "chaos": 5 }
   },
   {
@@ -208,7 +208,7 @@
     "once": true,
     "when": [{ "flagGte": ["scratched_couch", 2] }],
     "left": { "label": "Sulk at the post", "fx": { "joy": 10, "instinct": 10, "home": 5 } },
-    "right": { "label": "Scratch the armchair", "fx": { "home": -15, "joy": -10, "instinct": -15 },
+    "right": { "label": "Scratch the armchair", "fx": { "home": -15, "joy": -5, "instinct": -15 },
                "set": { "scratched_couch": "+1" }, "chaos": 7 }
   },
   {
@@ -235,7 +235,7 @@
     "text": "THE BIG PLANT HAS DIRT. DIRT IS JUST LITTER THAT GREW UP. YOU KNOW WHAT TO DO.",
     "bag": "main",
     "left": { "label": "That's not litter", "fx": { "instinct": 10 } },
-    "right": { "label": "Dig in the pot", "fx": { "home": -10, "joy": -10, "instinct": -15 },
+    "right": { "label": "Dig in the pot", "fx": { "home": -10, "joy": -5, "instinct": -15 },
                "set": { "plants_eaten": "+1" }, "chaos": 6 }
   },
   {
@@ -306,7 +306,7 @@
     "once": true,
     "when": [{ "day": { "gte": 3 } }],
     "left": { "label": "Go limp, tragic", "fx": { "joy": 10, "instinct": 15 } },
-    "right": { "label": "Become a blender", "fx": { "joy": -15, "home": -10, "instinct": -15 },
+    "right": { "label": "Become a blender", "fx": { "joy": -10, "home": -10, "instinct": -15 },
                "set": { "bites": "+1" }, "chaos": 6 }
   },
   {
@@ -324,7 +324,7 @@
     "bag": "main",
     "when": [{ "slot": ["morning", "afternoon"] }],
     "left": { "label": "Stay off-screen", "fx": { "instinct": 10 } },
-    "right": { "label": "Butt to camera", "fx": { "joy": -10, "instinct": -10 }, "next": "prob_work_call_reaction", "chaos": 2 }
+    "right": { "label": "Butt to camera", "fx": { "joy": -5, "instinct": -10 }, "next": "prob_work_call_reaction", "chaos": 2 }
   },
   {
     "id": "prob_work_call_reaction",
@@ -334,7 +334,7 @@
     "weight": 0,
     "noTime": true,
     "left": { "label": "Graceful exit", "fx": { "joy": 15, "instinct": 5 } },
-    "right": { "label": "Lick yourself", "fx": { "joy": -15, "instinct": -10 }, "chaos": 1 }
+    "right": { "label": "Lick yourself", "fx": { "joy": -10, "instinct": -10 }, "chaos": 1 }
   },
   {
     "id": "prob_hairball",
@@ -349,16 +349,16 @@
     "char": "owner",
     "text": "\"There's food in the bowl, {cat}. Look. Kibble.\" There is a visible circle of bowl bottom in the middle. This is famine.",
     "bag": "main",
-    "left": { "label": "Eat the edges", "fx": { "belly": 10, "instinct": 5 } },
-    "right": { "label": "Scream about it", "fx": { "joy": -10, "belly": 15, "instinct": -5 } }
+    "left": { "label": "Eat the edges", "fx": { "belly": 20, "instinct": 5 } },
+    "right": { "label": "Scream about it", "fx": { "joy": -5, "belly": 25, "instinct": -5 } }
   },
   {
     "id": "prob_new_food",
     "char": "owner",
     "text": "{owner} spent $4 on one can of grain-free wild salmon pâté. You sniff it, then try to bury it on the kitchen tile.",
     "bag": "main",
-    "left": { "label": "Eat it, grudgingly", "fx": { "belly": 15, "joy": 10, "instinct": 5 } },
-    "right": { "label": "Bury it with air", "fx": { "joy": -10, "belly": -5, "instinct": -5 } }
+    "left": { "label": "Eat it, grudgingly", "fx": { "belly": 25, "joy": 10, "instinct": 5 } },
+    "right": { "label": "Bury it with air", "fx": { "joy": -5, "belly": -5, "instinct": -5 } }
   },
   {
     "id": "prob_catnip",
@@ -388,7 +388,7 @@
     "once": true,
     "when": [{ "day": { "gte": 5 } }],
     "left": { "label": "Admire from afar", "fx": { "joy": 10, "instinct": 15 } },
-    "right": { "label": "Tree down!", "fx": { "joy": -10, "home": -15, "instinct": -20 },
+    "right": { "label": "Tree down!", "fx": { "joy": -5, "home": -15, "instinct": -20 },
                "set": { "knocked": "+1" }, "chaos": 8 }
   },
   {
@@ -461,7 +461,7 @@
     "text": "You roll over, showing the fluffy belly. {owner} reaches toward it, with the innocence of someone who has not learned.",
     "bag": "main",
     "left": { "label": "Allow it, tensely", "fx": { "joy": 15, "instinct": 15 } },
-    "right": { "label": "Bear trap", "fx": { "joy": -15, "instinct": -15 },
+    "right": { "label": "Bear trap", "fx": { "joy": -10, "instinct": -15 },
                "set": { "bites": "+1" }, "chaos": 3 }
   },
   {
@@ -539,7 +539,7 @@
     "weight": 0,
     "noTime": true,
     "left": { "label": "Stay humble", "fx": { "joy": 10, "instinct": 5 } },
-    "right": { "label": "Demand royalties", "fx": { "joy": 5, "belly": 10, "instinct": -5 } }
+    "right": { "label": "Demand royalties", "fx": { "joy": 5, "belly": 15, "instinct": -5 } }
   },
   {
     "id": "prob_roomba_captain",
@@ -594,7 +594,7 @@
     "weight": 0,
     "noTime": true,
     "left": { "label": "Take a nap", "fx": { "instinct": -10, "belly": -5 } },
-    "right": { "label": "Scream at the wall", "fx": { "joy": -10, "instinct": -15 }, "chaos": 1 }
+    "right": { "label": "Scream at the wall", "fx": { "joy": -5, "instinct": -15 }, "chaos": 1 }
   },
   {
     "id": "prob_reddot_source",
@@ -604,7 +604,7 @@
     "once": true,
     "when": [{ "flag": "reddot_obsessed" }, { "day": { "gte": 7 } }],
     "left": { "label": "Chase it anyway", "fx": { "joy": 15, "instinct": -15 } },
-    "right": { "label": "Bite the hand", "fx": { "joy": -15, "instinct": -20 },
+    "right": { "label": "Bite the hand", "fx": { "joy": -10, "instinct": -20 },
                "set": { "bites": "+1" }, "chaos": 3 }
   }
 ]
