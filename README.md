@@ -5,6 +5,8 @@ on a two-week trial: swipe left or right through fourteen days of counters,
 charger cables and 3 AM zoomies, and keep your human happy enough to adopt you
 for good. Static site, no build step, no dependencies. Mobile-first.
 
+**Play:** https://vorpus.github.io/nine-reigns/
+
 - Spec: [`docs/PRD.md`](docs/PRD.md)
 - Data formats (cards, endings, owners, achievements, cosmetics):
   [`docs/data-format.md`](docs/data-format.md)
