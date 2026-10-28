@@ -1,9 +1,15 @@
 // Boot, data loading and screen flow.
-import { Engine, buildData, METERS, DAYS, fillText } from './engine.js';
+// Flow (docs/research-onboarding.md §8): title (tap) → trial file (NEXT) → deal → cards
+// → ending card (tap) → "The / Trial / is over" → succession trial file (NEXT) → deal.
+import { Engine, buildData, DAYS, fillText } from './engine.js';
 import { createSwipe } from './swipe.js';
 import * as storage from './storage.js';
-import { $, esc, showScreen, buildMeters, renderMeters, renderDots, renderCard, renderGoals, toast, setCat, setLeaning, portraitThumb, UI_CONFIG } from './ui.js';
-import { meterSVG } from './portraits.js';
+import { prepareRun, ordinal, tagNumber, lifeLabel, runEpithet } from './onboarding.js';
+import {
+  $, esc, showScreen, hudIcons, buildMeters, renderMeters, setMetersDim, renderDots, renderCard,
+  fadePrompt, endEnter, enterDuration, setLeaning, setBoard, renderFooter, goalList, showBanner, starBurst,
+  portraitThumb, setCat, catHead, toast, reducedMotion, ICONS, segDigits,
+} from './ui.js';
 
 export const GAME_CONFIG = {
   difficultyMods: { easy: 0, normal: 1, hard: 2 },
@@ -13,6 +19,14 @@ export const GAME_CONFIG = {
     lose: ['the Returned', 'the Briefly Loved', 'the Unready', 'the Overdue', 'the Unreturnable'],
     chaos: ['the Destroyer', 'the Wrecking Ball', 'the Unbothered'],
   },
+  titleStatus: ['KNOCKING THINGS OFF THE LOGO', 'ANTAGONIZING THE ROOMBA', 'WARMING UP THE LAPTOP',
+    'COUNTING THE KIBBLE', 'SHEDDING ON THE GOOD COUCH', 'STARING AT A WALL'],
+  titleStatusMs: 1500,
+  titleReadyMs: 1200,
+  overAutoMs: 4200,     // "The Trial is over" moves on by itself after a loss
+  successionSlideMs: 1500,
+  hintDelayMs: 600,     // after the first card lands
+  hintRestMs: 1800,
 };
 
 const params = new URLSearchParams(location.search);
@@ -60,9 +74,18 @@ const app = {
   engine: null,
   meta: null,
   swipe: null,
-  beat: null, // 'ending' while the ending card is on screen
-  busy: false,
+  beat: null,        // 'ending' while the ending card is on screen
+  lastPrompt: '',    // narration cards keep the previous prompt (dimmed)
+  banners: Promise.resolve(),
+  returnTo: 'title', // where gallery/cosmetics go back to
+  timers: {},
 };
+
+function later(name, fn, ms) {
+  clearTimeout(app.timers[name]);
+  app.timers[name] = setTimeout(fn, ms);
+}
+function cancel(name) { clearTimeout(app.timers[name]); }
 
 function cosmeticUnlocked(item) {
   return !!item.unlocked || app.meta.unlocked.includes(item.id);
@@ -107,29 +130,54 @@ function blip(freq = 440, ms = 70, type = 'triangle', vol = 0.05) {
 }
 function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* ignore */ } }
 
+// ---------- names ----------
+function epithetFor(e, name) {
+  if (e.epithet) return e.epithet;
+  const pool = GAME_CONFIG.epithets[e.kind] || GAME_CONFIG.epithets.lose;
+  let h = 0;
+  for (const ch of name + e.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return pool[h % pool.length];
+}
+
+// "Biscuit the Kitten": the latest deed's epithet; at the end, the ending's if none.
+function fullName(s) {
+  const name = s.profile.catName;
+  const ep = runEpithet(s, app.data.achievements) || (s.over && s.ending ? epithetFor(s.ending, name) : null);
+  return ep ? `${name} ${ep}` : name;
+}
+
+function goalsView(s = app.engine.state) {
+  return s.activeAch.map((id) => app.data.achievements.find((a) => a.id === id)).filter(Boolean)
+    .map((a) => ({ ...a, desc: (a.desc || a.title).replace(/\.$/, ''), done: s.achDone.includes(a.id) }));
+}
+
 // ---------- title ----------
 function renderTitle() {
-  const saved = app.engine && app.engine.state && !app.engine.state.over;
-  $('btn-continue').hidden = !saved;
-  $('btn-continue').classList.toggle('btn-primary', !!saved);
-  $('btn-play').classList.toggle('btn-primary', !saved);
-  $('btn-play').style.order = saved ? '1' : '';
-  $('btn-play').textContent = saved ? 'New cat' : 'Play';
-  $('btn-chaos').hidden = !chaosUnlocked();
-  $('difficulty').hidden = app.meta.adoptions < 1;
-  for (const b of document.querySelectorAll('#difficulty .seg')) {
-    b.setAttribute('aria-checked', String(b.dataset.diff === app.meta.difficulty));
-  }
-  $('btn-sound').textContent = app.meta.settings.sound ? '🔊' : '🔇';
-  $('btn-sound').setAttribute('aria-pressed', String(app.meta.settings.sound));
-  const total = app.data.endings.length;
+  stopTitle();
   const bits = [];
-  if (app.meta.adoptions) bits.push(`Adoptions: ${app.meta.adoptions}`);
-  if (app.meta.runs) bits.push(`Endings seen: ${endingsSeenCount()}${total ? `/${total}` : ''}`);
-  if (app.meta.chaosHigh) bits.push(`Chaos best: ${app.meta.chaosHigh}`);
+  const total = app.data.endings.length;
+  if (app.meta.adoptions) bits.push(`Adoptions ${app.meta.adoptions}`);
+  if (app.meta.runs) bits.push(`Endings ${endingsSeenCount()}${total ? `/${total}` : ''}`);
+  if (app.meta.chaosHigh) bits.push(`Chaos best ${app.meta.chaosHigh}`);
   $('title-foot').textContent = bits.join(' · ');
-  setCat('title-cat', lookFrom(app.meta.cosmetic, 'happy'));
+  const lines = GAME_CONFIG.titleStatus;
+  let i = Math.floor(Math.random() * lines.length);
+  $('title-status').textContent = lines[i];
+  $('title-play').innerHTML = ICONS.down;
+  $('title-play').classList.remove('ready');
+  app.timers.titleStatus = setInterval(() => { i = (i + 1) % lines.length; $('title-status').textContent = lines[i]; }, GAME_CONFIG.titleStatusMs);
+  later('titleReady', () => { $('title-play').innerHTML = ICONS.play; $('title-play').classList.add('ready'); }, reducedMotion() ? 0 : GAME_CONFIG.titleReadyMs);
   showScreen('title');
+}
+function stopTitle() { clearInterval(app.timers.titleStatus); cancel('titleReady'); }
+
+function onTitleTap() {
+  stopTitle();
+  const s = app.engine && app.engine.state;
+  if (s && s.over) showOver();
+  else if (s && s.card === '__trial_file') showFile();
+  else if (s) enterGame({ deal: true });
+  else { startRun('normal'); showFile(); }
 }
 
 // ---------- runs ----------
@@ -149,65 +197,172 @@ function startRun(mode = 'normal', opts = {}) {
     achievementsDone: meta.achievementsDone,
     ...opts.run,
   });
+  prepareRun(app.engine, meta);
   storage.saveRun(app.engine.state);
   app.beat = null;
+  app.lastPrompt = '';
 }
 
-function showArrive() {
-  const p = app.engine.state.profile;
-  setCat('arrive-cat', currentLook('happy'));
-  $('arrive-name').textContent = p.catName;
-  $('arrive-sub').textContent = app.engine.state.mode === 'chaos'
-    ? `has been released into ${p.owner.name}'s ${p.home}. Chaos Mode.`
-    : `is going home with ${p.owner.name} on a two-week trial.`;
-  showScreen('arrive');
+// ---------- trial file (and succession) ----------
+const TRACK_STEPS = DAYS;
+function trackPos(day) { return Math.max(0, Math.min(1, day / TRACK_STEPS)); }
+
+function setMarker(pos, animate) {
+  const m = $('track-marker');
+  m.style.transition = animate && !reducedMotion() ? `left ${GAME_CONFIG.successionSlideMs}ms cubic-bezier(.5,0,.3,1)` : 'none';
+  m.style.left = `${(pos * 100).toFixed(2)}%`;
 }
 
-function enterGame() {
-  showScreen('game');
-  renderGame(true);
+function fileOwnerLine(s) {
+  const p = s.profile;
+  if (s.mode === 'chaos') return `Chaos Mode · ${p.owner.name}'s ${p.home}`;
+  const mods = p.mods.map((m) => ({ allergies: 'allergies', partner: `+ ${p.partnerName}`, dog: `+ ${p.dogName} the dog` }[m]));
+  return [`${p.owner.name} · ${p.owner.quirkLabel}`, `${p.home[0].toUpperCase()}${p.home.slice(1)}${mods.length ? ` · ${mods.join(' · ')}` : ''}`]
+    .map(esc).join('<br>');
 }
 
-function goalsView() {
+function renderFileFor(s) {
+  const p = s.profile;
+  const n = p.catNo || 1;
+  $('file-day').innerHTML = `<span class="file-day-label">Day</span>${segDigits(1)}`;
+  $('track-cat').innerHTML = catHead(lookFrom(p.cosmetic || app.meta.cosmetic, 'happy'));
+  $('file-name').textContent = p.catName;
+  $('file-sub').textContent = n === 1 ? '0 days on trial' : `${ordinal(n)} Cat`;
+  $('file-life').textContent = n === 1 ? '' : lifeLabel(n);
+  $('file-meta').innerHTML = `<span class="file-tag">${ICONS.tag}<b>#${tagNumber(n)}</b></span><span class="file-owner">${fileOwnerLine(s)}</span>`;
+  $('file-goals').innerHTML = goalList(goalsView(s));
+  setMarker(trackPos(0.5), false);
+}
+
+// opts.prev: { name, days, day, won } of the cat that just finished → succession beat.
+function showFile(opts = {}) {
   const s = app.engine.state;
-  return s.activeAch.map((id) => app.data.achievements.find((a) => a.id === id)).filter(Boolean)
-    .map((a) => ({ ...a, done: s.achDone.includes(a.id) }));
+  const screen = $('screen-file');
+  $('track-ticks').innerHTML = Array.from({ length: TRACK_STEPS - 1 }, () => '<i></i>').join('');
+  $('file-flash').textContent = '';
+  $('file-flash').classList.remove('show');
+  showScreen('file');
+  const prev = opts.prev;
+  if (!prev) {
+    screen.classList.remove('passing');
+    renderFileFor(s);
+    return;
+  }
+  // Phase A: the old cat's marker slides back to the shelter (or on to the forever home).
+  screen.classList.add('passing');
+  $('file-day').innerHTML = `<span class="file-day-label">Day</span>${segDigits(prev.day)}`;
+  $('track-cat').innerHTML = catHead(prev.look);
+  $('file-name').textContent = prev.name;
+  $('file-sub').textContent = prev.won ? 'Adopted' : `${prev.days} ${prev.days === 1 ? 'day' : 'days'} on trial`;
+  $('file-life').textContent = '';
+  $('file-meta').innerHTML = '';
+  $('file-goals').innerHTML = '';
+  setMarker(trackPos(prev.day - 0.5), false);
+  const slide = () => setMarker(prev.won ? 1 : 0, true);
+  const phaseB = () => {
+    cancel('succA'); cancel('succB'); cancel('succSlide');
+    screen.removeEventListener('pointerdown', skip);
+    screen.classList.remove('passing');
+    renderFileFor(s);
+    const f = $('file-flash');
+    f.textContent = 'Long live the Cat!';
+    f.classList.remove('show');
+    void f.offsetWidth;
+    f.classList.add('show');
+    blip(660, 180, 'sine', 0.05);
+  };
+  const skip = (e) => { if (!e.target.closest('button')) phaseB(); };
+  screen.addEventListener('pointerdown', skip);
+  if (reducedMotion()) { later('succB', phaseB, 900); return; }
+  later('succSlide', slide, 350);
+  later('succB', phaseB, 350 + GAME_CONFIG.successionSlideMs + 250);
+}
+
+function fileNext() {
+  if (!app.engine) return;
+  cancel('succB');
+  const s = app.engine.state;
+  if (s.card === '__trial_file') {
+    app.engine.choose('right'); // the engine's own trial card: pure, no time or drift
+    storage.saveRun(s);
+  }
+  enterGame({ deal: true });
+}
+
+// ---------- game ----------
+function enterGame(opts = {}) {
+  const s = app.engine.state;
+  if (s.over) { showOver(); return; }
+  if (s.card === '__trial_file') { app.engine.choose('right'); storage.saveRun(s); }
+  showScreen('game');
+  renderGame(opts.deal ? 'deal' : 'flip');
+}
+
+function footerView(s) {
+  const st = app.engine.stats();
+  return {
+    name: fullName(s),
+    days: st.daysSurvived,
+    day: s.day,
+    slot: s.slot,
+    chaos: s.mode === 'chaos' ? s.chaos : null,
+    goals: goalsView(s),
+  };
+}
+
+function killerMeter(s) {
+  const e = s.ending;
+  if (!e) return null;
+  const def = app.data.endingById[e.id];
+  const t = def && def.trigger;
+  if (t && t.meter) return t.meter;
+  if (t && t.chaos === 'home') return 'home';
+  if (e.kind !== 'win' && s.meters.joy <= 0) return 'joy';
+  if (e.kind !== 'win' && s.meters.home <= 0) return 'home';
+  return null;
 }
 
 function renderGame(animate, deltas) {
   const eng = app.engine;
   const s = eng.state;
-  renderMeters(s.meters, deltas, { off: s.mode === 'chaos' ? ['joy'] : [] });
+  stopHint();
+  renderMeters(s.meters, deltas, { off: s.mode === 'chaos' ? ['joy'] : [], killer: s.over ? killerMeter(s) : null, calm: s.over });
   renderDots(null);
-  $('cat-name').textContent = s.profile.catName;
-  $('time').textContent = s.mode === 'chaos' ? `${eng.timeLabel()} · Chaos ${s.chaos}` : eng.timeLabel();
-  renderGoals(goalsView());
+  renderFooter(footerView(s));
   if (s.over) { renderEndingCard(animate); return; }
-  renderCard(eng.current(), currentLook('happy'), { animate, people: peopleFrom(s) });
+  setBoard(null);
+  const view = eng.current();
+  const ui = view.ui || {};
+  const narration = view.char === 'narrator';
+  setMetersDim(!!ui.dim, { delay: animate ? enterDuration(animate) * 0.5 : 0 });
+  renderCard(view, {
+    look: currentLook('happy'),
+    people: peopleFrom(s),
+    animate,
+    narration,
+    prompt: narration ? app.lastPrompt : null,
+    promptDim: narration,
+  });
+  if (!narration) app.lastPrompt = view.text;
   app.swipe.arm();
+  if (ui.hint) later('hintStart', startHint, enterDuration(animate) + GAME_CONFIG.hintDelayMs);
 }
 
 function renderEndingCard(animate) {
   const s = app.engine.state;
   const e = s.ending;
-  const ch = app.data.characters[e.char] || {};
+  const kind = e.kind;
+  setMetersDim(false);
+  setBoard(kind);
   const view = {
     text: e.text,
     left: { label: '…' }, right: { label: '…' },
-    character: { id: e.char, name: e.title, emoji: ch.emoji || '📋', color: ch.color || '#d8ccb4' },
+    character: { id: 'cat', name: e.title, color: kind === 'win' ? '#fdeec0' : '#210f00' },
     crisis: null,
   };
-  renderCard(view, currentLook(e.kind === 'win' ? 'happy' : 'sad'), { animate, badge: 'THE END', people: peopleFrom(s) });
+  renderCard(view, { look: currentLook(), animate, ending: kind, people: peopleFrom(s) });
   app.beat = 'ending';
   app.swipe.arm();
-}
-
-function epithetFor(e, name) {
-  if (e.epithet) return e.epithet;
-  const pool = GAME_CONFIG.epithets[e.kind] || GAME_CONFIG.epithets.lose;
-  let h = 0;
-  for (const ch of name + e.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return pool[h % pool.length];
 }
 
 function recordEnding() {
@@ -221,75 +376,139 @@ function recordEnding() {
   saveMeta();
 }
 
-function showEndingScreen() {
-  const eng = app.engine;
-  const s = eng.state;
-  const e = s.ending;
-  const st = eng.stats();
-  const kind = $('ending-kind');
-  kind.className = `ending-kind ${e.kind}`;
-  kind.textContent = e.kind === 'win' ? 'Adopted' : e.kind === 'chaos' ? 'Chaos Mode' : 'Back to the shelter';
-  setCat('ending-cat', currentLook(e.kind === 'lose' ? 'sad' : 'smug'));
-  $('ending-epithet').textContent = `${s.profile.catName} ${epithetFor(e, s.profile.catName)}`;
-  $('ending-days').textContent = s.mode === 'chaos'
-    ? `Chaos score ${s.chaos} · best ${app.meta.chaosHigh}`
-    : e.kind === 'win' ? `Adopted after ${DAYS} days with ${s.profile.owner.name}`
-      : `Survived ${st.daysSurvived} day${st.daysSurvived === 1 ? '' : 's'} with ${s.profile.owner.name}`;
-  $('ending-title').textContent = e.title;
-  $('ending-text').textContent = e.text;
-  $('ending-stats').innerHTML = METERS.map((m) => `<div class="stat" title="${UI_CONFIG.meterNames[m]}"><span class="stat-icon">${meterSVG(m)}</span><span class="stat-bar"><i style="width:${s.meters[m]}%"></i></span></div>`).join('');
-  $('ending-ach').innerHTML = goalsView().map((a) => `<li class="${a.done ? 'done' : 'todo'}">${a.done ? '✔' : '○'} ${esc(a.icon || '')} ${esc(a.title)}</li>`).join('');
-  app.beat = null;
-  showScreen('ending');
-}
-
 function handleAchievements(list) {
+  const s = app.engine.state;
   for (const a of list) {
     if (!app.meta.achievementsDone.includes(a.id)) app.meta.achievementsDone.push(a.id);
     const u = a.unlocks || {};
     let extra = '';
     if (u.cosmetic && !app.meta.unlocked.includes(u.cosmetic)) {
       app.meta.unlocked.push(u.cosmetic);
-      extra = ' · new look unlocked';
+      extra = ' · new look under the bed';
     }
     if (u.flag) app.meta.flags[u.flag] = true;
-    toast(`${a.icon || '⭐'} ${a.title}${extra}`);
-    blip(880, 160, 'sine', 0.06);
+    const top = a.epithet ? `${s.profile.catName} ${a.epithet}` : a.title;
+    const deed = `${(a.desc || a.title).replace(/\.$/, '')}${extra}`;
+    app.banners = app.banners.then(() => { blip(880, 160, 'sine', 0.06); return showBanner(top, deed); });
   }
   if (list.length) saveMeta();
 }
 
 function commit(side) {
-  if (app.beat === 'ending') {
-    showEndingScreen();
-    return;
-  }
+  if (app.beat === 'ending') { showOver(); return; }
+  const played = app.engine.getCard(app.engine.state.card);
   const res = app.engine.choose(side);
   if (!res) return;
+  // Flash only what the choice itself touched (Reigns), not the passive drift.
+  const fx = (played[side] && played[side].fx) || {};
+  const flash = {};
+  for (const m of Object.keys(res.deltas)) flash[m] = fx[m] ? res.deltas[m] || fx[m] : 0;
   storage.saveRun(app.engine.state);
   blip(side === 'left' ? 330 : 392, 60);
   buzz(8);
-  if (res.events.includes('sneeze')) toast('🤧 Achoo! Allergies.');
+  if (res.events.includes('sneeze')) toast('Achoo! Allergies.');
   if (res.crisis) buzz(30);
-  handleAchievements(res.achievements);
   if (res.ending) {
     recordEnding();
     buzz([20, 40, 20]);
   }
-  renderGame(true, res.deltas);
+  handleAchievements(res.achievements);
+  renderGame('flip', flash);
 }
 
+// ---------- the first card's hand hint ----------
+// The card drags itself left, right and back, twice, until the player touches it.
+function startHint() {
+  stopHint();
+  const card = $('card');
+  if (!card.isConnected || app.swipe.dragging) return;
+  const hand = document.createElement('div');
+  hand.className = 'hint-hand';
+  hand.innerHTML = ICONS.hand;
+  card.appendChild(hand);
+  app.hint = { hand };
+  if (reducedMotion()) { hand.classList.add('still'); return; }
+  const w = card.getBoundingClientRect().width;
+  const x = w * 0.3;
+  const moves = [[-x, 560, 620], [x, 820, 620], [0, 560, 360], [-x, 560, 620], [x, 820, 620], [0, 560, GAME_CONFIG.hintRestMs]];
+  let i = 0;
+  const step = () => {
+    if (!app.hint) return;
+    const [to, ms, hold] = moves[i % moves.length];
+    app.swipe.drive(to, ms);
+    i++;
+    later('hint', step, ms + hold);
+  };
+  step();
+}
+
+function stopHint() {
+  cancel('hint'); cancel('hintStart');
+  if (!app.hint) return;
+  app.hint.hand.remove();
+  app.hint = null;
+}
+
+// ---------- the end ----------
+function showOver() {
+  const s = app.engine.state;
+  const e = s.ending;
+  if (!e) { enterGame(); return; }
+  app.beat = null;
+  stopHint();
+  const kind = e.kind;
+  const words = kind === 'win' ? ["You're", 'Adopted!', 'for good'] : kind === 'chaos' ? ['The', 'Chaos', 'is over'] : ['The', 'Trial', 'is over'];
+  $('over-stack').innerHTML = words.map((w, i) => `<span class="s${i + 1}">${esc(w)}</span>`).join('');
+  $('over-stack').setAttribute('aria-label', words.join(' '));
+  const n = s.profile.catNo || 1;
+  $('over-tag').innerHTML = `${kind === 'win' ? ICONS.collar : kind === 'chaos' ? ICONS.chaos : ICONS.tag}<b>#${tagNumber(n)}</b>`;
+  $('over-name').textContent = fullName(s);
+  const last = s.trialCompleted ? DAYS : s.day;
+  $('over-days').textContent = s.mode === 'chaos'
+    ? `Chaos ${s.chaos} · best ${app.meta.chaosHigh}`
+    : `Day 1 – Day ${last}`;
+  $('over-title').textContent = e.title;
+  const screen = $('screen-over');
+  screen.classList.remove('win', 'lose', 'chaos');
+  screen.classList.add(kind);
+  $('over-stars').innerHTML = kind === 'win' ? starBurst(22) : '';
+  showScreen('over');
+  app.overShownAt = performance.now();
+  if (kind !== 'win') later('overAuto', goSuccession, GAME_CONFIG.overAutoMs);
+}
+
+function goSuccession() {
+  cancel('overAuto');
+  const s = app.engine && app.engine.state;
+  if (!s) { renderTitle(); return; }
+  const st = app.engine.stats();
+  const prev = {
+    name: fullName(s),
+    days: st.daysSurvived,
+    day: s.trialCompleted ? DAYS : s.day,
+    won: !!(s.ending && s.ending.kind === 'win'),
+    look: lookFrom(s.profile.cosmetic || app.meta.cosmetic, 'happy'),
+  };
+  storage.clearRun();
+  startRun('normal', { ignoreSeed: true });
+  showFile({ prev });
+}
+
+// ---------- swipe + keys ----------
 function setupSwipe() {
   app.swipe = createSwipe($('card'), {
+    onStart() { stopHint(); endEnter(); },
     onMove(side) {
-      setLeaning(!!side);
+      setLeaning(!!side && app.beat !== 'ending');
       if (!app.engine || app.beat === 'ending' || !side) { renderDots(null); return; }
       renderDots(app.engine.preview(side));
     },
     onCancel() { renderDots(null); setLeaning(false); },
     onCommit(side) { renderDots(null); commit(side); },
+    onTap() { if (app.beat === 'ending') showOver(); },
+    // The prompt fades out while the card leaves; the next one fades in during the flip.
+    onFly() { if (app.beat !== 'ending') fadePrompt(); },
   });
-
   const press = (side) => {
     if (document.body.dataset.screen !== 'game' || !$('modal-menu').hidden) return;
     app.swipe.commit(side);
@@ -305,21 +524,34 @@ function setupSwipe() {
   }
 
   document.addEventListener('keydown', (e) => {
-    if (document.body.dataset.screen !== 'game' || !$('modal-menu').hidden) return;
+    const screen = document.body.dataset.screen;
+    const modalOpen = !$('modal-menu').hidden || !$('modal-settings').hidden;
+    if (modalOpen) {
+      if (e.key === 'Escape') closeModals();
+      return;
+    }
+    if (screen === 'title' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onTitleTap(); return; }
+    if (screen === 'over' && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) { e.preventDefault(); overNext(); return; }
+    if (screen !== 'game') return;
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       e.preventDefault();
       if (e.repeat) return;
       const side = e.key === 'ArrowLeft' ? 'left' : 'right';
+      if (app.beat === 'ending') { showOver(); return; }
       // First press previews, second press commits.
       if (app.swipe.leaned === side) app.swipe.commit(side);
       else app.swipe.lean(side);
-    } else if ((e.key === 'Enter' || e.key === ' ') && app.swipe.leaned) {
-      e.preventDefault();
-      app.swipe.commit(app.swipe.leaned);
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      if (app.beat === 'ending') { e.preventDefault(); showOver(); return; }
+      if (app.swipe.leaned) { e.preventDefault(); app.swipe.commit(app.swipe.leaned); }
     } else if (e.key === 'Escape') {
       app.swipe.reset();
     }
   });
+}
+
+function overNext() {
+  if (app.engine && app.engine.state && app.engine.state.over) goSuccession();
 }
 
 // ---------- gallery & cosmetics ----------
@@ -333,16 +565,16 @@ function renderGallery() {
     return `<div class="g-item${isSeen ? '' : ' unseen'}">${portraitThumb(e.char, ch.color, { owner: 'albert', ownerName: 'Albert' })}
       <span class="g-kind">${esc(e.kind)}</span><span class="g-title">${isSeen ? esc(e.title) : '???'}</span></div>`;
   }).join('') || '<p class="list-sub">No endings loaded.</p>';
-  $('ach-list').innerHTML = app.data.achievements.map((a) => {
+  $('ach-list').innerHTML = app.data.achievements.filter((a) => a.mode !== 'chaos' || chaosUnlocked()).map((a) => {
     const done = app.meta.achievementsDone.includes(a.id);
-    return `<li class="${done ? 'done' : 'locked'}"><span class="a-icon">${esc(a.icon || '⭐')}</span><span>${esc(a.title)}<small>${esc(a.desc || '')}</small></span></li>`;
+    return `<li class="${done ? 'done' : 'locked'}"><span class="box">${done ? ICONS.check : ''}</span><span><b>${esc(a.epithet ? `${a.epithet}` : a.title)}</b><small>${esc(a.desc || '')}</small></span></li>`;
   }).join('');
   showScreen('gallery');
 }
 
 function unlockHint(id) {
   const a = app.data.achievements.find((x) => x.unlocks && x.unlocks.cosmetic === id);
-  return a ? `Unlock: ${a.title}` : 'Locked';
+  return a ? `Unlock: ${a.desc || a.title}` : 'Locked';
 }
 
 function renderCosmetics() {
@@ -355,29 +587,76 @@ function renderCosmetics() {
     items.map((it) => {
       const ok = cosmeticUnlocked(it);
       const sw = key === 'coat' ? `<span class="swatch" style="background:${esc(it.fur)}"></span>` : '';
-      return `<button class="cos-opt" data-key="${key}" data-id="${esc(it.id)}" aria-pressed="${sel[key] === it.id}" ${ok ? '' : `disabled title="${esc(unlockHint(it.id))}"`}>${sw}${ok ? '' : '🔒 '}${esc(it.name)}</button>`;
+      return `<button class="cos-opt" data-key="${key}" data-id="${esc(it.id)}" aria-pressed="${sel[key] === it.id}" ${ok ? '' : `disabled title="${esc(unlockHint(it.id))}"`}>${sw}${esc(it.name)}</button>`;
     }).join('')}</div></div>`).join('');
   showScreen('cosmetics');
 }
 
+// The pending run (still on its trial file) wears the newly picked look.
+function syncPendingCosmetic() {
+  const s = app.engine && app.engine.state;
+  if (s && !s.over && s.card === '__trial_file') {
+    s.profile.cosmetic = { ...app.meta.cosmetic };
+    storage.saveRun(s);
+  }
+}
+
+function goBack() {
+  if (app.returnTo === 'file' && app.engine) showFile();
+  else if (app.returnTo === 'over' && app.engine && app.engine.state.over) showOver();
+  else renderTitle();
+}
+
+// ---------- modals ----------
+function renderSettings() {
+  const pending = app.engine && app.engine.state && !app.engine.state.over && app.engine.state.card === '__trial_file';
+  $('btn-sound').textContent = `Sound: ${app.meta.settings.sound ? 'on' : 'off'}`;
+  $('btn-sound').setAttribute('aria-pressed', String(app.meta.settings.sound));
+  $('difficulty').hidden = app.meta.adoptions < 1;
+  for (const b of document.querySelectorAll('#difficulty .seg')) {
+    b.setAttribute('aria-checked', String(b.dataset.diff === app.meta.difficulty));
+  }
+  const chaosOk = chaosUnlocked() && pending;
+  $('btn-chaos').hidden = !chaosOk;
+  if (chaosOk) $('btn-chaos').textContent = app.engine.state.mode === 'chaos' ? 'Back to a normal trial' : 'Chaos Mode';
+}
+
+function openSettings() { renderSettings(); $('modal-settings').hidden = false; }
+function closeModals() { $('modal-settings').hidden = true; $('modal-menu').hidden = true; }
+
+// Re-roll a run that hasn't started yet (difficulty / mode changed on the trial file).
+function rerollPending(mode) {
+  const s = app.engine && app.engine.state;
+  if (!s || s.over || s.card !== '__trial_file') return;
+  startRun(mode, { ignoreSeed: true, run: { catName: s.profile.catName } });
+  showFile();
+}
+
 // ---------- wiring ----------
 function wire() {
-  $('btn-play').addEventListener('click', () => {
-    const first = app.meta.runs === 0;
-    startRun('normal');
-    if (first) enterGame(); else showArrive();
+  $('btn-start').addEventListener('click', onTitleTap);
+  $('btn-file-next').addEventListener('click', fileNext);
+  $('btn-over-next').addEventListener('click', (e) => { e.stopPropagation(); overNext(); });
+  // (ignore the click that finishes the tap which opened this screen)
+  $('screen-over').addEventListener('click', (e) => {
+    if (!e.target.closest('button') && performance.now() - (app.overShownAt || 0) > 450) overNext();
   });
-  $('btn-continue').addEventListener('click', enterGame);
-  $('btn-chaos').addEventListener('click', () => { startRun('chaos'); showArrive(); });
-  $('btn-arrive').addEventListener('click', enterGame);
-  $('btn-next').addEventListener('click', () => { storage.clearRun(); startRun('normal', { ignoreSeed: true }); showArrive(); });
-  $('btn-ending-title').addEventListener('click', () => { storage.clearRun(); app.engine = null; renderTitle(); });
-  $('btn-gallery').addEventListener('click', renderGallery);
-  $('btn-cosmetics').addEventListener('click', renderCosmetics);
+  for (const nav of document.querySelectorAll('.hud-icons')) {
+    nav.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-hud]');
+      if (!b) return;
+      cancel('overAuto'); cancel('succB'); cancel('succSlide');
+      app.returnTo = document.body.dataset.screen;
+      if (b.dataset.hud === 'gallery') renderGallery();
+      else if (b.dataset.hud === 'cosmetics') renderCosmetics();
+      else openSettings();
+    });
+  }
+  for (const b of document.querySelectorAll('[data-back]')) b.addEventListener('click', goBack);
   $('btn-sound').addEventListener('click', () => {
     app.meta.settings.sound = !app.meta.settings.sound;
     saveMeta();
-    renderTitle();
+    renderSettings();
     blip(523, 90);
   });
   $('difficulty').addEventListener('click', (e) => {
@@ -385,21 +664,32 @@ function wire() {
     if (!b) return;
     app.meta.difficulty = b.dataset.diff;
     saveMeta();
-    renderTitle();
+    renderSettings();
+    if (document.body.dataset.screen === 'file') rerollPending(app.engine.state.mode);
   });
-  for (const b of document.querySelectorAll('[data-back]')) b.addEventListener('click', renderTitle);
+  $('btn-chaos').addEventListener('click', () => {
+    closeModals();
+    rerollPending(app.engine.state.mode === 'chaos' ? 'normal' : 'chaos');
+  });
+  $('btn-settings-close').addEventListener('click', closeModals);
+  for (const m of [$('modal-settings'), $('modal-menu')]) m.addEventListener('click', (e) => { if (e.target === m) closeModals(); });
   $('cos-groups').addEventListener('click', (e) => {
     const b = e.target.closest('.cos-opt');
     if (!b || b.disabled) return;
     app.meta.cosmetic[b.dataset.key] = b.dataset.id;
     saveMeta();
+    syncPendingCosmetic();
     renderCosmetics();
   });
-  $('btn-menu').addEventListener('click', () => { $('modal-menu').hidden = false; });
-  $('btn-resume').addEventListener('click', () => { $('modal-menu').hidden = true; });
-  $('btn-quit').addEventListener('click', () => { $('modal-menu').hidden = true; renderTitle(); });
+  $('btn-menu').addEventListener('click', () => {
+    if (!app.engine) return;
+    $('menu-goals').innerHTML = goalList(goalsView());
+    $('modal-menu').hidden = false;
+  });
+  $('btn-resume').addEventListener('click', closeModals);
+  $('btn-quit').addEventListener('click', () => { closeModals(); renderTitle(); });
   $('btn-abandon').addEventListener('click', () => {
-    $('modal-menu').hidden = true;
+    closeModals();
     storage.clearRun();
     app.engine = null;
     renderTitle();
@@ -426,6 +716,7 @@ async function boot() {
   app.meta = storage.loadMeta();
   sanitizeCosmetic();
   buildMeters();
+  hudIcons();
   setupSwipe();
   wire();
   const saved = storage.loadRun();
@@ -434,8 +725,7 @@ async function boot() {
     app.engine.load(saved);
   }
   $('loading').hidden = true;
-  if (app.engine && app.engine.state.over) showEndingScreen();
-  else if (app.engine && params.has('resume')) enterGame();
+  if (app.engine && params.has('resume')) onTitleTap();
   else renderTitle();
 
   if (DEBUG) {
@@ -443,12 +733,13 @@ async function boot() {
       app,
       get engine() { return app.engine; },
       get state() { return app.engine && app.engine.state; },
-      start(mode = 'normal', run = {}) { startRun(mode, { run }); enterGame(); },
+      start(mode = 'normal', run = {}) { startRun(mode, { run }); enterGame({ deal: true }); },
       choose(side) { commit(side); },
       swipe(side) { return app.swipe.commit(side); },
       set(meters) { Object.assign(app.engine.state.meters, meters); renderGame(false); },
       meta: () => app.meta,
       fill: fillText,
+      screen: () => document.body.dataset.screen,
     };
     document.body.dataset.debug = '1';
   }

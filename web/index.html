@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Nine Reigns</title>
   <meta name="description" content="You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.">
-  <meta name="theme-color" content="#2b2628">
+  <meta name="theme-color" content="#221302">
   <meta property="og:title" content="Nine Reigns">
   <meta property="og:description" content="You're a cat on a two-week trial. Swipe your way into a forever home… or back to the shelter.">
   <meta property="og:type" content="website">
@@ -22,32 +22,48 @@
   <meta name="twitter:image:alt" content="Nine Reigns: a cartoon cat beside a swipe card and four meters.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/SpaceMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div id="app" class="app">
-    <!-- Title -->
+    <!-- Title: one tap starts. No menu. -->
     <section id="screen-title" class="screen screen-title" hidden>
-      <h1 class="logo">Nine<br>Reigns</h1>
-      <div class="title-cat" id="title-cat"></div>
-      <p class="tagline">Fourteen days. One human. Infinite things to knock off the table.</p>
-      <div class="menu">
-        <button class="btn btn-primary" id="btn-play">Play</button>
-        <button class="btn" id="btn-continue" hidden>Continue</button>
-        <div class="difficulty" id="difficulty" hidden role="radiogroup" aria-label="Difficulty">
-          <button class="seg" data-diff="easy" role="radio">Easy</button>
-          <button class="seg" data-diff="normal" role="radio">Normal</button>
-          <button class="seg" data-diff="hard" role="radio">Hard</button>
-        </div>
-        <button class="btn btn-chaos" id="btn-chaos" hidden>Chaos Mode</button>
-        <div class="menu-row">
-          <button class="btn btn-small" id="btn-gallery">Endings</button>
-          <button class="btn btn-small" id="btn-cosmetics">Cosmetics</button>
-          <button class="btn btn-small btn-icon" id="btn-sound" aria-pressed="false" aria-label="Sound">🔇</button>
-        </div>
-      </div>
+      <button class="title-tap" id="btn-start" aria-label="Start">
+        <span class="title-band" id="title-band" aria-hidden="true"></span>
+        <span class="logo" aria-hidden="true">Nine<br>Reigns</span>
+        <span class="visually-hidden">Nine Reigns. Tap to start.</span>
+        <span class="title-status" id="title-status" aria-hidden="true"></span>
+        <span class="title-play" id="title-play" aria-hidden="true"></span>
+      </button>
       <p class="title-foot" id="title-foot"></p>
+    </section>
+
+    <!-- Trial file (Reigns' timeline): cat, day, goals, NEXT. Also the succession screen. -->
+    <section id="screen-file" class="screen screen-file" hidden>
+      <nav class="hud-icons" aria-label="Menu"></nav>
+      <div class="file-main">
+        <div class="file-day" id="file-day"></div>
+        <div class="track" id="track" aria-hidden="true">
+          <span class="track-line"></span>
+          <span class="track-end track-shelter"></span>
+          <span class="track-end track-home"></span>
+          <span class="track-ticks" id="track-ticks"></span>
+          <span class="track-marker" id="track-marker"><span class="track-stem"></span><span class="track-cat" id="track-cat"></span></span>
+        </div>
+        <div class="file-who">
+          <div class="file-name" id="file-name"></div>
+          <div class="file-sub" id="file-sub"></div>
+          <div class="file-life" id="file-life"></div>
+        </div>
+        <div class="file-meta" id="file-meta"></div>
+        <div class="file-flash" id="file-flash" aria-live="polite"></div>
+      </div>
+      <div class="file-band">
+        <ul class="file-goals" id="file-goals" aria-label="Goals"></ul>
+        <button class="next-btn" id="btn-file-next"><span class="next-dot" aria-hidden="true"></span>Next</button>
+      </div>
     </section>
 
     <!-- Game -->
@@ -57,79 +73,94 @@
       </header>
       <div class="prompt-wrap"><p class="prompt" id="prompt" aria-live="polite"></p></div>
       <div class="stage" id="stage">
-        <div class="deck-back"></div>
-        <div class="card" id="card" tabindex="0" aria-describedby="prompt">
-          <div class="choice choice-left" id="choice-left"></div>
-          <div class="choice choice-right" id="choice-right"></div>
-          <div class="portrait" id="portrait"></div>
+        <div class="card-slot" id="card-slot">
+          <div class="deck-back b2"></div>
+          <div class="deck-back b1"></div>
+          <div class="card-hold">
+            <div class="card" id="card" tabindex="0" aria-describedby="prompt">
+              <div class="choice choice-left" id="choice-left"></div>
+              <div class="choice choice-right" id="choice-right"></div>
+              <div class="portrait" id="portrait"></div>
+              <div class="card-cover" aria-hidden="true"></div>
+            </div>
+          </div>
         </div>
+        <div class="char-name" id="char-name"></div>
+        <div class="banner" id="banner" hidden aria-live="polite"></div>
       </div>
-      <div class="char-name" id="char-name"></div>
-      <div class="controls">
-        <button class="arrow" id="btn-left" aria-label="Swipe left">◀</button>
-        <div class="goals" id="goals" aria-label="Goals this run"></div>
-        <button class="arrow" id="btn-right" aria-label="Swipe right">▶</button>
-      </div>
+      <button class="arrow arrow-left" id="btn-left" aria-label="Swipe left"></button>
+      <button class="arrow arrow-right" id="btn-right" aria-label="Swipe right"></button>
       <footer class="bar bar-bottom">
-        <span id="cat-name" class="cat-name"></span>
-        <span id="time" class="time"></span>
-        <button class="menu-btn" id="btn-menu" aria-label="Menu">☰</button>
+        <div class="foot-left">
+          <div class="foot-name" id="cat-name"></div>
+          <div class="foot-days" id="foot-days"></div>
+        </div>
+        <button class="foot-right" id="btn-menu" aria-label="Goals and menu">
+          <span class="foot-day" id="foot-day"></span>
+          <span class="goal-slots" id="goals"></span>
+        </button>
       </footer>
       <div class="toasts" id="toasts" aria-live="polite"></div>
     </section>
 
-    <!-- Ending summary -->
-    <section id="screen-ending" class="screen screen-ending" hidden>
-      <div class="ending-kind" id="ending-kind"></div>
-      <div class="ending-cat" id="ending-cat"></div>
-      <h2 class="ending-epithet" id="ending-epithet"></h2>
-      <p class="ending-days" id="ending-days"></p>
-      <h3 class="ending-title" id="ending-title"></h3>
-      <p class="ending-text" id="ending-text"></p>
-      <div class="ending-stats" id="ending-stats"></div>
-      <ul class="ending-ach" id="ending-ach"></ul>
-      <div class="menu">
-        <button class="btn btn-primary" id="btn-next">Next cat</button>
-        <button class="btn btn-small" id="btn-ending-title">Title</button>
+    <!-- The / Trial / is over (and the adoption equivalent) -->
+    <section id="screen-over" class="screen screen-over" hidden>
+      <nav class="hud-icons" aria-label="Menu"></nav>
+      <h2 class="stack" id="over-stack"></h2>
+      <div class="over-band">
+        <div class="over-tag" id="over-tag" aria-hidden="true"></div>
+        <div class="over-name" id="over-name"></div>
+        <div class="over-days" id="over-days"></div>
+        <div class="over-title" id="over-title"></div>
+        <button class="next-btn" id="btn-over-next"><span class="next-dot" aria-hidden="true"></span>Next</button>
       </div>
+      <div class="stars" id="over-stars" aria-hidden="true"></div>
     </section>
 
-    <!-- New cat beat -->
-    <section id="screen-arrive" class="screen screen-arrive" hidden>
-      <p class="arrive-kicker">Meanwhile, at the shelter…</p>
-      <div class="arrive-cat" id="arrive-cat"></div>
-      <h2 class="arrive-name" id="arrive-name"></h2>
-      <p class="arrive-sub" id="arrive-sub"></p>
-      <button class="btn btn-primary" id="btn-arrive">Begin trial</button>
-    </section>
-
-    <!-- Gallery -->
+    <!-- Memento Meowri -->
     <section id="screen-gallery" class="screen screen-list" hidden>
-      <header class="list-head"><button class="back" data-back aria-label="Back">←</button><h2>Endings &amp; Goals</h2></header>
+      <header class="list-head"><button class="back" data-back aria-label="Back"></button><h2>Memento Meowri</h2></header>
       <div class="list-body">
         <p class="list-sub" id="gallery-sub"></p>
         <div class="gallery" id="gallery"></div>
-        <h3>Cat-chievements</h3>
+        <h3>Deeds</h3>
         <ul class="ach-list" id="ach-list"></ul>
       </div>
     </section>
 
     <!-- Cosmetics -->
     <section id="screen-cosmetics" class="screen screen-list" hidden>
-      <header class="list-head"><button class="back" data-back aria-label="Back">←</button><h2>Your cat</h2></header>
+      <header class="list-head"><button class="back" data-back aria-label="Back"></button><h2>Under the Bed</h2></header>
       <div class="list-body">
+        <p class="list-sub">Everything you've stashed down here. Hair ties not included.</p>
         <div class="cos-preview" id="cos-preview"></div>
         <div id="cos-groups"></div>
       </div>
     </section>
 
-    <!-- Pause menu -->
+    <!-- Pause menu (tap the footer) -->
     <div class="modal" id="modal-menu" hidden>
-      <div class="modal-box">
-        <h2>Paused</h2>
+      <div class="modal-box" role="dialog" aria-labelledby="menu-title">
+        <h2 id="menu-title">Goals</h2>
+        <ul class="menu-goals" id="menu-goals"></ul>
         <button class="btn" id="btn-resume">Resume</button>
         <button class="btn" id="btn-abandon">Give up this cat</button>
         <button class="btn btn-small" id="btn-quit">Title screen</button>
+      </div>
+    </div>
+
+    <!-- Settings (gear) -->
+    <div class="modal" id="modal-settings" hidden>
+      <div class="modal-box" role="dialog" aria-labelledby="settings-title">
+        <h2 id="settings-title">Settings</h2>
+        <button class="btn" id="btn-sound" aria-pressed="false">Sound: off</button>
+        <div class="difficulty" id="difficulty" hidden role="radiogroup" aria-label="Difficulty">
+          <button class="seg" data-diff="easy" role="radio">Easy</button>
+          <button class="seg" data-diff="normal" role="radio">Normal</button>
+          <button class="seg" data-diff="hard" role="radio">Hard</button>
+        </div>
+        <button class="btn btn-chaos" id="btn-chaos" hidden>Chaos Mode</button>
+        <button class="btn btn-small" id="btn-settings-close">Close</button>
       </div>
     </div>
 
