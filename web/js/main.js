@@ -2,7 +2,8 @@
 import { Engine, buildData, METERS, DAYS, fillText } from './engine.js';
 import { createSwipe } from './swipe.js';
 import * as storage from './storage.js';
-import { $, esc, showScreen, buildMeters, renderMeters, renderDots, renderCard, renderGoals, toast, setCat, UI_CONFIG } from './ui.js';
+import { $, esc, showScreen, buildMeters, renderMeters, renderDots, renderCard, renderGoals, toast, setCat, setLeaning, portraitThumb, UI_CONFIG } from './ui.js';
+import { meterSVG } from './portraits.js';
 
 export const GAME_CONFIG = {
   difficultyMods: { easy: 0, normal: 1, hard: 2 },
@@ -76,6 +77,13 @@ function lookFrom(sel, mood) {
 function currentLook(mood) {
   const s = app.engine && app.engine.state;
   return lookFrom((s && s.profile && s.profile.cosmetic) || app.meta.cosmetic, mood);
+}
+
+// Who the parametric portraits (owner, partner) should look like this run.
+function peopleFrom(s) {
+  const p = s && s.profile;
+  if (!p) return {};
+  return { owner: p.owner && p.owner.id, ownerName: p.owner && p.owner.name, partner: p.partnerName };
 }
 
 function endingsSeenCount() { return Object.keys(app.meta.endingsSeen).length; }
@@ -175,7 +183,7 @@ function renderGame(animate, deltas) {
   $('time').textContent = s.mode === 'chaos' ? `${eng.timeLabel()} · Chaos ${s.chaos}` : eng.timeLabel();
   renderGoals(goalsView());
   if (s.over) { renderEndingCard(animate); return; }
-  renderCard(eng.current(), currentLook('happy'), { animate });
+  renderCard(eng.current(), currentLook('happy'), { animate, people: peopleFrom(s) });
   app.swipe.arm();
 }
 
@@ -189,7 +197,7 @@ function renderEndingCard(animate) {
     character: { id: e.char, name: e.title, emoji: ch.emoji || '📋', color: ch.color || '#d8ccb4' },
     crisis: null,
   };
-  renderCard(view, currentLook(e.kind === 'win' ? 'happy' : 'sad'), { animate, badge: 'THE END' });
+  renderCard(view, currentLook(e.kind === 'win' ? 'happy' : 'sad'), { animate, badge: 'THE END', people: peopleFrom(s) });
   app.beat = 'ending';
   app.swipe.arm();
 }
@@ -229,7 +237,7 @@ function showEndingScreen() {
       : `Survived ${st.daysSurvived} day${st.daysSurvived === 1 ? '' : 's'} with ${s.profile.owner.name}`;
   $('ending-title').textContent = e.title;
   $('ending-text').textContent = e.text;
-  $('ending-stats').innerHTML = METERS.map((m) => `<div class="stat" title="${UI_CONFIG.meterNames[m]}"><span>${UI_CONFIG.meterIcons[m]}</span><span class="stat-bar"><i style="width:${s.meters[m]}%"></i></span></div>`).join('');
+  $('ending-stats').innerHTML = METERS.map((m) => `<div class="stat" title="${UI_CONFIG.meterNames[m]}"><span class="stat-icon">${meterSVG(m)}</span><span class="stat-bar"><i style="width:${s.meters[m]}%"></i></span></div>`).join('');
   $('ending-ach').innerHTML = goalsView().map((a) => `<li class="${a.done ? 'done' : 'todo'}">${a.done ? '✔' : '○'} ${esc(a.icon || '')} ${esc(a.title)}</li>`).join('');
   app.beat = null;
   showScreen('ending');
@@ -274,10 +282,11 @@ function commit(side) {
 function setupSwipe() {
   app.swipe = createSwipe($('card'), {
     onMove(side) {
+      setLeaning(!!side);
       if (!app.engine || app.beat === 'ending' || !side) { renderDots(null); return; }
       renderDots(app.engine.preview(side));
     },
-    onCancel() { renderDots(null); },
+    onCancel() { renderDots(null); setLeaning(false); },
     onCommit(side) { renderDots(null); commit(side); },
   });
 
@@ -321,7 +330,7 @@ function renderGallery() {
   $('gallery').innerHTML = endings.map((e) => {
     const ch = app.data.characters[e.char] || {};
     const isSeen = !!seen[e.id];
-    return `<div class="g-item${isSeen ? '' : ' unseen'}"><span class="g-emoji">${esc(ch.emoji || '📋')}</span>
+    return `<div class="g-item${isSeen ? '' : ' unseen'}">${portraitThumb(e.char, ch.color, { owner: 'albert', ownerName: 'Albert' })}
       <span class="g-kind">${esc(e.kind)}</span><span class="g-title">${isSeen ? esc(e.title) : '???'}</span></div>`;
   }).join('') || '<p class="list-sub">No endings loaded.</p>';
   $('ach-list').innerHTML = app.data.achievements.map((a) => {
