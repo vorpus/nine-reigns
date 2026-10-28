@@ -1,0 +1,63 @@
+[
+  {
+    "id": "intro_shelter_goodbye",
+    "char": "shelter",
+    "text": "\"This is {cat}. Two weeks' trial. Likes chin scratches and hates... well, you'll find out.\" The volunteer winks. Ominously.",
+    "bag": "intro",
+    "weight": 20,
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Hiss at the wink", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Slow blink", "fx": { "joy": 10, "instinct": 5 } }
+  },
+  {
+    "id": "intro_carrier_open",
+    "char": "owner",
+    "text": "{owner} opens the carrier door and steps back. \"Take your time, buddy. This is your home now.\" The carrier is also nice.",
+    "bag": "intro",
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Stay in carrier", "fx": { "joy": -5, "instinct": 5 } },
+    "right": { "label": "Emerge, regally", "fx": { "joy": 10, "instinct": -5 } }
+  },
+  {
+    "id": "intro_under_bed",
+    "char": "instinct",
+    "text": "NEW SMELLS. NEW HUMAN. TOO MANY CORNERS. THE UNDER-BED IS DARK AND FULL OF DUST AND WE LIVE THERE NOW. FOREVER. OR TIL DINNER.",
+    "bag": "intro",
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Move in under bed", "fx": { "joy": -5, "instinct": -10 }, "set": { "bed_dweller": true } },
+    "right": { "label": "Explore instead", "fx": { "joy": 5, "instinct": 5, "home": -5 } }
+  },
+  {
+    "id": "intro_first_sniff",
+    "char": "owner",
+    "text": "{owner} crouches and offers one finger, like in the YouTube video. \"Hi. Hi. I'm {owner}. I'll be your human.\"",
+    "bag": "intro",
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Sniff, then leave", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Headbutt the finger", "fx": { "joy": 15, "instinct": 5 }, "set": { "first_bonk": true } }
+  },
+  {
+    "id": "intro_first_meal",
+    "char": "owner",
+    "text": "{owner} sets down the first meal: premium salmon pâté, $4 a tin. \"The shelter said you like this one?\"",
+    "bag": "intro",
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Sniff and walk off", "fx": { "joy": -10, "belly": -5 } },
+    "right": { "label": "Inhale it", "fx": { "joy": 5, "belly": 20 } }
+  },
+  {
+    "id": "intro_tour",
+    "char": "narrator",
+    "text": "First night. {cat} conducts a thorough inspection of every room, cupboard and the inside of {owner}'s laundry basket.",
+    "bag": "intro",
+    "once": true,
+    "when": [{ "day": { "lte": 1 } }],
+    "left": { "label": "Claim the laundry", "fx": { "joy": 5, "home": -5, "instinct": -5 } },
+    "right": { "label": "Claim {owner}'s bed", "fx": { "joy": 10, "instinct": 5 } }
+  }
+]

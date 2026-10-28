@@ -1,0 +1,375 @@
+[
+  {
+    "id": "house_allergy_sneeze_snuggle",
+    "char": "owner",
+    "text": "{owner} scoops you up for a snuggle. Their eyes are already watering. \"Worth it,\" they say, nasally.",
+    "bag": "main",
+    "when": [{ "mod": "allergies" }],
+    "left":  { "label": "Wriggle free", "fx": { "joy": -5, "instinct": -5 } },
+    "right": { "label": "Full snuggle", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" }, "next": "house_allergy_sneeze_followup" }
+  },
+  {
+    "id": "house_allergy_sneeze_followup",
+    "char": "owner",
+    "text": "ACHOO. You have been sneezed on. Directly. In the ear. {owner} is apologizing into your fur, which makes it worse.",
+    "bag": "main",
+    "weight": 0,
+    "when": [{ "mod": "allergies" }],
+    "left":  { "label": "Flee, disgusted", "fx": { "joy": -10, "instinct": -5 } },
+    "right": { "label": "Purr through it", "fx": { "joy": 5, "instinct": 10 } }
+  },
+  {
+    "id": "house_allergy_lint_roller",
+    "char": "owner",
+    "text": "{owner} runs the lint roller over the couch once. The sheet is solid fur. They hold it up to you like evidence.",
+    "bag": "main",
+    "when": [{ "mod": "allergies" }],
+    "left":  { "label": "Look innocent", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Roll on the couch", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 2 }
+  },
+  {
+    "id": "house_allergy_fine_im_fine",
+    "char": "owner",
+    "text": "\"It's fine, I'm fine,\" says {owner}, eyes red as a stop sign, patting their lap. \"Come here. I took two pills.\"",
+    "bag": "main",
+    "when": [{ "mod": "allergies" }],
+    "left":  { "label": "Keep your distance", "fx": { "joy": -5, "instinct": 5 } },
+    "right": { "label": "Lap. Now.", "fx": { "joy": 5, "instinct": 10 }, "set": { "snuggles": "+1" } }
+  },
+  {
+    "id": "house_allergy_breed_lie",
+    "char": "owner",
+    "text": "The shelter said you were \"basically hypoallergenic.\" It's 2 AM and {owner} is googling that phrase between sneezes.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "mod": "allergies" }, { "slot": ["night"] }],
+    "left":  { "label": "Purr reassuringly", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Shed on the laptop", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 3 }
+  },
+  {
+    "id": "house_allergy_bedroom_ban",
+    "char": "owner",
+    "text": "New rule: the bedroom is a cat-free zone, \"for allergy reasons.\" The door clicks shut. You are on the wrong side of it.",
+    "bag": "main",
+    "when": [{ "mod": "allergies" }, { "slot": ["night"] }],
+    "left":  { "label": "Accept exile", "fx": { "joy": 5, "instinct": 15 } },
+    "right": { "label": "Scream at the door", "fx": { "joy": -10, "home": -5, "instinct": -10 }, "chaos": 2 }
+  },
+  {
+    "id": "house_allergy_air_purifier",
+    "char": "owner",
+    "text": "An air purifier arrives. It hums. It glows blue. It eats your fur out of the air. It is, clearly, a rival cat.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "mod": "allergies" }, { "day": { "gte": 3 } }],
+    "left":  { "label": "Respect the hum", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Swat the blue eye", "fx": { "joy": -5, "home": -5, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 3 }
+  },
+  {
+    "id": "house_allergy_tolerance",
+    "char": "owner",
+    "text": "{owner}'s eyes are clear. \"My doctor says I'm building a tolerance. To you, specifically.\" You are a vaccine now.",
+    "bag": "main",
+    "once": true,
+    "weight": 15,
+    "when": [{ "mod": "allergies" }, { "day": { "gte": 8 } }, { "flagGte": ["snuggles", 3] }],
+    "left":  { "label": "Accept the honor", "fx": { "joy": 15, "instinct": 5 }, "set": { "allergy_tolerance": true } },
+    "right": { "label": "Sneeze at them", "fx": { "joy": 10, "instinct": -5 }, "set": { "allergy_tolerance": true } }
+  },
+
+  {
+    "id": "house_partner_intro",
+    "char": "partner",
+    "text": "\"I'm not a cat person,\" announces {partner}, standing as far from you as the room allows. Cats can smell a challenge.",
+    "bag": "main",
+    "once": true,
+    "weight": 30,
+    "when": [{ "mod": "partner" }, { "notFlag": "partner_met" }],
+    "left":  { "label": "Snub them back", "fx": { "home": -5, "instinct": 5 }, "set": { "partner_met": true } },
+    "right": { "label": "Choose them", "fx": { "home": 5, "joy": -5, "instinct": 5 }, "set": { "partner_met": true, "partner_warming": "+1" } }
+  },
+  {
+    "id": "house_partner_bed_side",
+    "char": "partner",
+    "text": "You're on {partner}'s side of the bed. Their pillow. Their exact head dent. They're standing there holding a toothbrush.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "slot": ["night"] }],
+    "left":  { "label": "Give it back", "fx": { "home": 5, "instinct": 10 } },
+    "right": { "label": "Spread out more", "fx": { "joy": 5, "home": -10, "instinct": -5 } }
+  },
+  {
+    "id": "house_partner_shoes",
+    "char": "partner",
+    "text": "{partner}'s nice leather shoes are by the door. They smell like outside, and a stranger, and audacity.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flag": "partner_met" }],
+    "left":  { "label": "Cheek-claim them", "fx": { "home": -5, "joy": 5, "instinct": -5 } },
+    "right": { "label": "Hairball, left shoe", "fx": { "home": -15, "joy": -5, "instinct": -15 }, "chaos": 5 }
+  },
+  {
+    "id": "house_partner_me_or_cat",
+    "char": "partner",
+    "text": "\"It's me or the cat,\" {partner} jokes. {owner} pauses a little too long before laughing. Everyone heard the pause.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "day": { "gte": 3 } }],
+    "left":  { "label": "Purr at {owner}", "fx": { "joy": 10, "home": -10, "instinct": 5 } },
+    "right": { "label": "Purr at {partner}", "fx": { "joy": -5, "home": 10, "instinct": 5 }, "set": { "partner_warming": "+1" } }
+  },
+  {
+    "id": "house_partner_couch_lap",
+    "char": "partner",
+    "text": "{partner} is watching the game. Their lap is unoccupied. They are pretending very hard not to notice you noticing.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "slot": ["evening"] }],
+    "left":  { "label": "Claim the lap", "fx": { "home": 10, "instinct": 10 }, "set": { "partner_warming": "+1", "snuggles": "+1" } },
+    "right": { "label": "Sit on the remote", "fx": { "joy": 5, "home": -10, "instinct": -5 } }
+  },
+  {
+    "id": "house_partner_secret_ham",
+    "char": "partner",
+    "text": "{owner} is out. {partner} looks around, then whispers \"who's a good little gremlin\" and holds out a slice of ham.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "day": { "gte": 4 } }],
+    "left":  { "label": "Take ham gently", "fx": { "belly": 10, "home": 5, "instinct": 5 }, "set": { "partner_warming": "+1" } },
+    "right": { "label": "Take ham AND hand", "fx": { "belly": 15, "home": -10, "instinct": -10 }, "set": { "bites": "+1" } }
+  },
+  {
+    "id": "house_partner_phone_denial",
+    "char": "partner",
+    "text": "On the phone, {partner} insists they're \"still not a cat person.\" You are asleep on their chest. They're whispering.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flagGte": ["partner_warming", 2] }, { "notFlag": "partner_won" }],
+    "left":  { "label": "Snore louder", "fx": { "home": 10, "instinct": 10 }, "set": { "partner_warming": "+1", "snuggles": "+1" } },
+    "right": { "label": "Leave, wounded", "fx": { "home": -5, "instinct": -5 } }
+  },
+  {
+    "id": "house_partner_lock_screen",
+    "char": "partner",
+    "text": "You catch {partner} photographing you mid-nap. \"It's for evidence,\" they say. You've seen their lock screen. It's you.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flagGte": ["partner_warming", 2] }],
+    "left":  { "label": "Pose, regally", "fx": { "home": 10, "joy": 5, "instinct": 5 }, "set": { "partner_warming": "+1" } },
+    "right": { "label": "Yawn hideously", "fx": { "joy": 10, "home": -5, "instinct": -5 } }
+  },
+  {
+    "id": "house_partner_cat_tree",
+    "char": "partner",
+    "text": "{partner} came home with a cat tree. \"It was on sale.\" It was not on sale. You saw the receipt. You ate the receipt.",
+    "bag": "main",
+    "once": true,
+    "weight": 25,
+    "when": [{ "mod": "partner" }, { "flagGte": ["partner_warming", 3] }, { "day": { "gte": 7 } }, { "notFlag": "partner_won" }],
+    "left":  { "label": "Sit in the box", "fx": { "joy": 10, "home": -5, "instinct": -5 }, "set": { "partner_won": true } },
+    "right": { "label": "Climb it for them", "fx": { "joy": 5, "home": 15, "instinct": -5 }, "set": { "partner_won": true } }
+  },
+  {
+    "id": "house_partner_converted",
+    "char": "partner",
+    "text": "{partner} is lecturing {owner} about \"proper wet food ratios.\" They have opinions on litter now. They follow cat accounts.",
+    "bag": "main",
+    "when": [{ "mod": "partner" }, { "flag": "partner_won" }],
+    "left":  { "label": "Back {partner} up", "fx": { "home": 10, "belly": 5, "joy": -5 } },
+    "right": { "label": "Back {owner} up", "fx": { "joy": 10, "home": -5, "instinct": 5 } }
+  },
+
+  {
+    "id": "house_dog_intro",
+    "char": "dog",
+    "text": "{dog} has discovered you exist. This is the greatest day of {dog}'s life. {dog} is vibrating. A tennis ball is offered.",
+    "bag": "main",
+    "once": true,
+    "weight": 30,
+    "when": [{ "mod": "dog" }, { "notFlag": "dog_met" }],
+    "left":  { "label": "Hiss", "fx": { "joy": -5, "instinct": -10 }, "set": { "dog_met": true } },
+    "right": { "label": "Accept the ball", "fx": { "joy": 5, "instinct": 15 }, "set": { "dog_met": true } }
+  },
+  {
+    "id": "house_dog_breakfast_heist",
+    "char": "dog",
+    "text": "{dog} inhaled your entire breakfast in one breath and is now looking at you like you might have seconds on you.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }, { "slot": ["morning"] }],
+    "left":  { "label": "Let it go", "fx": { "belly": -10, "joy": 5, "instinct": 10 } },
+    "right": { "label": "Raid the dog bowl", "fx": { "belly": 15, "joy": -10, "instinct": -10 }, "chaos": 2 }
+  },
+  {
+    "id": "house_dog_bed_takeover",
+    "char": "dog",
+    "text": "{dog}'s bed is huge, plush, memory foam. {dog} stands beside it, confused, because you are in it. Again.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
+    "left":  { "label": "Fine. Get out.", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "This is mine now", "fx": { "joy": -5, "instinct": -15 }, "set": { "dog_respect": "+1" } }
+  },
+  {
+    "id": "house_dog_one_swat",
+    "char": "dog",
+    "text": "{dog} has put their entire nose in your face. Again. The nose is wet. The nose is enormous. The nose is everywhere.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
+    "left":  { "label": "Endure the nose", "fx": { "joy": 10, "instinct": 15 } },
+    "right": { "label": "One swat. Soft.", "fx": { "joy": -5, "instinct": -15 }, "set": { "dog_respect": "+1" }, "chaos": 1 }
+  },
+  {
+    "id": "house_dog_zoomies",
+    "char": "instinct",
+    "text": "THE DOG HAS THE ZOOMIES. YOU HAVE THE ZOOMIES. THE HALLWAY IS ONE CREATURE WIDE. ONLY ONE OF YOU WILL MAKE THE TURN.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
+    "left":  { "label": "Watch from above", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "RACE", "fx": { "joy": -5, "home": -15, "instinct": -20 }, "set": { "zoomies": "+1" }, "chaos": 6 }
+  },
+  {
+    "id": "house_dog_leash",
+    "char": "dog",
+    "text": "{owner} grabs the leash and {dog} loses their entire mind. Nobody is taking you for a walk. Not that you asked.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
+    "left":  { "label": "Sit in the leash", "fx": { "joy": 10, "instinct": 10 } },
+    "right": { "label": "Nap in the silence", "fx": { "joy": -5, "instinct": -10 } }
+  },
+  {
+    "id": "house_dog_hedgehog",
+    "char": "dog",
+    "text": "{dog} brings you a gift: a squeaky hedgehog, soaked through. It is placed at your feet like a crown. {dog} waits.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
+    "left":  { "label": "Accept tribute", "fx": { "joy": 10, "instinct": 10 }, "set": { "dog_respect": "+1" } },
+    "right": { "label": "Bat it off couch", "fx": { "joy": -5, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 1 }
+  },
+  {
+    "id": "house_dog_thunderstorm",
+    "char": "dog",
+    "text": "Thunderstorm. {dog} is shaking under the table, all 70 pounds of them, trying to be small. You watch from the couch.",
+    "bag": "main",
+    "once": true,
+    "weight": 20,
+    "when": [{ "mod": "dog" }, { "flagGte": ["dog_respect", 1] }, { "day": { "gte": 5 } }, { "notFlag": "dog_friend" }],
+    "left":  { "label": "Stay on the couch", "fx": { "joy": -5, "instinct": 5 } },
+    "right": { "label": "Go sit with {dog}", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" }, "next": "house_dog_friend_payoff" }
+  },
+  {
+    "id": "house_dog_friend_payoff",
+    "char": "owner",
+    "text": "Morning. {owner} finds you asleep in the dog bed, your head on {dog}'s paw. {owner} has taken 214 photos. Quietly.",
+    "bag": "main",
+    "weight": 0,
+    "when": [{ "mod": "dog" }],
+    "left":  { "label": "It's nothing", "fx": { "joy": 15, "instinct": -10 }, "set": { "dog_friend": true } },
+    "right": { "label": "Groom {dog}'s ear", "fx": { "joy": 20, "instinct": 5 }, "set": { "dog_friend": true, "snuggles": "+1" } }
+  },
+  {
+    "id": "house_dog_heist_partners",
+    "char": "dog",
+    "text": "You and {dog} have a system now. You knock food off the counter. {dog} makes the evidence disappear. Tonight: rotisserie chicken.",
+    "bag": "main",
+    "when": [{ "mod": "dog" }, { "flag": "dog_friend" }],
+    "left":  { "label": "Go straight", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Run the heist", "fx": { "belly": 15, "home": -10, "joy": -10, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 5 }
+  },
+
+  {
+    "id": "house_studio_one_room",
+    "char": "owner",
+    "text": "It's a studio. The bed is the couch is the dining room. {owner} would like five minutes alone. There is nowhere to go.",
+    "bag": "main",
+    "when": [{ "home": ["studio"] }],
+    "left":  { "label": "Face the wall", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Stare from 4 feet", "fx": { "joy": -5, "instinct": -5 } }
+  },
+  {
+    "id": "house_studio_3am_lap",
+    "char": "instinct",
+    "text": "3 AM. THE ROUTE: BED. KITCHEN. BED. {owner}'S FACE. BED. ONE LAP IS NINE FEET. DO FORTY.",
+    "bag": "main",
+    "when": [{ "home": ["studio"] }, { "slot": ["night"] }],
+    "left":  { "label": "Hold it in", "fx": { "joy": 5, "instinct": 15 } },
+    "right": { "label": "Forty laps", "fx": { "joy": -10, "home": -5, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 4 }
+  },
+  {
+    "id": "house_studio_litter_breakfast",
+    "char": "owner",
+    "text": "The litter box is three feet from where {owner} eats breakfast. You are using it now. Loudly. With commentary.",
+    "bag": "main",
+    "when": [{ "home": ["studio"] }, { "slot": ["morning"] }],
+    "left":  { "label": "Bury it politely", "fx": { "joy": 5, "instinct": 5 } },
+    "right": { "label": "Dig to bedrock", "fx": { "joy": -10, "home": -10, "instinct": -10 }, "chaos": 3 }
+  },
+  {
+    "id": "house_apt_pigeon",
+    "char": "bird",
+    "text": "A pigeon lands on the balcony railing. It's fat. It's smug. It's making that noise. It knows about the glass.",
+    "bag": "main",
+    "when": [{ "home": ["apartment"] }],
+    "left":  { "label": "Chatter at it", "fx": { "joy": 5, "instinct": -5 } },
+    "right": { "label": "Pounce the glass", "fx": { "joy": -5, "home": -5, "instinct": -15 }, "chaos": 2 }
+  },
+  {
+    "id": "house_apt_downstairs_thumps",
+    "char": "neighbor",
+    "text": "The downstairs neighbor is at the door. \"Someone is bowling up here at 3 AM. Every night.\" {owner} turns, slowly, to you.",
+    "bag": "main",
+    "when": [{ "home": ["apartment"] }, { "flagGte": ["zoomies", 1] }, { "slot": ["morning", "afternoon"] }],
+    "left":  { "label": "Charm the neighbor", "fx": { "joy": 5, "home": 5, "instinct": 10 } },
+    "right": { "label": "Thump once, live", "fx": { "joy": -10, "home": -10, "instinct": -10 }, "chaos": 4 }
+  },
+  {
+    "id": "house_apt_wall_cat",
+    "char": "instinct",
+    "text": "THERE IS A CAT IN THE WALL. YOU HAVE NEVER SEEN IT. IT YELLS AT 4 PM SHARP. IT IS 4 PM. ANSWER ITS CALL.",
+    "bag": "main",
+    "when": [{ "home": ["apartment"] }, { "slot": ["afternoon"] }],
+    "left":  { "label": "Stay dignified", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "YELL BACK", "fx": { "joy": -5, "home": -5, "instinct": -15 }, "chaos": 1 }
+  },
+  {
+    "id": "house_apt_landlord_inspection",
+    "char": "landlord",
+    "text": "Inspection day. \"Pets are... permitted,\" says the landlord, staring at the couch arm you've been working on all week.",
+    "bag": "main",
+    "once": true,
+    "weight": 20,
+    "when": [{ "home": ["apartment"] }, { "day": { "gte": 5 } }, { "flagGte": ["scratched_couch", 1] }],
+    "left":  { "label": "Sit on the damage", "fx": { "joy": 5, "home": 10, "instinct": 5 } },
+    "right": { "label": "Show your process", "fx": { "joy": -10, "home": -20, "instinct": -15 }, "set": { "scratched_couch": "+1" }, "chaos": 7 }
+  },
+  {
+    "id": "house_house_stairs_night",
+    "char": "owner",
+    "text": "2 AM. {owner} creeps downstairs for water in the dark. You are lying on step four like a fuzzy landmine.",
+    "bag": "main",
+    "when": [{ "home": ["house"] }, { "slot": ["night"] }],
+    "left":  { "label": "Scoot aside", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Race them down", "fx": { "joy": -10, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 2 }
+  },
+  {
+    "id": "house_house_yard_squirrel",
+    "char": "instinct",
+    "text": "THE SQUIRREL IN THE YARD WINDOW IS EATING A NUT. AT YOU. WITH EYE CONTACT. THIS IS A DECLARATION OF WAR.",
+    "bag": "main",
+    "when": [{ "home": ["house"] }, { "slot": ["morning", "afternoon"] }],
+    "left":  { "label": "Ignore the taunt", "fx": { "joy": 5, "instinct": 15 } },
+    "right": { "label": "Chatter for an hour", "fx": { "joy": -5, "home": -5, "instinct": -15 } }
+  },
+  {
+    "id": "house_house_basement",
+    "char": "instinct",
+    "text": "THE BASEMENT DOOR IS OPEN A CRACK. IT SMELLS LIKE 1987 AND SOMETHING WITH A TAIL. NO ONE HAS BEEN DOWN THERE IN YEARS.",
+    "bag": "main",
+    "once": true,
+    "when": [{ "home": ["house"] }, { "day": { "gte": 2 } }],
+    "left":  { "label": "Not today", "fx": { "joy": 5, "instinct": 10 } },
+    "right": { "label": "Descend", "fx": { "instinct": -10 }, "next": "house_house_basement_return" }
+  },
+  {
+    "id": "house_house_basement_return",
+    "char": "owner",
+    "text": "Three hours later, {owner} is calling your name with rising panic. You emerge with a toy mouse. It's from 1994. It's yours now.",
+    "bag": "main",
+    "weight": 0,
+    "when": [{ "home": ["house"] }],
+    "left":  { "label": "Present the mouse", "fx": { "joy": 10, "instinct": -5 }, "set": { "gifts": "+1" } },
+    "right": { "label": "Go back down", "fx": { "joy": -15, "instinct": -10 } }
+  }
+]

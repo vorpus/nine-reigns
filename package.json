@@ -1,0 +1,11 @@
+{
+  "name": "nine-reigns",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node tools/validate.js",
+    "test": "node --test tests/",
+    "sim": "node tools/sim.js",
+    "serve": "python3 -m http.server -d web 8000"
+  }
+}
