@@ -1,0 +1,315 @@
+{
+  "endings": [
+    {
+      "id": "returned_albert",
+      "kind": "lose",
+      "char": "albert",
+      "title": "Albert Needs a Minute",
+      "epithet": "the Too-Much",
+      "text": "Albert returned {cat} with a three-page handwritten care guide, all 14 toys and a heartfelt apology to the volunteer. He visits on Saturdays. He's started fostering kittens instead, which is somehow more chaotic.",
+      "trigger": {
+        "meter": "joy",
+        "at": "low"
+      },
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ]
+    },
+    {
+      "id": "returned_allergies",
+      "kind": "lose",
+      "char": "shelter",
+      "title": "Achoo and Goodbye",
+      "epithet": "the Sneezed-Upon",
+      "text": "{owner} lasted until the 40th sneeze and the third box of tissues. \"It's not you, it's my sinuses.\" {cat} accepts this. The shelter's air purifier is very nice, actually.",
+      "trigger": {
+        "meter": "joy",
+        "at": "low"
+      },
+      "when": [
+        {
+          "mod": "allergies"
+        }
+      ]
+    },
+    {
+      "id": "returned_partner",
+      "kind": "lose",
+      "char": "partner",
+      "title": "Voted Off the Island",
+      "epithet": "the Outvoted",
+      "text": "There was a household meeting. {partner} brought a slideshow. {cat} was returned 2–0, with one abstention ({cat}, who was asleep).",
+      "trigger": {
+        "meter": "joy",
+        "at": "low"
+      },
+      "when": [
+        {
+          "mod": "partner"
+        }
+      ]
+    },
+    {
+      "id": "returned_dog",
+      "kind": "lose",
+      "char": "dog",
+      "title": "The Dog Won",
+      "epithet": "the Second Favorite",
+      "text": "{owner} decided the household \"wasn't ready for a cat.\" {dog} watched you leave from the window, tail low, deeply confused about what just happened. {dog} will think about you every day.",
+      "trigger": {
+        "meter": "joy",
+        "at": "low"
+      },
+      "when": [
+        {
+          "mod": "dog"
+        }
+      ]
+    },
+    {
+      "id": "returned_shelter",
+      "kind": "lose",
+      "char": "shelter",
+      "title": "Return to Sender",
+      "epithet": "the Returned",
+      "text": "{owner} filled out the return form in pen and didn't make eye contact. Back at the shelter, the volunteer gives {cat} a chin scratch and a better cushion. Honestly, a lateral move.",
+      "trigger": {
+        "meter": "joy",
+        "at": "low"
+      }
+    },
+    {
+      "id": "home_partner_ultimatum",
+      "kind": "lose",
+      "char": "partner",
+      "title": "It's Me or the Cat",
+      "epithet": "the Ultimatum",
+      "text": "{partner} stood in the ruins of the living room and said the line. {owner} took a very long time to answer. Too long. {cat} is going back. {owner} is sleeping on the shredded couch.",
+      "trigger": {
+        "meter": "home",
+        "at": "low"
+      },
+      "when": [
+        {
+          "mod": "partner"
+        }
+      ]
+    },
+    {
+      "id": "home_landlord",
+      "kind": "lose",
+      "char": "landlord",
+      "title": "Lease Violation",
+      "epithet": "the Unlisted Tenant",
+      "text": "The landlord did an inspection. He photographed the curtains, the couch and the door frame, then quietly opened the lease to the \"Pets\" clause. {cat} has been evicted. {owner} has been invoiced.",
+      "trigger": {
+        "meter": "home",
+        "at": "low"
+      },
+      "when": [
+        {
+          "home": "apartment"
+        }
+      ]
+    },
+    {
+      "id": "home_deposit",
+      "kind": "lose",
+      "char": "owner",
+      "title": "The Deposit Taker",
+      "epithet": "the Deposit Taker",
+      "text": "{owner} sat on what was left of the couch and did math out loud. The security deposit is gone. So is {cat}, back to the shelter, where there is nothing left to shred.",
+      "trigger": {
+        "meter": "home",
+        "at": "low"
+      }
+    },
+    {
+      "id": "escaped_window",
+      "kind": "lose",
+      "char": "bird",
+      "title": "One Leap Too Far",
+      "epithet": "the Leaper",
+      "text": "{cat} leaped. {cat} missed the pigeon completely and landed, unharmed and dignified, in the downstairs neighbor's herb planter. The downstairs neighbor has now adopted {cat}. The pigeon visits daily, to gloat."
+    },
+    {
+      "id": "escaped_neighbor_tuna",
+      "kind": "lose",
+      "char": "neighbor",
+      "title": "Defected for Tuna",
+      "epithet": "the Defector",
+      "text": "{cat} never left the armchair. The neighbor buys tuna in oil by the case and has never once owned a vacuum. {owner} waves through the peephole sometimes. {cat} does not wave back."
+    },
+    {
+      "id": "trial_failed_close",
+      "kind": "lose",
+      "char": "shelter",
+      "title": "So Close",
+      "epithet": "the Almost",
+      "text": "Day 14. {owner} hesitated over the adoption papers, said \"I just need a bit more time to think,\" and handed {cat} back. There's a sticky note on {cat}'s shelter card now: \"almost.\"",
+      "trigger": {
+        "trialFail": true
+      },
+      "when": [
+        {
+          "meter": "joy",
+          "gte": 45
+        }
+      ]
+    },
+    {
+      "id": "trial_failed",
+      "kind": "lose",
+      "char": "shelter",
+      "title": "Not Quite a Match",
+      "epithet": "the Not-Quite",
+      "text": "Two weeks are up. {owner} says nice things about {cat}'s \"big personality\" and signs nothing. The shelter's front window gets a new resident, who is very good at sitting in front windows.",
+      "trigger": {
+        "trialFail": true
+      }
+    },
+    {
+      "id": "adopted_dog_friend",
+      "kind": "win",
+      "char": "dog",
+      "title": "Best Friends Forever",
+      "epithet": "the Dog Whisperer",
+      "text": "{owner} signs the papers with {cat} and {dog} asleep in the same dog bed, which is now the cat's bed. {dog} does not mind. {dog} has never been happier.",
+      "trigger": {
+        "win": true
+      },
+      "when": [
+        {
+          "mod": "dog"
+        },
+        {
+          "flag": "dog_friend"
+        }
+      ]
+    },
+    {
+      "id": "adopted_albert",
+      "kind": "win",
+      "char": "albert",
+      "title": "Chicken Nugget Forever",
+      "epithet": "the Nugget",
+      "text": "Albert signs the papers, cries a little, and announces it to a group chat that already knew. He has ordered a framed portrait of {cat} in a Victorian gentleman's coat. He has ordered two.",
+      "trigger": {
+        "win": true
+      },
+      "when": [
+        {
+          "owner": "albert"
+        }
+      ]
+    },
+    {
+      "id": "adopted_angel",
+      "kind": "win",
+      "char": "owner",
+      "title": "Suspiciously Perfect",
+      "epithet": "the Suspiciously Perfect",
+      "text": "Zero broken glasses. Pristine couch. Constant purring. {owner} adopts {cat} immediately and, late at night, wonders what {cat} is planning. {cat} is planning something.",
+      "trigger": {
+        "win": true
+      },
+      "when": [
+        {
+          "meter": "joy",
+          "gte": 80
+        },
+        {
+          "meter": "home",
+          "gte": 80
+        }
+      ]
+    },
+    {
+      "id": "adopted_gremlin",
+      "kind": "win",
+      "char": "owner",
+      "title": "Loved Despite Everything",
+      "epithet": "the Gremlin",
+      "text": "The couch is ribbons. The curtains are a memory. {owner} adopts {cat} anyway, from a folding chair, with genuine love and a quote from a carpet cleaner.",
+      "trigger": {
+        "win": true
+      },
+      "when": [
+        {
+          "meter": "home",
+          "lte": 25
+        }
+      ]
+    },
+    {
+      "id": "adopted_spoiled",
+      "kind": "win",
+      "char": "owner",
+      "title": "Ruler of the Household",
+      "epithet": "the Spoiled",
+      "text": "{owner} adopts {cat} and immediately buys a second cat tree, a heated window perch and the expensive pâté. {cat} sleeps in the cardboard box it all came in.",
+      "trigger": {
+        "win": true
+      },
+      "when": [
+        {
+          "meter": "joy",
+          "gte": 80
+        }
+      ]
+    },
+    {
+      "id": "adopted",
+      "kind": "win",
+      "char": "owner",
+      "title": "Forever Home",
+      "epithet": "the Adopted",
+      "text": "Day 14. {owner} signs the adoption papers while {cat} sits on them. It's official: {cat} lives here now, and the sunny spot by the window is legally theirs.",
+      "trigger": {
+        "win": true
+      }
+    },
+    {
+      "id": "chaos_masterpiece",
+      "kind": "chaos",
+      "char": "narrator",
+      "title": "The Masterpiece",
+      "epithet": "the Demolisher",
+      "text": "Nothing is on any shelf. Nothing is in one piece. {owner} stands in the doorway, speechless, as {cat} sits in the center of it all like an artist at a gallery opening.",
+      "trigger": {
+        "chaos": "home"
+      }
+    },
+    {
+      "id": "chaos_timeout_tame",
+      "kind": "chaos",
+      "char": "instinct",
+      "title": "The Mild Menace",
+      "epithet": "the Mostly Harmless",
+      "text": "TWO WEEKS. WE HAD TWO WEEKS. THE COUCH STILL HAS ITS ARMS. WE ARE ASHAMED. {owner} IS THRILLED. THIS IS THE WORST ENDING.",
+      "trigger": {
+        "chaos": "time"
+      },
+      "when": [
+        {
+          "not": {
+            "chaosGte": 150
+          }
+        }
+      ]
+    },
+    {
+      "id": "chaos_timeout",
+      "kind": "chaos",
+      "char": "narrator",
+      "title": "Survivor of the Storm",
+      "epithet": "the Storm",
+      "text": "Day 14 arrives and somehow the place is still standing, barely. {owner} has aged a year. {cat} has had the best two weeks of their life.",
+      "trigger": {
+        "chaos": "time"
+      }
+    }
+  ]
+}
