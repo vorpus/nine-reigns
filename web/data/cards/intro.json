@@ -86,8 +86,7 @@
         "label": "Explore instead",
         "fx": {
           "joy": 5,
-          "instinct": 5,
-          "home": -5
+          "instinct": 5
         }
       },
       "noTime": true

@@ -56,7 +56,8 @@ export function loadDataFromDisk() {
 
 // ---------- strategies ----------
 const clampM = (v) => Math.max(0, Math.min(100, v));
-const GUESS_RIGHT = 0.85;
+const GUESS_RIGHT = Number(process.env.SIM_GUESS || 0.85);
+const WHIM = Number(process.env.SIM_WHIM || 0);
 
 // fx as a strategy sees it. perfect: true numbers. Otherwise: dots + a direction guess.
 function seenFx(eng, side, rng, perfect) {
@@ -90,18 +91,18 @@ const argmax = (l, r, rng) => (l === r ? coin(rng) : l > r ? 'left' : 'right');
 
 function sensible(perfect) {
   return (eng, rng) => {
+    if (!perfect && WHIM && rng() < WHIM) return coin(rng);
     const score = (side) => {
       const { m, ch, fx, end } = project(eng, side, rng, perfect);
       if (eng.state.mode === 'chaos') return (perfect ? chaosPts(ch) : Math.max(0, -(fx.home || 0))) + rng() * 0.01;
-      let s = 0;
-      if (end) s -= 1000;
-      if (m.joy <= 0 || m.home <= 0) s -= 1000;
-      s += m.joy * 1.2 + Math.min(m.home, 60) * 0.6;
+      if (end || m.joy <= 0 || m.home <= 0) return -1000 + rng();
+      // Concave in Joy and Home, so the lower one gets the attention; mind the win line late on.
+      let s = 12 * Math.sqrt(m.joy) + 12 * Math.sqrt(m.home);
+      if (eng.state.day >= 10 && m.joy < CONFIG.winJoy + 5) s -= (CONFIG.winJoy + 5 - m.joy) * 0.5;
       for (const k of ['instinct', 'belly']) {
         const d = Math.abs(m[k] - 50);
-        s -= d > 35 ? (d - 35) * 6 : d * 0.15;
+        if (d > 30) s -= (d - 30) * 2;
       }
-      if (m.home < 25) s -= (25 - m.home) * 3;
       return s + rng() * 0.01;
     };
     return score('left') >= score('right') ? 'left' : 'right';

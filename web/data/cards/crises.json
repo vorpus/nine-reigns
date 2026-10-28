@@ -8,16 +8,16 @@
       "left": {
         "label": "Scale the curtains",
         "fx": {
-          "home": -20,
-          "joy": -5
+          "home": -15,
+          "joy": -10
         },
         "chaos": 20
       },
       "right": {
         "label": "Shred the TP",
         "fx": {
-          "home": -10,
-          "joy": -10
+          "home": -5,
+          "joy": -15
         },
         "chaos": 10
       }
@@ -39,8 +39,8 @@
       "right": {
         "label": "Bite the couch",
         "fx": {
-          "home": -15,
-          "joy": -5
+          "home": -10,
+          "joy": -10
         },
         "chaos": 10,
         "set": {
@@ -76,8 +76,8 @@
       "right": {
         "label": "Ambush the dog",
         "fx": {
-          "joy": -10,
-          "home": -10
+          "joy": -15,
+          "home": -5
         },
         "chaos": 10,
         "set": {
@@ -103,8 +103,8 @@
       "right": {
         "label": "Hallway drift",
         "fx": {
-          "home": -15,
-          "joy": -5
+          "home": -10,
+          "joy": -10
         },
         "chaos": 10,
         "set": {
@@ -120,8 +120,8 @@
       "left": {
         "label": "One. At. A. Time.",
         "fx": {
-          "home": -15,
-          "joy": -10
+          "home": -10,
+          "joy": -15
         },
         "chaos": 15,
         "set": {
@@ -131,7 +131,8 @@
       "right": {
         "label": "Full sweep",
         "fx": {
-          "home": -25
+          "home": -20,
+          "joy": -5
         },
         "chaos": 25,
         "set": {
@@ -253,8 +254,8 @@
       "left": {
         "label": "Bash the door",
         "fx": {
-          "joy": -10,
-          "home": -10,
+          "joy": -15,
+          "home": -5,
           "belly": 10
         },
         "chaos": 5
@@ -262,8 +263,9 @@
       "right": {
         "label": "Bite through bag",
         "fx": {
-          "home": -15,
-          "belly": 20
+          "home": -10,
+          "belly": 20,
+          "joy": -5
         },
         "chaos": 10
       }
@@ -283,8 +285,8 @@
       "right": {
         "label": "Knock off the lamp",
         "fx": {
-          "joy": -5,
-          "home": -15,
+          "joy": -10,
+          "home": -10,
           "belly": 10
         },
         "chaos": 10,
@@ -364,7 +366,8 @@
       "left": {
         "label": "The rug",
         "fx": {
-          "home": -20
+          "home": -15,
+          "joy": -5
         }
       },
       "right": {
@@ -395,8 +398,8 @@
       "right": {
         "label": "Blame the dog",
         "fx": {
-          "joy": -5,
-          "home": -10
+          "joy": -10,
+          "home": -5
         },
         "set": {
           "dog_feud": "+1"
@@ -417,8 +420,8 @@
       "right": {
         "label": "On the laptop",
         "fx": {
-          "joy": -10,
-          "home": -15
+          "joy": -15,
+          "home": -10
         },
         "chaos": 10
       }
@@ -431,14 +434,15 @@
       "left": {
         "label": "Dead center",
         "fx": {
-          "joy": -15,
-          "home": -10
+          "joy": -20,
+          "home": -5
         }
       },
       "right": {
         "label": "Sprint to the floor",
         "fx": {
-          "home": -10
+          "home": -5,
+          "joy": -5
         }
       }
     }

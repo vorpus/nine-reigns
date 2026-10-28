@@ -95,7 +95,7 @@
     "bag": "main",
     "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "slot": ["night"] }],
     "left":  { "label": "Give it back", "fx": { "home": 5, "instinct": 10 } },
-    "right": { "label": "Spread out more", "fx": { "joy": 5, "home": -10, "instinct": -5 } }
+    "right": { "label": "Spread out more", "fx": { "joy": 5, "home": -5, "instinct": -5 } }
   },
   {
     "id": "house_partner_shoes",
@@ -123,7 +123,7 @@
     "bag": "main",
     "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "slot": ["evening"] }],
     "left":  { "label": "Claim the lap", "fx": { "home": 10, "instinct": 10 }, "set": { "partner_warming": "+1", "snuggles": "+1" } },
-    "right": { "label": "Sit on the remote", "fx": { "joy": 5, "home": -10, "instinct": -5 } }
+    "right": { "label": "Sit on the remote", "fx": { "joy": 5, "home": -5, "instinct": -5 } }
   },
   {
     "id": "house_partner_secret_ham",
@@ -132,7 +132,7 @@
     "bag": "main",
     "when": [{ "mod": "partner" }, { "flag": "partner_met" }, { "day": { "gte": 4 } }],
     "left":  { "label": "Take ham gently", "fx": { "belly": 10, "home": 5, "instinct": 5 }, "set": { "partner_warming": "+1" } },
-    "right": { "label": "Take ham AND hand", "fx": { "belly": 15, "home": -10, "instinct": -10 }, "set": { "bites": "+1" } }
+    "right": { "label": "Take ham AND hand", "fx": { "belly": 20, "home": -10, "instinct": -10 }, "set": { "bites": "+1" } }
   },
   {
     "id": "house_partner_phone_denial",
@@ -191,7 +191,7 @@
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }, { "slot": ["morning"] }],
     "left":  { "label": "Let it go", "fx": { "belly": -10, "joy": 5, "instinct": 10 } },
-    "right": { "label": "Raid the dog bowl", "fx": { "belly": 15, "joy": -10, "instinct": -10 }, "chaos": 2 }
+    "right": { "label": "Raid the dog bowl", "fx": { "belly": 20, "joy": -10, "instinct": -10 }, "chaos": 2 }
   },
   {
     "id": "house_dog_bed_takeover",
@@ -218,7 +218,7 @@
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_met" }],
     "left":  { "label": "Watch from above", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "RACE", "fx": { "joy": -5, "home": -15, "instinct": -20 }, "set": { "zoomies": "+1" }, "chaos": 6 }
+    "right": { "label": "RACE", "fx": { "joy": -5, "home": -10, "instinct": -20 }, "set": { "zoomies": "+1" }, "chaos": 6 }
   },
   {
     "id": "house_dog_leash",
@@ -266,7 +266,7 @@
     "bag": "main",
     "when": [{ "mod": "dog" }, { "flag": "dog_friend" }],
     "left":  { "label": "Go straight", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Run the heist", "fx": { "belly": 15, "home": -10, "joy": -10, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 5 }
+    "right": { "label": "Run the heist", "fx": { "belly": 20, "home": -10, "joy": -10, "instinct": -10 }, "set": { "knocked": "+1" }, "chaos": 5 }
   },
 
   {
@@ -285,7 +285,7 @@
     "bag": "main",
     "when": [{ "home": ["studio"] }, { "slot": ["night"] }],
     "left":  { "label": "Hold it in", "fx": { "joy": 5, "instinct": 15 } },
-    "right": { "label": "Forty laps", "fx": { "joy": -10, "home": -5, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 4 }
+    "right": { "label": "Forty laps", "fx": { "joy": -10, "instinct": -15 }, "set": { "zoomies": "+1" }, "chaos": 4 }
   },
   {
     "id": "house_studio_litter_breakfast",
@@ -321,7 +321,7 @@
     "bag": "main",
     "when": [{ "home": ["apartment"] }, { "slot": ["afternoon"] }],
     "left":  { "label": "Stay dignified", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "YELL BACK", "fx": { "joy": -5, "home": -5, "instinct": -15 }, "chaos": 1 }
+    "right": { "label": "YELL BACK", "fx": { "joy": -5, "instinct": -15 }, "chaos": 1 }
   },
   {
     "id": "house_apt_landlord_inspection",
@@ -350,7 +350,7 @@
     "bag": "main",
     "when": [{ "home": ["house"] }, { "slot": ["morning", "afternoon"] }],
     "left":  { "label": "Ignore the taunt", "fx": { "joy": 5, "instinct": 15 } },
-    "right": { "label": "Chatter for an hour", "fx": { "joy": -5, "home": -5, "instinct": -15 } }
+    "right": { "label": "Chatter for an hour", "fx": { "joy": -5, "instinct": -15 } }
   },
   {
     "id": "house_house_basement",

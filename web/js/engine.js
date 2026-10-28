@@ -13,10 +13,10 @@ export const BAGS = ['main', 'intro', 'chain', 'chaos',
 
 export const CONFIG = {
   start: { joy: 35, home: 70, instinct: 40, belly: 50 },
-  drift: { instinct: 2, belly: -3 },
+  drift: { instinct: 1, belly: -2 },
   winJoy: 60,
   // Value a cat meter resets to after its crisis card resolves (number or per crisis bag).
-  crisisReset: 50,
+  crisisReset: { instinct_high: 25, instinct_low: 50, belly_high: 50, belly_low: 50 },
   defaultWeight: 10,
   defaultCooldown: 20,
   sneezeChance: 0.35,

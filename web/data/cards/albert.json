@@ -23,7 +23,7 @@
         "label": "Try the heated bed",
         "fx": {
           "joy": 15,
-          "instinct": 5
+          "instinct": -5
         },
         "set": {
           "albert_bff": "+1"
@@ -141,7 +141,7 @@
         "label": "Summit the tree",
         "fx": {
           "joy": 10,
-          "home": -10,
+          "home": -5,
           "instinct": -10
         },
         "chaos": 10,
@@ -173,7 +173,7 @@
         "label": "Inspect the pan",
         "fx": {
           "home": -5,
-          "belly": 10,
+          "belly": 15,
           "joy": 5
         }
       }

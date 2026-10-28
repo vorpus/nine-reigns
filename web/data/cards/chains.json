@@ -405,7 +405,7 @@
         "label": "Eat the tuna",
         "fx": {
           "joy": -10,
-          "belly": 15
+          "belly": 20
         },
         "set": {
           "neighbor_friend": true
@@ -458,7 +458,7 @@
         "label": "Take the treats",
         "fx": {
           "joy": -5,
-          "belly": 15
+          "belly": 20
         }
       }
     }

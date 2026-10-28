@@ -13,7 +13,7 @@
     "char": "owner",
     "text": "\"It's the salmon pâté! The bag says GOURMET!\" {owner} paid $3 for this tiny can. They are watching you sniff it.",
     "bag": "main",
-    "left": { "label": "Eat it all", "fx": { "joy": 10, "belly": 15 } },
+    "left": { "label": "Eat it all", "fx": { "joy": 10, "belly": 20 } },
     "right": { "label": "Bury it in the floor", "fx": { "joy": -10, "belly": -5, "instinct": -5 } }
   },
   {
@@ -22,8 +22,8 @@
     "text": "\"Did I feed you already?\" {owner} genuinely can't remember. You genuinely can. You ate eleven minutes ago.",
     "bag": "main",
     "when": [{ "slot": ["evening"] }],
-    "left": { "label": "Wash face, satisfied", "fx": { "joy": 5, "instinct": 5 } },
-    "right": { "label": "Act starving", "fx": { "belly": 15, "joy": -5 } }
+    "left": { "label": "Wash face, satisfied", "fx": { "joy": 5, "instinct": -5 } },
+    "right": { "label": "Act starving", "fx": { "belly": 20, "joy": -5 } }
   },
   {
     "id": "daily_bowl_politics",
@@ -47,7 +47,7 @@
     "text": "*shake shake* \"Whooo wants a treat?\" {owner} knows exactly who. It's a rhetorical bag.",
     "bag": "main",
     "left": { "label": "Sit like a gentleman", "fx": { "joy": 10, "belly": 5 } },
-    "right": { "label": "Headbutt bag open", "fx": { "belly": 20, "home": -10, "joy": -5 }, "chaos": 3 }
+    "right": { "label": "Headbutt bag open", "fx": { "belly": 25, "home": -5, "joy": -5 }, "chaos": 3 }
   },
   {
     "id": "daily_high_five",
@@ -75,7 +75,7 @@
     "weight": 0,
     "noTime": true,
     "left": { "label": "Check on them", "fx": { "joy": 10, "instinct": 5 } },
-    "right": { "label": "Take the chicken", "fx": { "belly": 15, "joy": -10, "instinct": -5 } }
+    "right": { "label": "Take the chicken", "fx": { "belly": 20, "joy": -10, "instinct": -5 } }
   },
   {
     "id": "daily_onion_tears",
@@ -128,7 +128,7 @@
     "bag": "main",
     "weight": 0,
     "left": { "label": "Keep nursing", "fx": { "joy": 10, "instinct": 10 } },
-    "right": { "label": "Drink the soup", "fx": { "belly": 15, "joy": -10, "instinct": -10 } }
+    "right": { "label": "Drink the soup", "fx": { "belly": 20, "joy": -10, "instinct": -10 } }
   },
   {
     "id": "daily_breakup_movie",
@@ -136,7 +136,7 @@
     "text": "{owner} is watching The Notebook with a pint of ice cream. It is the third time this week. They are saying \"why\" at Ryan Gosling.",
     "bag": "main",
     "when": [{ "slot": ["evening", "night"] }],
-    "left": { "label": "Lick the ice cream", "fx": { "belly": 10, "joy": -5, "instinct": -5 } },
+    "left": { "label": "Lick the ice cream", "fx": { "belly": 15, "joy": -5, "instinct": -5 } },
     "right": { "label": "Purr through credits", "fx": { "joy": 15, "instinct": 10 }, "set": { "snuggles": "+1" } }
   },
   {
@@ -145,7 +145,7 @@
     "text": "THE BLANKET MICE HAVE RETURNED. TWO OF THEM. THEY TWITCH BENEATH THE DUVET. THE HUMAN CALLS THEM \"FEET.\" THE HUMAN IS A FOOL.",
     "bag": "main",
     "when": [{ "slot": ["night"] }],
-    "left": { "label": "Sleep like a pet", "fx": { "joy": 5, "instinct": 10 } },
+    "left": { "label": "Sleep like a pet", "fx": { "joy": 5, "instinct": -5 } },
     "right": { "label": "Ambush the mice", "fx": { "joy": -10, "instinct": -15 }, "set": { "bites": "+1" }, "next": "daily_duvet_fortress" }
   },
   {
@@ -173,7 +173,7 @@
     "text": "THE HUMAN SLEEPS. THEIR FACE IS WARM. THEIR FACE IS EXACTLY THE SIZE OF US. COINCIDENCE? NO.",
     "bag": "main",
     "when": [{ "slot": ["night"] }],
-    "left": { "label": "Sleep at their feet", "fx": { "joy": 5, "instinct": 5 } },
+    "left": { "label": "Sleep at their feet", "fx": { "joy": 5, "instinct": -5 } },
     "right": { "label": "Become a face hat", "fx": { "joy": -5, "instinct": -10 }, "set": { "slept_on_face": "+1" } }
   },
   {
@@ -307,7 +307,7 @@
     "bag": "main",
     "once": true,
     "when": [{ "flag": "feather_hoard" }],
-    "left": { "label": "Look ashamed", "fx": { "joy": 5, "instinct": 5 } },
+    "left": { "label": "Look ashamed", "fx": { "joy": 5, "instinct": 5, "home": 5 } },
     "right": { "label": "Defend the hoard", "fx": { "joy": -5, "instinct": -10, "home": -5 }, "set": { "gifts": "+1" } }
   },
   {
@@ -325,7 +325,7 @@
     "text": "A package! {owner} unwraps a $90 heated cat bed. \"For YOU!\" The bubble wrap falls to the floor, gleaming.",
     "bag": "main",
     "once": true,
-    "left": { "label": "Try the fancy bed", "fx": { "joy": 15, "instinct": 5 } },
+    "left": { "label": "Try the fancy bed", "fx": { "joy": 15, "instinct": -5 } },
     "right": { "label": "Murder bubble wrap", "fx": { "joy": -10, "instinct": -15 } }
   },
   {
@@ -334,7 +334,7 @@
     "text": "{owner} dumps a load of warm laundry on the bed to fold. It's all black clothes. They have a work thing tomorrow.",
     "bag": "main",
     "left": { "label": "Watch respectfully", "fx": { "joy": 5, "instinct": 5 } },
-    "right": { "label": "Dive in", "fx": { "joy": 5, "home": -10, "instinct": -10 } }
+    "right": { "label": "Dive in", "fx": { "joy": 5, "home": -5, "instinct": -10 } }
   },
   {
     "id": "daily_grandma_facetime",
@@ -387,8 +387,8 @@
     "text": "{owner} reads the food bag. \"'Feed one half-cup daily.'\" They look at you. They look at the three cups you've had today.",
     "bag": "main",
     "when": [{ "meter": "belly", "gt": 70 }],
-    "left": { "label": "Beg for a fourth", "fx": { "belly": 10, "joy": -10 } },
-    "right": { "label": "Do a fitness lap", "fx": { "belly": -10, "instinct": -10, "home": -5 }, "set": { "zoomies": "+1" } }
+    "left": { "label": "Beg for a fourth", "fx": { "belly": 20, "joy": -10 } },
+    "right": { "label": "Do a fitness lap", "fx": { "belly": -10, "instinct": -10 }, "set": { "zoomies": "+1" } }
   },
   {
     "id": "daily_cancelled_plans",
@@ -438,7 +438,7 @@
     "once": true,
     "when": [{ "day": { "gte": 10 } }],
     "left": { "label": "Drink from their mug", "fx": { "joy": -5, "instinct": -5 } },
-    "right": { "label": "Eat from it", "fx": { "joy": 10, "belly": 10 } }
+    "right": { "label": "Eat from it", "fx": { "joy": 10, "belly": 15 } }
   },
   {
     "id": "daily_wfh_intern",
@@ -447,7 +447,7 @@
     "bag": "main",
     "once": true,
     "when": [{ "quirk": "wfh" }, { "slot": ["morning", "afternoon"] }],
-    "left": { "label": "Do the job (nap)", "fx": { "joy": 10, "instinct": 10 } },
+    "left": { "label": "Do the job (nap)", "fx": { "joy": 10, "instinct": -5 } },
     "right": { "label": "Unionize (yell)", "fx": { "joy": -5, "instinct": -10 } }
   },
   {
@@ -511,7 +511,7 @@
     "bag": "main",
     "when": [{ "quirk": "neatfreak" }],
     "left": { "label": "Admire from afar", "fx": { "joy": 5, "instinct": 10 } },
-    "right": { "label": "Nap on all of them", "fx": { "joy": -5, "home": -10, "instinct": -10 }, "chaos": 2 }
+    "right": { "label": "Nap on all of them", "fx": { "joy": -5, "home": -5, "instinct": -10 }, "chaos": 2 }
   },
   {
     "id": "daily_gamer_clutch",
@@ -540,7 +540,7 @@
     "weight": 0,
     "noTime": true,
     "left": { "label": "Retire undefeated", "fx": { "joy": 10, "instinct": 5 } },
-    "right": { "label": "Demand a cut (tuna)", "fx": { "joy": 5, "belly": 15 } }
+    "right": { "label": "Demand a cut (tuna)", "fx": { "joy": 5, "belly": 20 } }
   },
   {
     "id": "daily_gamer_one_more",
@@ -548,7 +548,7 @@
     "text": "It's 2 AM. {owner} is still gaming. \"One more match.\" That was the seventh one-more-match.",
     "bag": "main",
     "when": [{ "quirk": "gamer" }, { "slot": ["night"] }],
-    "left": { "label": "Fall asleep on lap", "fx": { "joy": 10, "instinct": 10 }, "set": { "snuggles": "+1" } },
+    "left": { "label": "Fall asleep on lap", "fx": { "joy": 10, "instinct": -5 }, "set": { "snuggles": "+1" } },
     "right": { "label": "Yowl them to bed", "fx": { "joy": -5, "instinct": -10 } }
   }
 ]
